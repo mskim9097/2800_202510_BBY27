@@ -1,0 +1,16 @@
+{
+  "name": "2800_202510_bby27",
+  "version": "1.0.0",
+  "description": "Team Name: BBY-27\r Team Members: \r - Rayen Ben Moussa\r - Minsu Kim\r - Tony Chen\r - Blair Tate \r - Jazib jeehan\r ## Overview",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "ejs": "^3.1.10",
+    "express": "^5.1.0"
+  }
+}
