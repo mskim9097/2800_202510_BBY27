@@ -34,27 +34,31 @@ var mongoStore = MongoStore.create({
 	}
 })
 
-app.get('/signupSubmit', async (req, res) => {
-    var name = req.query.name;
-    var email = req.query.email;
-    var password = req.query.password;
+app.post('/createUser', async (req, res) => {
+    var firstName = req.body.firstName;
+    var lastName = req.body.lastName;
+    var email = req.body.email;
+    var password = req.body.password;
+    var type = req.body.type;
 
     const schema = Joi.object({
-        name: Joi.string().alphanum().max(20).required(),
+        firstName: Joi.string().alphanum().max(20).required(),
+        lastName: Joi.string().alphanum().max(20).required(),
         email: Joi.string().email().max(30).required(),
         password: Joi.string().max(20).required()
     });
-    const validationResult = schema.validate({name, email, password});
-
+    const validationResult = schema.validate({firstName, lastName, email, password});
+    /*
     if (validationResult.error != null) {
         res.send(`
             Invalid email/password combination.<br><br>
             <a href="/signup">Try again</a>
             `);
-    }
+        return;
+    }*/
     var hashedPassword = await bcrypt.hash(password, saltRounds);
 
-    await userCollection.insertOne({name: name, email: email, password: hashedPassword});
+    await userCollection.insertOne({firstName: firstName, lastName: lastName, email: email, password: hashedPassword, type: type});
 
     res.redirect("/");
 });
