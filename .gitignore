@@ -1,6 +1,9 @@
 # Created by https://www.toptal.com/developers/gitignore/api/java,node,macos,windows,eclipse
 # Edit at https://www.toptal.com/developers/gitignore?templates=java,node,macos,windows,eclipse
 
+#Packege.json files
+package-lock.json
+package.json
 
 ### Firebase ###
 .firebase/
