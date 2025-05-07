@@ -1,0 +1,1 @@
+//logic related to researcher routes goes here
