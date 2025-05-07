@@ -1,10 +1,10 @@
 //logic related to common routes like login... goes here
 
 // Species routes
-app.get("/species", async (req, res) => {
+const getSpecies = async (req, res) => {
   const speciesList = await speciesCollection.find().toArray();
   res.render("pages/species", { species: speciesList });
-});
+};
 
 app.get("/add-species", isAuthenticated, (req, res) => {
   res.render("add-species");
@@ -27,3 +27,5 @@ app.post("/add-species", async (req, res) => {
   await speciesCollection.insertOne(newSpecies);
   res.redirect("/species");
 });
+
+module.exports = {getSpecies};
