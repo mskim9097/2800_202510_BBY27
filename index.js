@@ -64,6 +64,7 @@ app.post("/add-species", async (req, res) => {
     commonName: req.body.commonName,
     scientificName: req.body.scientificName,
     image: req.body.image,
+    description: req.body.description,
     location: {
       center: {
         lat: parseFloat(req.body.lat),
