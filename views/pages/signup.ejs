@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    
+    <form id="signup-form" action="/createUser" method="post">
+        <label>Email:</label>
+        <input id="email" name="email" type="email" placeholder="email:" required><br>
+        <label>First name:</label>
+        <input id="firstName" name="firstName" type="text" placeholder="first name: " required>
+        <label>Last name:</label>
+        <input id="lastName" name="lastName"  placeholder="last name:" required><br>
+        <label>Password:</label>
+        <input id="password" name="password" type="password" placeholder="password:" required><br>
+        <label>Confirm:</label>
+        <input id="confirmPassword" name="confirmPassword" type="password" placeholder="confirm password:" required><br>
+        <span id="confirmPwMsg"></span><br>
+        <p>Choose your role:</p>
+        <label>
+            <input type="radio" name="type" value="researcher" required>
+            Researcher
+        </label>
+        <label>
+            <input type="radio" name="type" value="explorer">
+            Explorer
+        </label><br><br>
+
+        <button type="submit">Create User</button>
+    </form>
+
+    <script src="/js/signup.js"></script>
+</body>
+</html>
