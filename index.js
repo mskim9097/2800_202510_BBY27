@@ -8,6 +8,8 @@ const saltRounds = 12;
 const Joi = require("joi");
 const path = require('path');
 const { MongoClient } = require('mongodb');
+const path = require('path');
+const { MongoClient } = require('mongodb');
 
 const app = express();
 const PORT = process.env.PORT || 3000;
@@ -21,10 +23,14 @@ const mongodb_session_secret = process.env.MONGODB_SESSION_SECRET;
 const node_session_secret = process.env.NODE_SESSION_SECRET;
 
 var { database } = include('databaseConnection');
+var { database } = include('databaseConnection');
 
 const userCollection = database.db(mongodb_database).collection('user');
 const speciesCollection = database.db(mongodb_database).collection('species');
 
+app.use(express.urlencoded({ extended: false }));
+app.set('views', path.join(__dirname, 'views'));
+app.use(express.static(path.join(__dirname, 'public')));
 app.use(express.urlencoded({ extended: false }));
 app.set('views', path.join(__dirname, 'views'));
 app.use(express.static(path.join(__dirname, 'public')));
@@ -80,7 +86,28 @@ app.post("/add-species", async (req, res) => {
 // Create user route
 app.post('/createUser', async (req, res) => {
   var { firstName, lastName, email, password, type } = req.body;
+  var { firstName, lastName, email, password, type } = req.body;
 
+  const schema = Joi.object({
+    firstName: Joi.string().alphanum().max(20).required(),
+    lastName: Joi.string().alphanum().max(20).required(),
+    email: Joi.string().email().max(30).required(),
+    password: Joi.string().max(20).required()
+  });
+
+  const validationResult = schema.validate({ firstName, lastName, email, password });
+
+  /*
+  if (validationResult.error != null) {
+      res.send(\`
+          Invalid email/password combination.<br><br>
+          <a href="/signup">Try again</a>
+          \`);
+      return;
+  }*/
+
+  var hashedPassword = await bcrypt.hash(password, saltRounds);
+  await userCollection.insertOne({ firstName, lastName, email, password: hashedPassword, type });
   const schema = Joi.object({
     firstName: Joi.string().alphanum().max(20).required(),
     lastName: Joi.string().alphanum().max(20).required(),
@@ -103,8 +130,10 @@ app.post('/createUser', async (req, res) => {
   await userCollection.insertOne({ firstName, lastName, email, password: hashedPassword, type });
 
   res.redirect("/");
+  res.redirect("/");
 });
 
+// Use index router for root routes
 // Use index router for root routes
 const indexRouter = require('./routes/index');
 app.use('/',indexRouter);
