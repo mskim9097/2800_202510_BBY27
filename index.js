@@ -2,6 +2,7 @@ require("./utils.js");
 require('dotenv').config();
 const express = require('express');
 const session = require('express-session');
+const MongoStore = require('connect-mongo');
 const bcrypt = require('bcrypt');
 const saltRounds = 12;
 const Joi = require("joi");
@@ -11,10 +12,6 @@ const path = require('path');
 const PORT = process.env.PORT || 3000;
 //setting ejs as the view engine
 app.set('view engine', 'ejs');
-
-// MongoDB connection
-const MongoStore = require('connect-mongo');
-const { MongoClient } = require('mongodb');
 
 const mongodb_host = process.env.MONGODB_HOST;
 const mongodb_user = process.env.MONGODB_USER;
@@ -28,25 +25,14 @@ var {database} = include('databaseConnection');
 
 const userCollection = database.db(mongodb_database).collection('user');
 
-var sessionStore = MongoStore.create({
+app.use(express.urlencoded({extended: false}));
+
+var mongoStore = MongoStore.create({
 	mongoUrl: `mongodb+srv://${mongodb_user}:${mongodb_password}@${mongodb_host}/sessions`,
 	crypto: {
 		secret: mongodb_session_secret
 	}
-});
-
-// Middleware
-app.use(express.urlencoded({extended: false}));
-app.use(express.json());
-app.use(session({
-    secret: process.env.NODE_SESSION_SECRET,
-    resave: false,
-    saveUninitialized: false,
-    store: sessionStore,
-    cookie: { maxAge: 60 * 60 * 1000 } // 1 hour
-}));
-
-
+})
 
 app.post('/createUser', async (req, res) => {
     var firstName = req.body.firstName;
@@ -85,6 +71,7 @@ app.use(express.static(path.join(__dirname, 'public')));
 //We should organize routes in this way.
 const indexRouter = require('./routes/index');
 app.use('/',indexRouter);
+
 
  
 
