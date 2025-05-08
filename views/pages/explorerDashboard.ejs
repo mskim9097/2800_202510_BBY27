@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Photo Capture</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://unpkg.com/lucide@latest"></script> <!-- Camera icon -->
+    <!-- mapbox css and js links -->
+    <link href="https://api.mapbox.com/mapbox-gl-js/v2.15.0/mapbox-gl.css" rel="stylesheet" />
+    <script src="https://api.mapbox.com/mapbox-gl-js/v2.15.0/mapbox-gl.js"></script>
+</head>
+
+<body class="h-screen  ">
+    <div style="background-color:rgb(242, 242, 242)"
+        class="flex flex-col p-4 justify-between h-full rounded-lg shadow-sm">
+        <div id="content" class="flex flex-col gap-5">
+            <div class="flex justify-between p-2">
+                <img class="w-10 h-10" src="/images/menu.svg" alt="">
+                <img class="w-10 h-10" src="/images/bell.svg" alt="">
+            </div>
+            <div class="flex items-center gap-5">
+                <img src="/images/photo.svg" alt="">
+                <div>
+                    <span class="text-xl">Hello,</span> <span class="font-bold text-xl">Rayen!</span>
+                </div>
+                <div id="weather-caption"
+                    class=" text-black px-1 py-2 rounded shadow text-sm">
+                    Loading weather...
+                </div>
+            </div>
+            <div id="explore_time" class="py-2 px-1 w-fit shadow text-sm rounded font-semibold m-auto">
+                Is it a good day to explore .....
+            </div>
+            <div id="map" class="h-[250px] w-full rounded shadow">
+
+            </div>
+        </div>
+        <div id="footer" style="background-color: rgb(95, 143, 96);"
+            class=" w-full py-3 px-3 self-center  rounded-3xl relative ">
+            <button id="start-camera"
+                class="bg-[#e9bc70] p-2 rounded-full  transition absolute -top-4 transform -translate-x-[50%] left-[50%]">
+                <i data-lucide="camera" class="w-8 h-8 text-white"></i>
+            </button>
+
+            <!-- Fullscreen Camera Container -->
+            <div id="camera-container"
+                class="hidden fixed top-0 left-0 w-screen h-screen bg-black z-50 flex flex-col items-center justify-center space-y-4">
+                <video id="video" autoplay playsinline class="w-full h-full object-cover"></video>
+
+                <button id="capture-btn"
+                    class="absolute bottom-20 bg-green-600 hover:bg-green-700 px-6 py-3 text-white rounded-full shadow-lg">
+                    Capture
+                </button>
+
+                <button id="close-camera"
+                    class="absolute top-5 right-5 bg-red-600 hover:bg-red-700 text-white px-4 py-2 rounded">
+                    Close
+                </button>
+            </div>
+
+            <!-- Fullscreen Canvas for Captured Image -->
+            <canvas id="canvas" class="hidden fixed top-0 left-0 w-screen h-screen z-50 object-cover bg-black"></canvas>
+
+            <!-- Canvas Close Button -->
+            <button id="close-canvas" class="hidden fixed top-5 right-5 z-50 text-white bg-red-600 px-4 py-2 rounded">
+                Close
+            </button>
+
+            <div class="flex items-center justify-between">
+                <img class="hover:bg-[#dad7b2] rounded p-2 " src="/images/home.svg" width="40" height="30" alt="">
+                <img class="hover:bg-[#dad7b2] rounded p-2" src="/images/dna-icon.svg" width="40" height="30" alt="">
+                <img class="hover:bg-[#dad7b2] rounded p-2" src="https://img.icons8.com/ios/30/ffffff/quest--v1.png"
+                    width="40" height="30" alt="quest" />
+                <img class="hover:bg-[#dad7b2] rounded p-2" src="/images/heart.svg" width="40" height="30" alt="">
+            </div>
+
+        </div>
+    </div>
+    <script src="/js/camera.js"></script>
+    <script src="/js/weather.js"></script>
+    <script src="/js/map.js"></script>
+</body>
+
+</html>

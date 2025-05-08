@@ -72,7 +72,8 @@ app.use(express.static(path.join(__dirname, 'public')));
 const indexRouter = require('./routes/index');
 app.use('/',indexRouter);
 
-
+const explorerRouter = require('./routes/explorerRoutes');
+app.use('/explorer',explorerRouter);
  
 
 app.listen(PORT, () => console.log(`Server running on http://localhost:${PORT}`));
