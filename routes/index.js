@@ -11,5 +11,13 @@ router.get('/signup', (req, res) => {
   res.render('pages/signup'); 
 });
 
+// This is test page for main <<
+router.get('/test-main', async (req, res) => {
+  const result = await userCollection.find({email: 'mskim9097@gmail.com'}).project({email: 1, type: 1, _id: 1}).toArray();
+  req.session.authenticated = true;
+	req.session.username = username;
+  req.session.type = result[0].type;
+  res.render('pages/test-main', {type: type});
+});
 
 module.exports = router;
