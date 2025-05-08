@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>login</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+</head>
+
+<body class="bg-no-repeat bg-center bg-fixed bg-cover min-h-screen flex items-center justify-center"
+    style="background-image: url('/images/plant2.jpg');">
+
+    <div class="bg-white/10 backdrop-blur-sm p-8 rounded-xl shadow-xl max-w-md w-full text-white">
+        <h2 class="text-3xl font-bold mb-6 text-center">Log In to Your Account</h2>
+
+        <form action="/login" method="POST" class="space-y-4">
+            <div>
+                <label for="email" class="text-sm font-medium">Email</label>
+                <input type="email" name="email" id="email" required
+                    class="w-full mt-1 p-2 rounded bg-white/20 focus:outline-none focus:ring-2 focus:ring-green-400 placeholder-white"
+                    placeholder="you@example.com">
+            </div>
+
+            <div>
+                <label for="password" class="text-sm font-medium">Password</label>
+                <input type="password" name="password" id="password" required
+                    class="w-full mt-1 p-2 rounded bg-white/20 focus:outline-none focus:ring-2 focus:ring-green-400 placeholder-white"
+                    placeholder="••••••••">
+            </div>
+
+            <button type="submit"
+                class="w-full bg-green-600 hover:bg-green-700 text-white font-semibold py-2 rounded transition duration-300 ease-in-out">Log
+                In</button>
+        </form>
+
+        <p class="mt-4 text-sm text-center">
+            Don't have an account?
+            <a href="/signup" class="text-green-300 underline hover:text-green-100">Sign up</a>
+        </p>
+    </div>
+
+</body>
