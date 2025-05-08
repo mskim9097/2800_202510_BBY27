@@ -1,0 +1,9 @@
+.container {
+    max-width: 1200px;      /* or any width you like */
+    margin: 0 auto;         /* centers it horizontally */
+    padding: 20px;         
+    background-color: #f70404;  
+    border: 1px solid #ccc;
+    color: #f70404;    
+  }
+  

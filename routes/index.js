@@ -6,5 +6,9 @@ router.get('/', (req, res) => {
   res.render('pages/landing'); 
 });
 
+router.get('/sign_in', (req, res) => {
+  res.render('pages/login');
+});
+
 
 module.exports = router;
