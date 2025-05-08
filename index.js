@@ -34,6 +34,11 @@ var mongoStore = MongoStore.create({
 	}
 })
 
+// Blair Tate - for testing Auth./Auth./Sess.
+const loginRoutes = require('./tests/loginRoutes');
+app.use('/login', loginRoutes);
+// Blair Tate - End of testing Auth./Auth./Sess.
+
 app.post('/createUser', async (req, res) => {
     var firstName = req.body.firstName;
     var lastName = req.body.lastName;
