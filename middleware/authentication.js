@@ -1,16 +1,18 @@
 
 require('dotenv').config();
-const express = require('express');
-const router = require('../tests/loginRoutes');
 const bcrypt = require('bcrypt');
-const session = require('express-session');
-
-// const app = require("../index");
-
+const saltRounds = 12;
 const Joi = require("joi");
+
 const loginSchema = Joi.object({
     email: Joi.string().min(4).max(40).required(),
     password: Joi.string().min(6).max(25).required()
+});
+const schema = Joi.object({
+    firstName: Joi.string().alphanum().max(20).required(),
+    lastName: Joi.string().alphanum().max(20).required(),
+    email: Joi.string().email().max(30).required(),
+    password: Joi.string().max(20).required()
 });
 
 //MongoDB connection
@@ -73,7 +75,6 @@ const sessionStore = MongoStore.create({
 // }
 
 async function authenticateUser(req, res, next) {
-    const loginSchema = loginSchema;
     const { error, value } = loginSchema.validate(req.body);
 
     if (error) return res.status(400).send("Validation failed.");
@@ -108,8 +109,8 @@ function createSession(req, res, next) {
 }
 
 function authenticated(req, res, next) {
-    if (req.session.email) {
-        console.log('User is authenticated:', req.session.email);
+    if (req.session.user) {
+        console.log('User is authenticated:', req.session.user);
         next();
     } else {
         console.log('User is not authenticated');
@@ -128,5 +129,58 @@ function destroySession(req, res, next) {
         res.redirect('/');
     });
 }
+async function signUp(req, res, next) {
+    // const { firstName, lastName, email, password } = req.body;
+    // const validationResult = schema.validate({ firstName, lastName, email, password });
 
-module.exports = { authenticated, destroySession, createSession, authenticateUser };
+    // if (validationResult.error) {
+    //     console.warn('Validation failed:', validationResult.error.details);
+    //     return res.status(400).send('Invalid input');
+    // }
+
+    // bcrypt.hash(password, 12, async (err, hashedPassword) => {
+    //     if (err) {
+    //         console.error('Hashing error:', err);
+    //         return res.status(500).send('Internal Server Error');
+    //     }
+
+    //     await appClient.db("biodiversityGo").collection("user").insertOne({
+    //         firstName,
+    //         lastName,
+    //         email,
+    //         password: hashedPassword
+    //     });
+
+    //     next();
+    // });
+    const { firstName, lastName, email, password } = req.body;
+
+    if (email && password && email) {
+        try {
+            console.log("Connected to MongoDB");
+
+            hashedPassword = await bcrypt.hash(password, saltRounds);
+            const newUser = {
+                firstName: firstName,
+                lastName: lastName,
+                email: email,
+                password: hashedPassword
+            };
+
+            const result = await appClient.db('biodiversityGo').collection("user").insertOne(newUser);
+            console.log(`New user created with the following id: ${result.insertedId}`);
+
+            req.session.user = email;
+        } catch (err) {
+            console.error("Error creating user:", err);
+            res.status(500).send('Internal Server Error');
+        } finally {
+            next();
+        }
+    } else {
+        console.log('Username, password, or email not provided.');
+        res.redirect('/');
+    }
+}
+
+module.exports = { authenticated, destroySession, createSession, authenticateUser, signUp };

@@ -1,19 +1,31 @@
 const express = require('express');
+const bcrypt = require('bcrypt');
+const saltRounds = 12;
 const router = express.Router();
 
+
+const {signUp} = require('../middleware/authentication');
+
 router.get('/', (req, res) => {
-  // This will render views/pages/landing.ejs
+  
   res.render('pages/landing'); 
 });
 
 router.get('/signup', (req, res) => {
-  // This will render views/pages/signup.ejs
+
   res.render('pages/signup'); 
 });
 
+router.post('/signup',signUp, async (req, res) => {
+
+  res.redirect("/");
+});
+
 router.get('/login', (req, res) => {
-  // This will render views/pages/login.ejs
+
   res.render('pages/login'); 
 });
+
+
 
 module.exports = router;
