@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Sign Up</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+</head>
+
+<body class="bg-no-repeat bg-center bg-fixed bg-cover min-h-screen flex items-center justify-center"
+    style="background-image: url('/images/plant2.jpg');">
+
+    <div class="bg-white/10 backdrop-blur-sm p-8 rounded-xl shadow-xl max-w-md w-full text-white">
+        <h2 class="text-3xl font-bold mb-6 text-center">Create an Account</h2>
+
+        <form action="/createUser" method="POST" class="space-y-4">
+            <div>
+                <label for="fname" class="text-sm font-medium">First Name</label>
+                <input type="text" name="firstName" id="fname" required
+                    class="w-full mt-1 p-2 rounded bg-white/20 focus:outline-none focus:ring-2 focus:ring-green-400 placeholder-white"
+                    placeholder="Your name">
+            </div>
+
+            <div>
+                <label for="lname" class="text-sm font-medium">Last Name</label>
+                <input type="text" name="lastName" id="lname" required
+                    class="w-full mt-1 p-2 rounded bg-white/20 focus:outline-none focus:ring-2 focus:ring-green-400 placeholder-white"
+                    placeholder="Your name">
+            </div>
+
+            <div>
+                <label for="email" class="text-sm font-medium">Email</label>
+                <input type="email" name="email" id="email" required
+                    class="w-full mt-1 p-2 rounded bg-white/20 focus:outline-none focus:ring-2 focus:ring-green-400 placeholder-white"
+                    placeholder="you@example.com">
+            </div>
+
+            <div class="flex flex-col gap-3">
+                <label for="userType" class="text-sm font-medium">Account</label>
+                <div class="flex justify-between min-w-[40%]">
+                    <div>
+                        <input type="radio" id="explorer" name="type" value="explorer">
+                        <label for="explorer" class="mr-4">Explorer(Normal User)</label>
+                    </div>
+                    <div>
+                        <input type="radio" id="researcher" name="type" value="researcher">
+                        <label for="researcher">Researcher</label>
+                    </div>
+                </div>
+            </div>
+
+            <div>
+                <label for="password" class="text-sm font-medium">Password</label>
+                <input type="password" name="password" id="password" required
+                    class="w-full mt-1 p-2 rounded bg-white/20 focus:outline-none focus:ring-2 focus:ring-green-400 placeholder-white"
+                    placeholder="••••••••">
+            </div>
+
+            <button type="submit"
+                class="w-full bg-green-600 hover:bg-green-700 text-white font-semibold py-2 rounded transition duration-300 ease-in-out">Sign
+                Up</button>
+        </form>
+
+        <p class="mt-4 text-sm text-center">
+            Already have an account?
+            <a href="/login" class="text-green-300 underline hover:text-green-100">Log in</a>
+        </p>
+    </div>
+
+</body>
+
+</html>
