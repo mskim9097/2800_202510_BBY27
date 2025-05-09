@@ -6,8 +6,6 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Photo Capture</title>
     <script src="https://cdn.tailwindcss.com"></script>
-    <!-- Camera icon -->
-    <script src="https://unpkg.com/lucide@latest"></script>
     <!-- mapbox css and js links -->
     <link href="https://api.mapbox.com/mapbox-gl-js/v2.15.0/mapbox-gl.css" rel="stylesheet" />
     <script src="https://api.mapbox.com/mapbox-gl-js/v2.15.0/mapbox-gl.js"></script>
@@ -28,11 +26,9 @@
 <body class="h-screen overflow-y-auto">
     <% const quests=[ { id: 1, image: "/images/plant4.jpg" , title: "Explore the Wetlands" , location: "Burnaby Lake" ,
         mission: "Find and photograph 3 amphibians" , target: "Frogs, salamanders" , time: "Before sunset" ,
-        difficulty: "Medium" }, 
-        { id: 2, image: "/images/plant2.jpg" , title: "Urban Pollinators" ,
+        difficulty: "Medium" }, { id: 2, image: "/images/plant2.jpg" , title: "Urban Pollinators" ,
         location: "Downtown Vancouver" , mission: "Identify 5 pollinator species" , target: "Bees, butterflies" ,
-        time: "Anytime" , difficulty: "Easy" }, 
-        { id: 3, image: "/images/plant1.jpg" , title: "Explore Stanley Park" ,
+        time: "Anytime" , difficulty: "Easy" }, { id: 3, image: "/images/plant1.jpg" , title: "Explore Stanley Park" ,
         location: "Downtown Vancouver" , mission: "Identify 5 pollinator species" , target: "Bees, butterflies" ,
         time: "Anytime" , difficulty: "Easy" } ]; %>
 
@@ -46,7 +42,7 @@
                 <div class="flex items-center gap-5">
                     <img src="/images/photo.svg" alt="">
                     <div>
-                        <span class="text-xl">Hello,</span> <span class="font-bold text-xl">Rayen!</span>
+                        <span class="text-xl">Hello,</span> <span class="font-bold text-xl">Blair!</span>
                     </div>
                     <!-- forecast -->
                     <div id="weather-caption" class=" text-black px-1 py-2 rounded shadow text-sm">
@@ -56,6 +52,17 @@
 
                 <div id="explore_time" class="py-2 px-1 w-fit shadow text-sm rounded font-semibold m-auto">
                     Is it a good day to explore .....
+                </div>
+                <div class=" flex justify-end  ">
+                    <div class="relative group">
+                        <div class="absolute bottom-full bg-black text-white text-xs rounded px-2 py-1 group-hover:opacity-100 mb-2 right-0  opacity-0   mb-2 right-0">
+                            Add Quests
+                        </div>
+                        <div class="bg-green-700 p-2 rounded-full cursor-pointer">
+                            <img src="/images/add.svg" class="h-8 w-8 " alt="">
+                        </div>
+                    </div>
+                    
                 </div>
                 <div id="map" class="min-h-[250px] w-full rounded shadow">
 
@@ -67,44 +74,13 @@
                         <%- include('../partials/questCard', { quest: quest }) %>
                             <% })%>
                 </div>
-                <a href="#quests" id="toggle-quests" class="text-white font-semibold italic bg-green-600 shadow p-2 w-fit self-center rounded text-center focus:outline-none">
-                    See More 
+                <a href="#quests" id="toggle-quests"
+                    class="text-white font-semibold italic bg-green-600 shadow p-2 w-fit self-center rounded text-center focus:outline-none">
+                    See More
                 </a href="#quests">
 
-
             </div>
-            <div id="footer" 
-                class=" w-full py-3 px-3 self-center  rounded-3xl relative bg-green-700 ">
-                <button id="start-camera"
-                    class="bg-[#e9bc70] p-2 rounded-full  transition absolute -top-4 transform -translate-x-[50%] left-[50%]">
-                    <i data-lucide="camera" class="w-8 h-8 text-white"></i>
-                </button>
-
-                <!-- Fullscreen Camera Container -->
-                <div id="camera-container"
-                    class="hidden fixed top-0 left-0 w-screen h-screen bg-black z-50 flex flex-col items-center justify-center space-y-4">
-                    <video id="video" autoplay playsinline class="w-full h-full object-cover"></video>
-
-                    <button id="capture-btn"
-                        class="absolute bottom-20 bg-green-600 hover:bg-green-700 px-6 py-3 text-white rounded-full shadow-lg">
-                        Capture
-                    </button>
-
-                    <button id="close-camera"
-                        class="absolute top-5 right-5 bg-red-600 hover:bg-red-700 text-white px-4 py-2 rounded">
-                        Close
-                    </button>
-                </div>
-
-                <!-- Fullscreen Canvas for Captured Image -->
-                <canvas id="canvas"
-                    class="hidden fixed top-0 left-0 w-screen h-screen z-50 object-cover bg-black"></canvas>
-
-                <!-- Canvas Close Button -->
-                <button id="close-canvas"
-                    class="hidden fixed top-5 right-5 z-50 text-white bg-red-600 px-4 py-2 rounded">
-                    Close
-                </button>
+            <div id="footer" class=" w-full py-3 px-3 self-center  rounded-3xl relative bg-green-700 ">
 
                 <div class="flex items-center justify-between">
                     <img class="hover:bg-[#dad7b2] rounded p-2 " src="/images/home.svg" width="40" height="30" alt="">
@@ -117,7 +93,6 @@
 
             </div>
         </div>
-        <script src="/js/camera.js"></script>
         <script src="/js/weather.js"></script>
         <script src="/js/map.js"></script>
 </body>

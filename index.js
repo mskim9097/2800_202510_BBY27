@@ -74,6 +74,9 @@ app.use('/',indexRouter);
 
 const explorerRouter = require('./routes/explorerRoutes');
 app.use('/explorer',explorerRouter);
+
+const researcherRouter = require('./routes/researcherRoutes');
+app.use('/researcher',researcherRouter);
  
 
 app.listen(PORT, () => console.log(`Server running on http://localhost:${PORT}`));
