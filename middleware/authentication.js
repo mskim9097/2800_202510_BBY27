@@ -36,6 +36,7 @@ async function authenticateUser(req, res, next) {
 
     req.session.user = email;
     req.session.type = user.type;
+    req.session.name = user.firstName + " " + user.lastName;
 
     req.session.save(err => {
       if (err) {
