@@ -7,4 +7,4 @@ const mongodb_password = process.env.MONGODB_PASSWORD;
 const MongoClient = require("mongodb").MongoClient;
 const atlasURI = `mongodb+srv://${mongodb_user}:${mongodb_password}@${mongodb_host}/?retryWrites=true`;
 var database = new MongoClient(atlasURI, {});
-module.exports = {database};
+module.exports = {database, atlasURI};
