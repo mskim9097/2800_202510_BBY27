@@ -1,21 +1,23 @@
 //logic related to common routes like login... goes here
 
-// Species routes
-const getSpecies = async (req, res) => {
-  const speciesList = await speciesCollection.find().toArray();
-  res.render("pages/species", { species: speciesList });
-};
+const express = require('express');
+const router  = express.Router();
+const { isAuthenticated } = require('../middleware/auth');
+const { database } = require('../utils/databaseConnection');
+const speciesCollection = database.db('yourDBname').collection('species'); 
 
-app.get("/add-species", isAuthenticated, (req, res) => {
+// show the “add species” form
+router.get("/add-species", isAuthenticated, (req, res) => {
   res.render("add-species");
 });
 
-app.post("/add-species", async (req, res) => {
+// handle the form POST
+router.post("/add-species", isAuthenticated, async (req, res) => {
   const newSpecies = {
-    commonName: req.body.commonName,
+    commonName:     req.body.commonName,
     scientificName: req.body.scientificName,
-    image: req.body.image,
-    description: req.body.description,
+    image:          req.body.image,
+    description:    req.body.description,
     location: {
       center: {
         lat: parseFloat(req.body.lat),
@@ -28,4 +30,10 @@ app.post("/add-species", async (req, res) => {
   res.redirect("/species");
 });
 
-module.exports = {getSpecies};
+// list all species
+router.get("/species", isAuthenticated, async (req, res) => {
+  const speciesList = await speciesCollection.find().toArray();
+  res.render("pages/species", { species: speciesList });
+});
+
+module.exports = router;
