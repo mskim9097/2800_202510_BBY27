@@ -1,11 +1,17 @@
 // researcher's specifc routes
-// explorer's specific routes
 const express = require('express');
 const router = express.Router();
+const {createQuest} = require('../controllers/researcherController');
 
 router.get('/dashboard', (req, res) => {
     // This will render views/pages/researcherDashboard.ejs
     res.render('pages/researcherDashboard2'); 
-  });
+});
 
-  module.exports = router;
+
+router.get('/testQuest', (req, res) => {
+    res.render('pages/testQuest');
+})
+router.get('/createQuest', createQuest);
+
+module.exports = router;
