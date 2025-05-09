@@ -14,5 +14,10 @@ router.get('/signup', (req, res) => {
   res.render('pages/signup'); 
 });
 
+router.get('/login', (req, res) => {
+  // This will render views/pages/login.ejs
+  res.render('pages/login'); 
+});
+
 
 module.exports = router;
