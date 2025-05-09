@@ -1,5 +1,6 @@
 const express = require('express');
 const router = express.Router();
+const {createUser} = require('../controllers/userController');
 
 router.get('/', (req, res) => {
   // This will render views/pages/landing.ejs
@@ -16,5 +17,6 @@ router.get('/login', (req, res) => {
   res.render('pages/login'); 
 });
 
+router.post('/createUser', createUser);
 
 module.exports = router;
