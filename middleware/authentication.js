@@ -16,64 +16,11 @@ const schema = Joi.object({
 });
 
 //MongoDB connection
-const MongoStore = require('connect-mongo');
-const mongoUri = `mongodb+srv://${process.env.MONGODB_USER}:${process.env.MONGODB_PASSWORD}@${process.env.MONGODB_HOST}/${process.env.MONGODB_DATABASE}?retryWrites=true&w=majority`;
 const appClient = require('../databaseConnection').database;
-const { MongoClient } = require('mongodb');
 
-// Session store MongoClient
-const sessionStore = MongoStore.create({
-    mongoUrl: mongoUri,
-    crypto: {
-        secret: process.env.MONGODB_SESSION_SECRET
-    }
-});
-
-// not sure if I can edit the session like this
-// router.use(session({
-//     secret: process.env.NODE_SESSION_SECRET,
-//     resave: false,
-//     saveUninitialized: false,
-//     store: sessionStore,
-//     cookie: { maxAge: 60 * 60 * 1000 } // 1 hour
-// }));
-
-// Needs to be connected to the login Schema(JOI), once we have this the username 
-// and password will be used to validate the user
-// This code is partially from assignment 1 of Web Dev 2, but I also
-// had chatGPT make it more related to this project as middleware
-// async function authenticateUser(req, res, next) {
-//     const { error, value } = loginSchema.validate(req.body);
-//     if (error) {
-//         console.warn('Validation failed:', error.details);
-//         return res.status(400).send('Invalid input');
-//     }
-
-//     const { email, password } = value;
-
-//     try {
-//         const result = await appClient.db("biodiversityGo").collection("user").findOne({ email });
-//         console.log(result);
-//         if (!result) {
-//             console.log(`User ${email} not found.`);
-//             return res.redirect('/invalid');
-//         }
-
-//         const match = await bcrypt.compare(password, result.password);
-//         if (!match) {
-//             console.log(`Password mismatch for ${email}`);
-//             return res.redirect('/invalid');
-//         }
-
-//         console.log(`Authenticated ${email}`);
-//         req.email = result;
-//         createSession(req, res, next);
-//     } catch (err) {
-//         console.error("DB Error:", err);
-//         res.status(500).send("Internal error");
-//     }
-// }
-
+// Authenticates the user by checking the users login credentials.
+// If the credentials are valid, it creates a session for the user and saves it to MongoDB.
+// If the credentials are invalid, it redirects to the invalid login page.
 async function authenticateUser(req, res, next) {
     const { error, value } = loginSchema.validate(req.body);
 
@@ -87,37 +34,38 @@ async function authenticateUser(req, res, next) {
         return res.redirect("/invalid");
     }
 
-    req.session.user = { email: user.email };
+    req.session.user = email;
+    req.session.type = user.type;
+
     req.session.save(err => {
-        if (err) return res.status(500).send("Session error");
-        console.log("Session saved:", req.session);
-        next();
+      if (err) {
+        console.error("Session save error:", err);
+        return res.status(500).send("Session error");
+      }
+    
+    //   console.log('Session type:', req.session.type);
+    //   console.log("✅ Session saved to MongoDB:", req.session);
+      next();
     });
 }
 
-
-function createSession(req, res, next) {
-    req.session.email = req.body.email;
-    req.session.save((err) => {
-        if (err) {
-            console.error('Error saving session:', err);
-            return res.status(500).send('Internal Server Error');
-        }
-        console.log('Session created:', req.session.email);
-        next();
-    });
-}
-
+// Checks if the user is authenticated by checking if the session exists.
+// If the user is authenticated, it allows the request to proceed.
+// If not, it redirects to the login page.
+// This middleware is used to protect routes that require authentication.
 function authenticated(req, res, next) {
     if (req.session.user) {
         console.log('User is authenticated:', req.session.user);
         next();
     } else {
         console.log('User is not authenticated');
-        res.redirect('/login');
+        res.redirect('/');
     }
 }
 
+// Destroys the session and clears the session cookie.
+// This is typically used when the user logs out.
+// After destroying the session, it redirects to the home page.
 function destroySession(req, res, next) {
     req.session.destroy((err) => {
         if (err) {
@@ -129,30 +77,8 @@ function destroySession(req, res, next) {
         res.redirect('/');
     });
 }
+
 async function signUp(req, res, next) {
-    // const { firstName, lastName, email, password } = req.body;
-    // const validationResult = schema.validate({ firstName, lastName, email, password });
-
-    // if (validationResult.error) {
-    //     console.warn('Validation failed:', validationResult.error.details);
-    //     return res.status(400).send('Invalid input');
-    // }
-
-    // bcrypt.hash(password, 12, async (err, hashedPassword) => {
-    //     if (err) {
-    //         console.error('Hashing error:', err);
-    //         return res.status(500).send('Internal Server Error');
-    //     }
-
-    //     await appClient.db("biodiversityGo").collection("user").insertOne({
-    //         firstName,
-    //         lastName,
-    //         email,
-    //         password: hashedPassword
-    //     });
-
-    //     next();
-    // });
     const { firstName, lastName, email, password } = req.body;
 
     if (email && password && email) {
@@ -168,6 +94,7 @@ async function signUp(req, res, next) {
             };
 
             const result = await appClient.db('biodiversityGo').collection("user").insertOne(newUser);
+            console.log("User created:", newUser);
             console.log(`New user created with the following id: ${result.insertedId}`);
 
             req.session.user = email;
@@ -183,4 +110,4 @@ async function signUp(req, res, next) {
     }
 }
 
-module.exports = { authenticated, destroySession, createSession, authenticateUser, signUp };
+module.exports = { authenticated, destroySession, authenticateUser, signUp };

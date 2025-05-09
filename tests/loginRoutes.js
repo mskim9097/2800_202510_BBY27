@@ -10,12 +10,12 @@ const { authenticated, destroySession, createSession, authenticateUser } = requi
 
 // router.use(authenticated);
 
-router.get('/', (req, res) => {
+router.get('/login', (req, res) => {
   // This will render views/pages/landing.ejs
   res.render('pages/login'); 
 });
 
-router.post('/', authenticateUser, authenticated, (req, res) => {
+router.post('/login', authenticateUser, authenticated, (req, res) => {
   // This will render views/pages/landing.ejs
   res.render('tests/blair_test'); 
 });
