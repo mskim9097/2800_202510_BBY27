@@ -22,5 +22,44 @@
       },
       "rangeKm": 80
     }
+  },
+  {
+    "commonName": "Tony Testing Species",
+    "scientificName": "test",
+    "image": "test",
+    "description": "testtesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttest",
+    "location": {
+      "center": {
+        "lat": 3,
+        "lng": 3
+      },
+      "rangeKm": 19
+    }
+  },
+  {
+    "commonName": "Tony Testing Species2",
+    "scientificName": "test",
+    "image": "test",
+    "description": "testtesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttest",
+    "location": {
+      "center": {
+        "lat": 3,
+        "lng": 3
+      },
+      "rangeKm": 19
+    }
+  },
+  {
+    "commonName": "Tony Testing Species3",
+    "scientificName": "test",
+    "image": "test",
+    "description": "testtesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttest",
+    "location": {
+      "center": {
+        "lat": 3,
+        "lng": 3
+      },
+      "rangeKm": 19
+    }
   }
 ]
