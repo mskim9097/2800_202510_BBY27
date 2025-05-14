@@ -5,7 +5,7 @@ const app = express();
 app.use(express.json());
 app.use(express.urlencoded({extended: false}));
 const path = require('path');
-const PORT = process.env.PORT || 3000;
+const PORT = process.env.PORT || 8000;
 
 //getting static files from views and public folders
 app.set('views', path.join(__dirname, 'views'));
@@ -65,3 +65,6 @@ app.use('/explorer',explorerRouter);
 const researcherRouter = require('./routes/researcherRoutes');
 app.use('/researcher',researcherRouter);const userRouter = require('./routes/userRoutes');
 app.use('/user', userRouter);
+
+const testRouter = require('./routes/testRoutes');
+app.use('/test', testRouter);

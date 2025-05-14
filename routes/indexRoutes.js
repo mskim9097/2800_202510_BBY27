@@ -14,7 +14,7 @@ router.get('/signup', (req, res) => {
   res.render('pages/signup'); 
 });
 
-router.post('/signup',signUp, async (req, res) => {
+router.post('/createUser',signUp, async (req, res) => {
   res.redirect("/");
 });
 
