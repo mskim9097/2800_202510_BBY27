@@ -72,33 +72,7 @@
     </form>
 
     
-    <script>
-        mapboxgl.accessToken = 'pk.eyJ1IjoidG9ueXhjaGVuIiwiYSI6ImNtOGdjMGYydTBsdjcyaW9pa2xqNWw3ODUifQ.zNywMAWcRkug0iD3Aej6hw'; // Replace this with your token
-
-        const map = new mapboxgl.Map({
-            container: 'map',
-            style: 'mapbox://styles/mapbox/streets-v12',
-            center: [-123.1207, 49.2827], // Default center (Vancouver, for example)
-            zoom: 10
-        });
-
-        let marker;
-
-        map.on('click', function (e) {
-            const { lng, lat } = e.lngLat;
-
-            // Remove old marker if it exists
-            if (marker) marker.remove();
-
-            // Add a new marker
-            marker = new mapboxgl.Marker({ color: 'green' })
-                .setLngLat([lng, lat])
-                .addTo(map);
-
-            document.getElementById('latitude').value = lat;
-            document.getElementById('longitude').value = lng;
-        });
-    </script>
+    <script src="/js/questMap.js"> </script>
 
 </body>
 
