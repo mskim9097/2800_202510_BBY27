@@ -1,0 +1,34 @@
+<div id="footer" style="background-color: rgb(95, 143, 96);"
+    class="w-full py-3 px-3 self-center rounded-3xl relative">
+    <button id="start-camera"
+        class="bg-[#e9bc70] p-2 rounded-full transition absolute -top-4 transform -translate-x-[50%] left-[50%]">
+        <i data-lucide="camera" class="w-8 h-8 text-white"></i>
+    </button>
+
+    <div id="camera-container"
+        class="hidden fixed top-0 left-0 w-screen h-screen bg-black z-50 flex flex-col items-center justify-center space-y-4">
+        <video id="video" autoplay playsinline class="w-full h-full object-cover"></video>
+        <button id="capture-btn"
+            class="absolute bottom-20 bg-green-600 hover:bg-green-700 px-6 py-3 text-white rounded-full shadow-lg">
+            Capture
+        </button>
+        <button id="close-camera"
+            class="absolute top-5 right-5 bg-red-600 hover:bg-red-700 text-white px-4 py-2 rounded">
+            Close
+        </button>
+    </div>
+
+    <canvas id="canvas" class="hidden fixed top-0 left-0 w-screen h-screen z-50 object-cover bg-black"></canvas>
+    <button id="close-canvas"
+        class="hidden fixed top-5 right-5 z-50 text-white bg-red-600 px-4 py-2 rounded">
+        Close
+    </button>
+
+    <div class="flex items-center justify-between">
+        <img class="hover:bg-[#dad7b2] rounded p-2 " src="/images/home.svg" width="40" height="30" alt="">
+        <img class="hover:bg-[#dad7b2] rounded p-2" src="/images/dna-icon.svg" width="40" height="30" alt="">
+        <img class="hover:bg-[#dad7b2] rounded p-2" src="https://img.icons8.com/ios/30/ffffff/quest--v1.png"
+            width="40" height="30" alt="quest" />
+        <img class="hover:bg-[#dad7b2] rounded p-2" src="/images/heart.svg" width="40" height="30" alt="">
+    </div>
+</div>
