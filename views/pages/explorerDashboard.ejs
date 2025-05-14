@@ -25,8 +25,8 @@
         time: "Anytime" , difficulty: "Easy" } ]; %>
 
         <div style="background-color:rgb(242, 242, 242)"
-            class="flex flex-col p-4 justify-between h-full rounded-lg shadow-sm gap-6">
-            <div id="content" class="flex flex-col gap-5 overflow-y-auto ">
+            class="flex flex-col p-4 justify-between h-full rounded-lg shadow-sm gap-5">
+            <div id="content" class="flex flex-col gap-4 overflow-y-auto ">
                 <div class="flex justify-between p-2">
                     <img class="w-10 h-10" src="/images/menu.svg" alt="">
                     <img class="w-10 h-10" src="/images/bell.svg" alt="">
@@ -50,11 +50,11 @@
 
                 </div>
                 <!-- quest cards -->
-                <div class="p-4">
+                <div class="p-3">
                     <span class="font-bold text-xl">Quests</span>
 
                     <!-- Swiper Container -->
-                    <div class="swiper mySwiper mt-4">
+                    <div class="swiper mySwiper mt-2 w-full">
                         <div class="swiper-wrapper flex items-center">
                             <% quests.forEach((quest)=> { %>
                                 <div class="swiper-slide">
@@ -121,14 +121,7 @@
         <script src="/js/camera.js"></script>
         <script src="/js/weather.js"></script>
         <script src="/js/map.js"></script>
-        <script>
-            const swiper = new Swiper(".mySwiper", {
-                slidesPerView: "1.2",
-                spaceBetween: 13,
-                freeMode: true,
-                grabCursor: true
-            });
-        </script>
+        <script src="/js/swiper.js"></script>
 
 </body>
 

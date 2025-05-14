@@ -72,7 +72,7 @@
                     <div class="swiper mySwiper mt-2 w-full">
                         <div class="swiper-wrapper ">
                             <% quests.forEach((quest)=> { %>
-                                <div class="swiper-slide max-w-[280px]">
+                                <div class="swiper-slide ">
                                     <%- include('../partials/questCard', { quest: quest, isResearcher :true }) %>
                                 </div>
                                 <% }) %>
@@ -104,31 +104,7 @@
         <script src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js"></script>
         <script src="/js/weather.js"></script>
         <script src="/js/map.js"></script>
-        <script>
-            const swiper = new Swiper(".mySwiper", {
-                slidesPerView: 1.2,
-                spaceBetween: 13,
-                freeMode: true,
-                grabCursor: true,
-                breakpoints: {
-                    410: {
-                        slidesPerView: 2,
-                    },
-                    640: {
-                        slidesPerView: 2.2,
-                    },
-                    768: {
-                        slidesPerView: 2.5,
-                    },
-                    1024: {
-                        slidesPerView: 3,
-                    },
-                }
-            });
-            setTimeout(() => {
-                swiper.update();
-            }, 100);
-        </script>
+        <script src="/js/swiper.js"></script>
 </body>
 
 </html>
