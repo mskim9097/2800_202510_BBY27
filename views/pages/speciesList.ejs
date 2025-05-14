@@ -1,0 +1,21 @@
+<%- include('partials/header') %>
+
+    <body class="bg-gray-100 p-4 flex flex-col gap-4 min-h-screen text-sm">
+
+        <!-- Search Field -->
+        <div class="max-w-xl w-full mx-auto">
+            <input type="text" placeholder="Search species..."
+                class="w-full border border-gray-300 p-2 rounded-full shadow-sm focus:outline-none focus:ring-2 focus:ring-green-400"
+                id="searchInput" />
+        </div>
+
+
+        <!-- Species Cards Section -->
+        <div id="speciesContainer" class="flex flex-col gap-4 mt-4 max-w-4xl mx-auto w-full">
+            <!-- This is where species cards will go -->
+            <!-- Species cards will be dynamically inserted here later -->
+        </div>
+
+    </body>
+
+    <%- include('partials/researcher-footer') %>
