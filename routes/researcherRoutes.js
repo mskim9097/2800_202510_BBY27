@@ -11,6 +11,9 @@ router.get('/dashboard', (req, res) => {
 
 router.get('/testQuest', (req, res) => {
     res.render('pages/testQuest');
+})
+router.get("/add-quest", (req, res) => {
+    res.render("pages/addQuest");
 });
 
 router.get('/createQuest', createQuest);

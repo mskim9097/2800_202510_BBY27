@@ -66,3 +66,6 @@ const researcherRouter = require('./routes/researcherRoutes');
 app.use('/researcher',researcherRouter);
 const userRouter = require('./routes/userRoutes');
 app.use('/user', userRouter);
+
+const testRouter = require('./routes/testRoutes');
+app.use('/test', testRouter);
