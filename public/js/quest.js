@@ -1,6 +1,38 @@
-const toggle = document.getElementById('enableQuantity');
-    const quantityInput = document.getElementById('quantityInput');
+const searchBox = document.getElementById('target');
+const resultBox = document.createElement('div');
+let suggestionClicked = false;
 
-    toggle.addEventListener('change', () => {
-        quantityInput.disabled = !toggle.checked;
+resultBox.classList.add('bg-white', 'border', 'rounded', 'p-2', 'mt-1');
+searchBox.parentNode.appendChild(resultBox);
+
+searchBox.addEventListener('input', async () => {
+    suggestionClicked = false;
+    const query = searchBox.value.trim();
+    if (query.length < 2) {
+        resultBox.innerHTML = '';
+        return;
+    }
+
+    const res = await fetch(`/quests/searchTarget?q=${encodeURIComponent(query)}`);
+    const data = await res.json();
+
+    resultBox.innerHTML = data
+        .map(species => `<div class="suggestion cursor-pointer hover:bg-gray-100 p-1">${species.speciesName}</div>`)
+        .join('');
+
+    document.querySelectorAll('.suggestion').forEach(item => {
+        item.addEventListener('click', () => {
+            searchBox.value = item.textContent;
+            suggestionClicked = true;
+            resultBox.innerHTML = '';
+        });
     });
+});
+
+const form = document.querySelector('form');
+form.addEventListener('submit', (e) => {
+    if (!suggestionClicked) {
+        e.preventDefault();
+        alert('Please select a species from the suggestion list.');
+    }
+});

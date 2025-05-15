@@ -23,17 +23,39 @@
 </head>
 
 <body class="bg-gray-100 p-4 flex flex-col gap-6 text-sm">
+<<<<<<< HEAD
+=======
+    <div >
+        <a href="/user/researcher" class="text-green-600 font-medium">← Back to Dashboard</a>
+    </div>
+    
+
+    <form action="/quests/addQuest" method="POST" class="flex flex-col gap-4 bg-white p-4 rounded shadow-md">
+        <h1 class="text-xl font-bold text-center">Create a New Quest</h1>
+>>>>>>> 45bdd5d716fea05445e388a03a3717d7057c1968
         <div>
             <a href="/researcher/Dashboard" class="text-green-600 font-medium">← Back to Dashboard</a>
         </div>
 
 
+<<<<<<< HEAD
         <form action="/create-quest" method="POST" class="flex flex-col gap-4 bg-white p-4 rounded shadow-md">
             <h1 class="text-xl font-bold text-center">Create a New Quest</h1>
             <div>
                 <label for="title" class="font-semibold block mb-1">Title</label>
                 <input type="text" name="title" id="title" required class="w-full border border-gray-300 p-2 rounded" />
             </div>
+=======
+        <div>
+            <label for="mission" class="font-semibold block mb-1">Mission</label>
+            <input type="text" name="mission" id="mission" required class="w-full border border-gray-300 p-2 rounded" />
+        </div>
+
+        <div>
+            <label for="target" class="font-semibold block mb-1">Target Species</label>
+            <input type="text" name="target" id="target" required class="w-full border border-gray-300 p-2 rounded" />
+        </div>
+>>>>>>> 45bdd5d716fea05445e388a03a3717d7057c1968
 
             <div>
                 <label class="font-semibold block mb-1">Choose Location on Map</label>
@@ -84,7 +106,7 @@
         </form>
 
     <script src="/js/questMap.js"> </script>
-
+    <script src="/js/quest.js"></script>
 </body>
 
 </html>

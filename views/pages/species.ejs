@@ -1,0 +1,11 @@
+
+<h1>Species Catalog</h1>
+<% species.forEach(sp => { %>
+  <div class="species-card">
+    <h2><%= sp.commonName %></h2>
+    <p><i><%= sp.scientificName %></i></p>
+    <p><%= sp.description %></p>
+    <img src="<%= sp.image %>" width="200" />
+    <p>Found within <%= sp.location.rangeKm %> km of (Lat: <%= sp.location.center.lat %>, Lng: <%= sp.location.center.lng %>)</p>
+  </div>
+<% }) %>

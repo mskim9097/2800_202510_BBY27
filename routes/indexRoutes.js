@@ -1,10 +1,7 @@
 const express = require('express');
-const bcrypt = require('bcrypt');
-const saltRounds = 12;
 const router = express.Router();
 
-
-const {signUp, destroySession, authenticateUser, authenticated} = require('../middleware/authentication');
+const { authenticated, destroySession, authenticateUser, signUp, checkAuthorization, isAuthorizedResearcher } = require('../controllers/userController');
 
 router.get('/', (req, res) => {
   res.render('pages/landing'); 
@@ -14,7 +11,7 @@ router.get('/signup', (req, res) => {
   res.render('pages/signup'); 
 });
 
-router.post('/signup',signUp, async (req, res) => {
+router.post('/createUser',signUp, async (req, res) => {
   res.redirect("/");
 });
 
