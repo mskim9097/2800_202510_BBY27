@@ -16,7 +16,7 @@ const appClient = require('../databaseConnection').database;
 const questCollection = appClient.db('biodiversityGo').collection('quest');
 const speciesCollection = appClient.db('biodiversityGo').collection('species');
 
-const createQuest = async (req, res) => {
+const createQuest = async (req, res, next) => {
     var questName = req.query.questName;
     // var location = null;
     var questInfo = req.query.questInfo;
@@ -32,8 +32,7 @@ const createQuest = async (req, res) => {
         note: null,
         acceptedBy: null
     });
-
-    res.redirect("/");
+    next();
 }
 
 const createSpecies = async (req, res, next) => {
@@ -62,7 +61,7 @@ const createSpecies = async (req, res, next) => {
 }
 
 //This updates the same fields as createSpecies
-const updateSpecies = async (req, res) => {
+const updateSpecies = async (req, res, next) => {
 
     const { speciesScientificName, speciesName, speciesInfo  } = req.body;
 
@@ -84,7 +83,7 @@ const updateSpecies = async (req, res) => {
             }
         }
     );
-    res.redirect("/");
+    next();
 }
 
 const getSpecies = async (req, res) => {

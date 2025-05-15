@@ -8,10 +8,10 @@ router.get('/dashboard', (req, res) => {
     res.render('pages/researcherDashboard'); 
 });
 
-
 router.get('/testQuest', (req, res) => {
     res.render('pages/testQuest');
-})
+});
+
 router.get("/add-quest", (req, res) => {
     res.render("pages/addQuest");
 });

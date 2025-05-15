@@ -6,15 +6,24 @@ const {createSpecies, updateSpecies} = require('../controllers/researcherControl
 const multer = require("multer");
 const upload = multer({ dest: "uploads/" });
 
-router.get('/add', (req, res) => {
+router.get('/addSpecies', (req, res) => {
     res.render('pages/addSpecies');
 });
 
-router.post('/add', upload.single("speciesImage"), createSpecies, (req, res) => {
+router.post('/addSpecies', upload.single("speciesImage"), createSpecies, (req, res) => {
     res.redirect("/researcher/dashboard");
 });
 
-router.post('/update', updateSpecies);
+// NEED UPDATE SPECIES PAGE
+router.get('/updateSpecies', (req, res) => {
+    res.render('pages/updateSpecies');
+});
+
+router.post('/updateSpecies', upload.single("speciesImage"), createSpecies, (req, res) => {
+    res.redirect("/researcher/dashboard");
+});
+
+router.post('/updateSpecies', updateSpecies);
 
 
 module.exports = router;

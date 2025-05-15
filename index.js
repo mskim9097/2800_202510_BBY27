@@ -71,5 +71,8 @@ app.use('/user', userRouter);
 const speciesRouter = require('./routes/speciesRoutes');
 app.use('/species', speciesRouter);
 
+const questRouter = require('./routes/questRoutes');
+app.use('/quests', questRouter);
+
 const testRouter = require('./routes/testRoutes');
 app.use('/test', testRouter);

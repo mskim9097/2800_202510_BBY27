@@ -22,8 +22,4 @@ router.get('/researcher', authenticated, isAuthorizedResearcher, (req, res) => {
     res.render('pages/researcherDashboard');
 });
 
-router.post('/logout', (req, res) => {
-    res.redirect('/logout');
-});
-
 module.exports = router;
