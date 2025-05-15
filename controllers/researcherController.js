@@ -4,13 +4,23 @@ const Joi = require("joi");
 const MongoStore = require('connect-mongo');
 const session = require('express-session');
 const bcrypt = require("bcrypt");
+const fs = require("fs");
+const path = require("path");
 const saltRounds = 12;
 const expireTime = 24 * 60 * 60 * 1000;
 const app = express();
 
-//Not necessary to create a collection in a seperate file, because mongo will create the collection if it dosen't exist.
-// var {database} = include('databaseConnection');
+const mongodb_host = process.env.MONGODB_HOST;
+const mongodb_user = process.env.MONGODB_USER;
+const mongodb_password = process.env.MONGODB_PASSWORD;
+const mongodb_database = process.env.MONGODB_DATABASE;
+const mongodb_session_secret = process.env.MONGODB_SESSION_SECRET;
+const node_session_secret = process.env.NODE_SESSION_SECRET;
+
+var {database} = include('databaseConnection');
 // const questCollection = database.db(mongodb_database).collection('quest');
+
+app.use(express.urlencoded({extended: false}));
 //logic related to researcher routes goes here
 const appClient = require('../databaseConnection').database;
 const questCollection = appClient.db('biodiversityGo').collection('quest');

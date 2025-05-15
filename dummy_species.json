@@ -2,7 +2,7 @@
   {
     "commonName": "Black Bear",
     "scientificName": "Ursus americanus",
-    "image": "/images/bear.jpg",
+    "image": "/images/black_bear.jpg",
     "location": {
       "center": {
         "lat": 49.25,
@@ -14,13 +14,27 @@
   {
     "commonName": "Bald Eagle",
     "scientificName": "Haliaeetus leucocephalus",
-    "image": "/images/eagle.jpg",
+    "image": "/images/bald_eagle.jpg",
     "location": {
       "center": {
         "lat": 49.3,
         "lng": -123.1
       },
       "rangeKm": 80
+    }
+  }
+ ,
+  {
+    "commonName": "Tony Testing Demo",
+    "scientificName": "Demo Species",
+    "image": "test",
+    "description": "This is a test for the demo.",
+    "location": {
+      "center": {
+        "lat": 3,
+        "lng": 3
+      },
+      "rangeKm": 19
     }
   }
 ]
