@@ -9,18 +9,8 @@
     <!-- mapbox css and js links -->
     <link href="https://api.mapbox.com/mapbox-gl-js/v2.15.0/mapbox-gl.css" rel="stylesheet" />
     <script src="https://api.mapbox.com/mapbox-gl-js/v2.15.0/mapbox-gl.js"></script>
-    <style>
-        /* hide scrollbar+ keep scroll */
-        #content {
-            -ms-overflow-style: none;
-            scrollbar-width: none;
-            overflow-y: scroll;
-        }
-
-        #content::-webkit-scrollbar {
-            display: none;
-        }
-    </style>
+    <!-- SwiperJS CSS -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.css" />
 </head>
 
 <body class="h-screen overflow-y-auto">
@@ -30,11 +20,15 @@
         location: "Downtown Vancouver" , mission: "Identify 5 pollinator species" , target: "Bees, butterflies" ,
         time: "Anytime" , difficulty: "Easy" }, { id: 3, image: "/images/plant1.jpg" , title: "Explore Stanley Park" ,
         location: "Downtown Vancouver" , mission: "Identify 5 pollinator species" , target: "Bees, butterflies" ,
+        time: "Anytime" , difficulty: "Easy" },{ id: 2, image: "/images/plant2.jpg" , title: "Urban Pollinators" ,
+        location: "Downtown Vancouver" , mission: "Identify 5 pollinator species" , target: "Bees, butterflies" ,
+        time: "Anytime" , difficulty: "Easy" },{ id: 3, image: "/images/plant1.jpg" , title: "Explore Stanley Park" ,
+        location: "Downtown Vancouver" , mission: "Identify 5 pollinator species" , target: "Bees, butterflies" ,
         time: "Anytime" , difficulty: "Easy" } ]; %>
 
         <div style="background-color:rgb(242, 242, 242)"
-            class="flex flex-col p-4 justify-between h-full rounded-lg shadow-sm gap-6">
-            <div id="content" class="flex flex-col gap-5 overflow-y-auto ">
+            class="flex flex-col p-4 justify-between h-full rounded-lg shadow-sm gap-4">
+            <div id="content" class="flex flex-col gap-4 overflow-y-auto ">
                 <div class="flex justify-between p-2">
                     <img class="w-10 h-10" src="/images/menu.svg" alt="">
                     <img class="w-10 h-10" src="/images/bell.svg" alt="">
@@ -53,31 +47,45 @@
                 <div id="explore_time" class="py-2 px-1 w-fit shadow text-sm rounded font-semibold m-auto">
                     Is it a good day to explore .....
                 </div>
+                <!--Add Quest-->
                 <div class=" flex justify-end  ">
                     <div class="relative group">
-                        <div class="absolute bottom-full bg-black text-white text-xs rounded px-2 py-1 group-hover:opacity-100 mb-2 right-0  opacity-0   mb-2 right-0">
+                        <div
+                            class="absolute bottom-full bg-black text-white text-xs rounded px-2 py-1 group-hover:opacity-100 mb-2 right-0  opacity-0   mb-2 right-0">
                             Add Quests
                         </div>
-                        <div class="bg-green-700 p-2 rounded-full cursor-pointer">
-                            <img src="/images/add.svg" class="h-8 w-8 " alt="">
-                        </div>
+                        <a href="/researcher/add-quest" class="bg-green-700 p-2 rounded-full cursor-pointer block">
+                            <img src="/images/add.svg" class="h-8 w-8" alt="Add Quest">
+                        </a>
                     </div>
-                    
+
                 </div>
-                <div id="map" class="min-h-[250px] w-full rounded shadow">
+                <!--Map-->
+                <div id="map" class="min-h-[180px] w-full rounded shadow">
 
                 </div>
                 <!-- quest cards -->
-                <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 p-4">
+                <div>
                     <span class="font-bold text-xl">Quests</span>
-                    <% quests.slice(0, 3).forEach((quest)=> { %>
-                        <%- include('../partials/questCard', { quest: quest }) %>
-                            <% })%>
+
+                    <!-- Swiper Container -->
+                    <div class="swiper mySwiper mt-2 w-full">
+                        <div class="swiper-wrapper ">
+                            <% quests.forEach((quest)=> { %>
+                                <div class="swiper-slide max-w-[280px]">
+                                    <%- include('../partials/questCard', { quest: quest, isResearcher :true }) %>
+                                </div>
+                                <% }) %>
+                                    <div class="swiper-slide ">
+                                        <a href="/quests"
+                                            class="p-5 flex items-center justify-center text-green-600 border border-green-600 rounded-lg text-sm font-semibold hover:bg-green-50 gap-2">
+                                            <span>See More </span>
+                                            <img src="/images/right.svg" width="20" alt="">
+                                        </a>
+                                    </div>
+                        </div>
+                    </div>
                 </div>
-                <a href="#quests" id="toggle-quests"
-                    class="text-white font-semibold italic bg-green-600 shadow p-2 w-fit self-center rounded text-center focus:outline-none">
-                    See More
-                </a href="#quests">
 
             </div>
             <div id="footer" class=" w-full py-3 px-3 self-center  rounded-3xl relative bg-green-700 ">
@@ -93,8 +101,34 @@
 
             </div>
         </div>
+        <script src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js"></script>
         <script src="/js/weather.js"></script>
         <script src="/js/map.js"></script>
+        <script>
+            const swiper = new Swiper(".mySwiper", {
+                slidesPerView: 1.2,
+                spaceBetween: 13,
+                freeMode: true,
+                grabCursor: true,
+                breakpoints: {
+                    410: {
+                        slidesPerView: 2,
+                    },
+                    640: {
+                        slidesPerView: 2.2,
+                    },
+                    768: {
+                        slidesPerView: 2.5,
+                    },
+                    1024: {
+                        slidesPerView: 3,
+                    },
+                }
+            });
+            setTimeout(() => {
+                swiper.update();
+            }, 100);
+        </script>
 </body>
 
 </html>

@@ -36,12 +36,16 @@ async function authenticateUser(req, res, next) {
 
     req.session.user = email;
     req.session.type = user.type;
+    req.session.name = user.firstName + " " + user.lastName;
 
     req.session.save(err => {
       if (err) {
         console.error("Session save error:", err);
         return res.status(500).send("Session error");
       }
+    console.log("User type:", user.firstName);
+    console.log("User type:", req.session.type);
+
     
     //   console.log('Session type:', req.session.type);
     //   console.log("✅ Session saved to MongoDB:", req.session);
@@ -74,12 +78,12 @@ function destroySession(req, res, next) {
         }
         res.clearCookie('connect.sid');
         console.log('Session destroyed and cookie cleared.');
-        res.redirect('/');
+        next();
     });
 }
 
 async function signUp(req, res, next) {
-    const { firstName, lastName, email, password } = req.body;
+    const { firstName, lastName, email, password, type } = req.body;
 
     if (email && password && email) {
         try {
@@ -90,7 +94,8 @@ async function signUp(req, res, next) {
                 firstName: firstName,
                 lastName: lastName,
                 email: email,
-                password: hashedPassword
+                password: hashedPassword,
+                type: type
             };
 
             const result = await appClient.db('biodiversityGo').collection("user").insertOne(newUser);

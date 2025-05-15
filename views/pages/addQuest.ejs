@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Add Quest</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://api.mapbox.com/mapbox-gl-js/v2.15.0/mapbox-gl.css" rel="stylesheet" />
+    <script src="https://api.mapbox.com/mapbox-gl-js/v2.15.0/mapbox-gl.js"></script>
+
+</head>
+
+<body class="bg-gray-100 p-4 flex flex-col gap-6 text-sm">
+    <div >
+        <a href="/researcher/Dashboard" class="text-green-600 font-medium">← Back to Dashboard</a>
+    </div>
+    
+
+    <form action="/quests/createQuest" method="POST" class="flex flex-col gap-4 bg-white p-4 rounded shadow-md">
+        <h1 class="text-xl font-bold text-center">Create a New Quest</h1>
+        <div>
+            <label for="title" class="font-semibold block mb-1">Title</label>
+            <input type="text" name="title" id="title" required class="w-full border border-gray-300 p-2 rounded" />
+        </div>
+
+        <div>
+            <label class="font-semibold block mb-1">Choose Location on Map</label>
+            <div id="map" class="w-full h-64 rounded border border-gray-300 mb-2"></div>
+            <input type="hidden" name="latitude" id="latitude" />
+            <input type="hidden" name="longitude" id="longitude" />
+        </div>
+
+        <div>
+            <label for="mission" class="font-semibold block mb-1">Mission</label>
+            <input type="text" name="mission" id="mission" required class="w-full border border-gray-300 p-2 rounded" />
+        </div>
+          
+        <div>
+            <label for="target" class="font-semibold block mb-1">Target Species</label>
+            <select name="target" id="target" required class="w-full border border-gray-300 p-2 rounded">
+                <option value="" disabled selected>Select species</option>
+                <option value="1">Bald Eagle</option>
+                <option value="2">Monarch Butterfly</option>
+                <option value="3">Red Fox</option>
+                <option value="4">Western Toad</option>
+              </select>
+        </div>
+
+        <div>
+            <label for="timeOfDay" class="font-semibold block mb-1">Time of Day</label>
+            <select name="timeOfDay" id="timeOfDay" required class="w-full border border-gray-300 p-2 rounded">
+                <option value="Morning">Morning</option>
+                <option value="Afternoon">Afternoon</option>
+                <option value="Evening">Evening</option>
+                <option value="Night">Night</option>
+            </select>
+        </div>
+
+        <div>
+            <label for="difficulty" class="font-semibold block mb-1">Difficulty</label>
+            <select name="difficulty" id="difficulty" required class="w-full border border-gray-300 p-2 rounded">
+                <option value="Easy">Easy</option>
+                <option value="Medium">Medium</option>
+                <option value="Hard">High</option>
+            </select>
+        </div>
+
+        <button type="submit" class="bg-green-600 text-white p-2 rounded font-semibold hover:bg-green-700">
+            Submit Quest
+        </button>
+    </form>
+
+    
+    <script src="/js/questMap.js"> </script>
+
+</body>
+
+</html>

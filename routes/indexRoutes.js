@@ -5,6 +5,7 @@ const router = express.Router();
 
 
 const {signUp, destroySession, authenticateUser, authenticated} = require('../middleware/authentication');
+const {isAuthorizedResearcher, isAuthorizedExplorer, checkAuthorization} = require('../middleware/authorization');
 
 router.get('/', (req, res) => {
   res.render('pages/landing'); 
@@ -14,7 +15,7 @@ router.get('/signup', (req, res) => {
   res.render('pages/signup'); 
 });
 
-router.post('/signup',signUp, async (req, res) => {
+router.post('/createUser',signUp, async (req, res) => {
   res.redirect("/");
 });
 

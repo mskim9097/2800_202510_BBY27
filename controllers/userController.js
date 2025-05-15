@@ -42,7 +42,7 @@ const createUser = async (req, res) => {
     var lastName = req.body.lastName;
     var email = req.body.email;
     var password = req.body.password;
-    var type = req.body.type;
+    var type = req.body.userType;
 
     const schema = Joi.object({
         firstName: Joi.string().alphanum().max(20).required(),

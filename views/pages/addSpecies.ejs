@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Add Species</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+</head>
+
+<body class="bg-gray-100 p-4 flex flex-col gap-6 text-sm min-h-screen">
+
+  <!-- Back Link -->
+  <div>
+    <a href="/researcher/Dashboard" class="text-green-600 font-medium">← Return to Species</a>
+  </div>
+
+  <!-- Add Species Form -->
+  <form action="/species/addSpecies" method="POST" enctype="multipart/form-data"
+    class="flex flex-col gap-4 bg-white p-4 rounded shadow-md max-w-xl mx-auto">
+    
+    <h1 class="text-xl font-bold text-center">Add New Species</h1>
+
+    <!-- Scientific Name -->
+    <div>
+      <label for="speciesScientificName" class="font-semibold block mb-1">Scientific Name</label>
+      <input type="text" name="speciesScientificName" id="speciesScientificName" required
+        class="w-full border border-gray-300 p-2 rounded" />
+    </div>
+
+    <!-- Common Name -->
+    <div>
+      <label for="speciesName" class="font-semibold block mb-1">Common Name</label>
+      <input type="text" name="speciesName" id="speciesName" required
+        class="w-full border border-gray-300 p-2 rounded" />
+    </div>
+
+    <!-- Species Info -->
+    <div>
+      <label for="speciesInfo" class="font-semibold block mb-1">Species Info</label>
+      <input type="text" name="speciesInfo" id="speciesInfo" rows="4" required
+        class="w-full border border-gray-300 p-2 rounded"></textarea>
+    </div>
+
+    <!-- Species Image Upload -->
+    <div>
+      <label for="speciesImage" class="font-semibold block mb-1">Species Image</label>
+      <input type="file" name="speciesImage" id="speciesImage" accept="image/*"
+        class="w-full border border-gray-300 p-2 rounded bg-white file:mr-2 file:py-1 file:px-3 file:rounded file:border-0 file:bg-green-600 file:text-white hover:file:bg-green-700" />
+    </div>
+
+    <!-- Submit Button -->
+    <button type="submit"
+      class="bg-green-600 text-white p-2 rounded font-semibold hover:bg-green-700">
+      Submit Species
+    </button>
+  </form>
+
+</body>
+
+</html>
