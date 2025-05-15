@@ -51,14 +51,7 @@ const createUser = async (req, res) => {
         password: Joi.string().max(20).required()
     });
     const validationResult = schema.validate({firstName, lastName, email, password});
-    /*
-    if (validationResult.error != null) {
-        res.send(`
-            Invalid email/password combination.<br><br>
-            <a href="/signup">Try again</a>
-            `);
-        return;
-    }*/
+
     var hashedPassword = await bcrypt.hash(password, saltRounds);
 
     await userCollection.insertOne({firstName: firstName, lastName: lastName, email: email, password: hashedPassword, type: type});
