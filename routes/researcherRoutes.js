@@ -1,7 +1,7 @@
 // researcher's specifc routes
 const express = require('express');
 const router = express.Router();
-const {createQuest} = require('../controllers/researcherController');
+const {createQuest} = require('../controllers/questsController');
 
 router.get('/dashboard', (req, res) => {
     // This will render views/pages/researcherDashboard.ejs
@@ -14,6 +14,10 @@ router.get('/testQuest', (req, res) => {
 })
 router.get("/add-quest", (req, res) => {
     res.render("pages/addQuest");
+});
+
+router.get("/quests", (req, res) => {
+    res.render("pages/quests");
 });
 
 router.get('/createQuest', createQuest);
