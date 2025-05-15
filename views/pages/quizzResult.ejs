@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+
+</head>
+
+<body>
+    <h2>Your Score: <%= score %> / <%= total %>
+    </h2>
+
+    <ul>
+        <% riddles.forEach(r=> { %>
+            <li>
+                <strong>Q:</strong>
+                <%= r.question %><br>
+                    <strong>Your answer:</strong>
+                    <%= r.userAnswer %>
+                        <%= r.correct ? "✅" : "❌" %><br>
+                            <% if (!r.correct) { %>
+                                <strong>Correct answer:</strong>
+                                <%= r.correctAnswer %>
+                                    <% } %>
+            </li>
+            <% }) %>
+    </ul>
+
+
+    <h3>Bonus Nature Joke 🐸:</h3>
+    <p>
+        <%= joke %>
+    </p>
+
+</body>
+
+</html>

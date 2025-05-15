@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+
+</head>
+
+<body>
+    <!-- views/pages/riddles.ejs -->
+    <div class="max-w-xl mx-auto mt-10 bg-white p-6 rounded-xl shadow-md">
+        <h1 class="text-2xl font-bold text-center mb-4">🧠 Biodiversity Riddle Challenge</h1>
+        <form action="/ai/riddles" method="POST" class="space-y-4">
+
+            <div>
+                <label class="block text-sm font-medium">Difficulty</label>
+                <select name="difficulty" class="mt-1 block w-full border border-gray-300 rounded-md p-2">
+                    <option>easy</option>
+                    <option>medium</option>
+                    <option>hard</option>
+                </select>
+            </div>
+
+            <div>
+                <label class="block text-sm font-medium">Number of Riddles</label>
+                <input type="number" name="count" value="5" min="1" max="10"
+                    class="mt-1 block w-full border border-gray-300 rounded-md p-2" />
+            </div>
+
+            <div>
+                <label class="block text-sm font-medium">Category</label>
+                <select name="category" class="mt-1 block w-full border border-gray-300 rounded-md p-2">
+                    <option value="any">Any</option>
+                    <option value="birds">Birds</option>
+                    <option value="plants">Plants</option>
+                    <option value="insects">Insects</option>
+                </select>
+            </div>
+
+            <div class="text-center">
+                <button type="submit"
+                    class="bg-green-600 text-white px-4 py-2 rounded hover:bg-green-700 transition duration-200">
+                    🪄 Generate Riddles
+                </button>
+            </div>
+        </form>
+    </div>
+
+
+</body>
+
+</html>
