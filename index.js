@@ -5,7 +5,7 @@ const app = express();
 app.use(express.json());
 app.use(express.urlencoded({extended: false}));
 const path = require('path');
-const PORT = process.env.PORT || 3000;
+const PORT = process.env.PORT || 8000;
 
 //getting static files from views and public folders
 app.set('views', path.join(__dirname, 'views'));
@@ -22,6 +22,8 @@ const session = require('express-session');
 const mongoSessions = `mongodb+srv://${process.env.MONGODB_USER}:${process.env.MONGODB_PASSWORD}@${process.env.MONGODB_HOST}/biodiversityGo`;
 
 const { database } = require('./databaseConnection');
+
+const { authenticated } = require('./controllers/userController');
 
 // Session Middleware
 app.use(session({
@@ -59,12 +61,14 @@ app.use(session({
 const indexRouter = require('./routes/indexRoutes');
 app.use('/', indexRouter);
 
-const explorerRouter = require('./routes/explorerRoutes');
-app.use('/explorer',explorerRouter);
+const userRouter = require('./routes/userRoutes');
+app.use('/user', authenticated, userRouter);
 
-const researcherRouter = require('./routes/researcherRoutes');
-app.use('/researcher',researcherRouter);const userRouter = require('./routes/userRoutes');
-app.use('/user', userRouter);
+const speciesRouter = require('./routes/speciesRoutes');
+app.use('/species', authenticated, speciesRouter);
+
+const questRouter = require('./routes/questRoutes');
+app.use('/quests', authenticated, questRouter);
 
 const testRouter = require('./routes/testRoutes');
 app.use('/test', testRouter);

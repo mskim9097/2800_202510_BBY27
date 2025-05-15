@@ -12,40 +12,40 @@
 
   <!-- Back Link -->
   <div>
-    <a href="/researcher/Dashboard" class="text-green-600 font-medium">← Return to Species</a>
+    <a href="/user/researcher" class="text-green-600 font-medium">← Return to Dashboard</a>
   </div>
 
   <!-- Add Species Form -->
-  <form action="/species/add" method="POST" enctype="multipart/form-data"
+  <form action="/species/addSpecies" method="POST" enctype="multipart/form-data"
     class="flex flex-col gap-4 bg-white p-4 rounded shadow-md max-w-xl mx-auto">
     
     <h1 class="text-xl font-bold text-center">Add New Species</h1>
 
     <!-- Scientific Name -->
     <div>
-      <label for="scientificName" class="font-semibold block mb-1">Scientific Name</label>
-      <input type="text" name="scientificName" id="scientificName" required
+      <label for="speciesScientificName" class="font-semibold block mb-1">Scientific Name</label>
+      <input type="text" name="speciesScientificName" id="speciesScientificName" required
         class="w-full border border-gray-300 p-2 rounded" />
     </div>
 
     <!-- Common Name -->
     <div>
-      <label for="commonName" class="font-semibold block mb-1">Common Name</label>
-      <input type="text" name="commonName" id="commonName" required
+      <label for="speciesName" class="font-semibold block mb-1">Common Name</label>
+      <input type="text" name="speciesName" id="speciesName" required
         class="w-full border border-gray-300 p-2 rounded" />
     </div>
 
     <!-- Species Info -->
     <div>
       <label for="speciesInfo" class="font-semibold block mb-1">Species Info</label>
-      <textarea name="speciesInfo" id="speciesInfo" rows="4" required
+      <input type="text" name="speciesInfo" id="speciesInfo" rows="4" required
         class="w-full border border-gray-300 p-2 rounded"></textarea>
     </div>
 
     <!-- Species Image Upload -->
     <div>
-      <label for="speciesImage" class="font-semibold block mb-1">Species Image</label>
-      <input type="file" name="speciesImage" id="speciesImage" accept="image/*"
+      <label for="image" class="font-semibold block mb-1">Species Image</label>
+      <input type="file" name="image" id="image" accept="image/*"
         class="w-full border border-gray-300 p-2 rounded bg-white file:mr-2 file:py-1 file:px-3 file:rounded file:border-0 file:bg-green-600 file:text-white hover:file:bg-green-700" />
     </div>
 
