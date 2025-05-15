@@ -1,29 +1,48 @@
 const express = require('express');
 const router = express.Router();
 
-const {createSpecies, updateSpecies, createQuest, searchTarget} = require('../controllers/researcherController');
+const { createQuest } = require('../controllers/questsController');
 
 const multer = require("multer");
 const upload = multer({ dest: "uploads/" });
 
-//Needs to be updated with actua
-router.get('/createQuest', (req, res, next) => {
-    res.render('pages/addQuest');
+const researcherDashboard = "/user/researcher";
+const addQuest = "pages/addQuest";
+
+const { isAuthorizedResearcher } = require('../controllers/userController');
+
+router.get('/completeQuest', (req, res, next) => {
+    res.redirect(researcherDashboard);
 });
 
-router.get('/searchTarget', searchTarget);
+// NEEDS QUEST PAGE
+router.get('/viewQuest', (req, res, next) => {
+    res.redirect(researcherDashboard);
+});
+// NEEDS QUEST LIST PAGE
+router.get('/questList', (req, res, next) => {
+    res.redirect(researcherDashboard);
+});
 
-router.post('/createQuest', upload.single("speciesImage"), createQuest, (req, res, next) => {
-    res.redirect("/researcher/dashboard");
+//Needs to be updated with actua
+router.get('/addQuest', isAuthorizedResearcher, (req, res, next) => {
+    res.render(addQuest);
+});
+
+// router.get('/searchTarget', searchTarget);
+
+router.post('/addQuest', isAuthorizedResearcher, upload.single("speciesImage"), createQuest, (req, res, next) => {
+    res.redirect(researcherDashboard);
 });
 
 //!!!! NEEDS MIDDLEWARE FOR UPDATING QUESTS !!!!!
-router.get('/update', (req, res, next) => {
+router.get('/updateQuest', isAuthorizedResearcher, (req, res, next) => {
     // NEEDS PAGE FOR UPDATING QUESTS
-    res.redirect("/researcher/dashboard");
+    res.redirect(researcherDashboard);
 });
-router.post('/update', (req, res, next) => {
-    res.redirect("/researcher/dashboard");
+router.post('/updateQuest', isAuthorizedResearcher, (req, res, next) => {
+    res.redirect(researcherDashboard);
 });
+
 
 module.exports = router;

@@ -1,14 +1,13 @@
 const express = require('express');
 const router = express.Router();
 
-const { isAuthorizedResearcher, isAuthorizedExplorer, checkAuthorization } = require('../middleware/authorization');
-const { authenticated } = require('../middleware/authentication');
+const { authenticated, destroySession, authenticateUser, signUp, checkAuthorization, isAuthorizedResearcher } = require('../controllers/userController');
 
 router.get('/', (req, res) => {
     checkAuthorization(req, res);
 });
 
-router.get('/explorer', authenticated, isAuthorizedExplorer, (req, res) => {
+router.get('/explorer', authenticated, (req, res) => {
     /*
     Needs to be changed to the correct route (the explorer dashboard)
     */

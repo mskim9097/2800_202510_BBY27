@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title><%= title ? title : 'Species Detail' %></title>
+    <!-- Link to your main stylesheet -->
+    <link rel="stylesheet" href="/css/style.css"> <%- /* Adjust path if necessary */ %>
+    <style>
+        /* Basic styling for the detail page */
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+            background-color: #f4f4f4;
+            color: #333;
+        }
+        .container {
+            background-color: #fff;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0,0,0,0.1);
+            max-width: 800px;
+            margin: auto;
+        }
+        h1 {
+            color: #2c3e50;
+            text-align: center;
+        }
+        img.species-image {
+            max-width: 100%;
+            height: auto;
+            border-radius: 5px;
+            margin-bottom: 15px;
+            display: block;
+            margin-left: auto;
+            margin-right: auto;
+        }
+        .species-info p {
+            line-height: 1.6;
+        }
+        .species-info strong {
+            color: #555;
+        }
+        .back-link {
+            display: inline-block;
+            margin-top: 20px;
+            padding: 10px 15px;
+            background-color: #3498db;
+            color: white;
+            text-decoration: none;
+            border-radius: 5px;
+        }
+        .back-link:hover {
+            background-color: #2980b9;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <% if (typeof species !== 'undefined' && species) { %>
+            <h1><%= species.speciesName %></h1>
+            
+            <% if (species.speciesImage) { %>
+                <img src="<%= species.speciesImage %>" alt="Image of <%= species.speciesName %>" class="species-image">
+            <% } else { %>
+                <p><em>No image available for this species.</em></p>
+            <% } %>
+
+            <div class="species-info">
+                <p><strong>Scientific Name:</strong> <%= species.speciesScientificName %></p>
+                <p><strong>Information:</strong></p>
+                <p><%= species.speciesInfo %></p>
+            </div>
+            
+        <% } else { %>
+            <h1>Species Not Found</h1>
+            <p>The species you are looking for could not be found.</p>
+        <% } %>
+
+        <a href="/species" class="back-link">Back to All Species</a>
+    </div>
+
+    <%- /* You might have a common footer include here, e.g., include('../partials/footer') */ %>
+</body>
+</html> 

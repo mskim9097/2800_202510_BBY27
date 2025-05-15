@@ -1,11 +1,7 @@
 const express = require('express');
-const bcrypt = require('bcrypt');
-const saltRounds = 12;
 const router = express.Router();
 
-
-const {signUp, destroySession, authenticateUser, authenticated} = require('../middleware/authentication');
-const {isAuthorizedResearcher, isAuthorizedExplorer, checkAuthorization} = require('../middleware/authorization');
+const { authenticated, destroySession, authenticateUser, signUp, checkAuthorization, isAuthorizedResearcher } = require('../controllers/userController');
 
 router.get('/', (req, res) => {
   res.render('pages/landing'); 
