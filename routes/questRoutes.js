@@ -9,7 +9,7 @@ const upload = multer({ dest: "uploads/" });
 const researcherDashboard = "/user/researcher";
 const addQuest = "pages/addQuest";
 
-const { isAuthorizedResearcher } = require('../controllers/userController');
+const { isAuthorizedResearcher,authenticated } = require('../controllers/userController');
 
 router.get('/completeQuest', (req, res, next) => {
     res.redirect(researcherDashboard);
@@ -25,7 +25,7 @@ router.get('/questList', (req, res, next) => {
 });
 
 //Needs to be updated with actua
-router.get('/addQuest', isAuthorizedResearcher, (req, res, next) => {
+router.get('/addQuest',authenticated, isAuthorizedResearcher, (req, res, next) => {
     res.render(addQuest);
 });
 

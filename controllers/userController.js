@@ -33,6 +33,7 @@ async function authenticateUser(req, res, next) {
     }
 
     req.session.user = email;
+    req.session.userId = user._id.toString();
     req.session.type = user.type;
     req.session.name = user.firstName + " " + user.lastName;
 
