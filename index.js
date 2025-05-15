@@ -23,6 +23,8 @@ const mongoSessions = `mongodb+srv://${process.env.MONGODB_USER}:${process.env.M
 
 const { database } = require('./databaseConnection');
 
+const { authenticated } = require('./controllers/userController');
+
 // Session Middleware
 app.use(session({
   secret: process.env.NODE_SESSION_SECRET,
@@ -59,20 +61,14 @@ app.use(session({
 const indexRouter = require('./routes/indexRoutes');
 app.use('/', indexRouter);
 
-const explorerRouter = require('./routes/explorerRoutes');
-app.use('/explorer',explorerRouter);
-
-const researcherRouter = require('./routes/researcherRoutes');
-app.use('/researcher',researcherRouter);
-
 const userRouter = require('./routes/userRoutes');
-app.use('/user', userRouter);
+app.use('/user', authenticated, userRouter);
 
 const speciesRouter = require('./routes/speciesRoutes');
-app.use('/species', speciesRouter);
+app.use('/species', authenticated, speciesRouter);
 
 const questRouter = require('./routes/questRoutes');
-app.use('/quests', questRouter);
+app.use('/quests', authenticated, questRouter);
 
 const testRouter = require('./routes/testRoutes');
 app.use('/test', testRouter);

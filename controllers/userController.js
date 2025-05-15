@@ -1,280 +1,140 @@
-require('dotenv').config();
-const express = require('express');
-const Joi = require("joi");
-const bcrypt = require("bcrypt");
+const bcrypt = require('bcrypt');
 const saltRounds = 12;
 
-const cloudinary = require('cloudinary').v2;
-
-const mongodb_host = process.env.MONGODB_HOST;
-const mongodb_user = process.env.MONGODB_USER;
-const mongodb_password = process.env.MONGODB_PASSWORD;
-const mongodb_database = process.env.MONGODB_DATABASE;
-
-var { database } = include('databaseConnection');
-const userCollection = database.db(mongodb_database).collection('user');
-// const speciesCollection = database.db(mongodb_database).collection('species');
-
-// Configure Cloudinary
-cloudinary.config({
-  cloud_name: process.env.CLOUDINARY_CLOUD_NAME,
-  api_key: process.env.CLOUDINARY_API_KEY,
-  api_secret: process.env.CLOUDINARY_API_SECRET,
-  secure: true,
+const Joi = require("joi");
+const loginSchema = Joi.object({
+    email: Joi.string().min(4).max(40).required(),
+    password: Joi.string().min(6).max(25).required()
 });
-
-// Handle adding species
-const addSpecies = async (req, res) => {
-  try {
-    let speciesImageUrl = null;
-
-    // Check if a file was uploaded
-    if (req.file) {
-      // Upload image to Cloudinary from buffer
-      // Giving it a unique public_id using field (e.g. speciesName if unique) and timestamp might be good
-      // For simplicity, letting Cloudinary auto-generate public_id
-      const result = await new Promise((resolve, reject) => {
-        const uploadStream = cloudinary.uploader.upload_stream(
-          { resource_type: 'image' }, // Can add folder: 'species_images' for organization
-          (error, result) => {
-            if (error) {
-              console.error('Cloudinary Upload Error:', error);
-              return reject(error);
-            }
-            resolve(result);
-          }
-        );
-        uploadStream.end(req.file.buffer);
-      });
-      speciesImageUrl = result.secure_url;
-    }
-
-    const newSpecies = {
-      speciesName: req.body.speciesName, // From form input name="speciesName"
-      speciesScientificName: req.body.scientificName, // From form input name="scientificName"
-      speciesImage: speciesImageUrl, // URL from Cloudinary or null
-      speciesInfo: req.body.speciesInfo, // From form input name="speciesInfo"
-    };
-
-    await speciesCollection.insertOne(newSpecies);
-    console.log('New species added to MongoDB:', newSpecies.speciesName);
-    res.redirect("/species");
-
-  } catch (error) {
-    console.error("Error in addSpecies controller:", error);
-    // Consider sending a user-friendly error page or message
-    res.status(500).send("Error adding species. " + error.message);
-  }
-};
-
-// sign up function.
-const createUser = async (req, res) => {
-    var firstName = req.body.firstName;
-    var lastName = req.body.lastName;
-    var email = req.body.email;
-    var password = req.body.password;
-    var type = req.body.userType;
-
-  const schema = Joi.object({
+const schema = Joi.object({
     firstName: Joi.string().alphanum().max(20).required(),
     lastName: Joi.string().alphanum().max(20).required(),
     email: Joi.string().email().max(30).required(),
     password: Joi.string().max(20).required()
-  });
-  const validationResult = schema.validate({ firstName, lastName, email, password });
-  /*
-  if (validationResult.error != null) {
-      res.send(`
-          Invalid email/password combination.<br><br>
-          <a href="/signup">Try again</a>
-          `);
-      return;
-  }*/
-  var hashedPassword = await bcrypt.hash(password, saltRounds);
+});
 
-  await userCollection.insertOne({ firstName: firstName, lastName: lastName, email: email, password: hashedPassword, type: type });
+//MongoDB connection
+const appClient = require('../databaseConnection').database;
 
-  res.redirect("/");
+// Authenticates the user by checking the users login credentials.
+// If the credentials are valid, it creates a session for the user and saves it to MongoDB.
+// If the credentials are invalid, it redirects to the invalid login page.
+async function authenticateUser(req, res, next) {
+    const { error, value } = loginSchema.validate(req.body);
+
+    if (error) return res.status(400).send("Validation failed.");
+
+    const { email, password } = value;
+    const user = await appClient.db('biodiversityGo').collection("user").findOne({ email });
+
+    if (!user || !(await bcrypt.compare(password, user.password))) {
+        console.log(`Authentication failed for ${email}`);
+        return res.redirect("/invalid");
+    }
+
+    req.session.user = email;
+    req.session.type = user.type;
+    req.session.name = user.firstName + " " + user.lastName;
+
+    req.session.save(err => {
+        if (err) {
+            console.error("Session save error:", err);
+            return res.status(500).send("Session error");
+        }
+        console.log("User type:", user.firstName);
+        console.log("User type:", req.session.type);
+        next();
+    });
 }
 
-module.exports = { createUser , addSpecies };
-
-module.exports = {createUser};
-
-const express = require('express');
-const router  = express.Router();
-const { isAuthenticated } = require('../middleware/auth');
-const { database } = require('../utils/databaseConnection');
-const speciesCollection = database.db('yourDBname').collection('species'); 
-
-// show the “add species” form
-router.get("/add-species", isAuthenticated, (req, res) => {
-  res.render("add-species");
-});
-
-// handle the form POST
-router.post("/add-species", isAuthenticated, async (req, res) => {
-  const newSpecies = {
-    commonName:     req.body.commonName,
-    scientificName: req.body.scientificName,
-    image:          req.body.image,
-    description:    req.body.description,
-    location: {
-      center: {
-        lat: parseFloat(req.body.lat),
-        lng: parseFloat(req.body.lng)
-      },
-      rangeKm: parseFloat(req.body.rangeKm)
+// Checks if the user is authenticated by checking if the session exists.
+// If the user is authenticated, it allows the request to proceed.
+// If not, it redirects to the login page.
+// This middleware is used to protect routes that require authentication.
+function authenticated(req, res, next) {
+    if (req.session.user) {
+        console.log('User is authenticated:', req.session.user);
+        next();
+    } else {
+        console.log('User is not authenticated');
+        res.redirect('/');
     }
-  };
-  await speciesCollection.insertOne(newSpecies);
-  res.redirect("/species");
-});
+}
 
-// list all species
-router.get("/species", isAuthenticated, async (req, res) => {
-  const speciesList = await speciesCollection.find().toArray();
-  res.render("pages/species", { species: speciesList });
-});
+// Destroys the session and clears the session cookie.
+// This is typically used when the user logs out.
+// After destroying the session, it redirects to the home page.
+function destroySession(req, res, next) {
+    req.session.destroy((err) => {
+        if (err) {
+            console.error('Error destroying session:', err);
+            return res.status(500).send('Internal Server Error');
+        }
+        res.clearCookie('connect.sid');
+        console.log('Session destroyed and cookie cleared.');
+        next();
+    });
+}
 
-module.exports = router;
+async function signUp(req, res, next) {
+    const { firstName, lastName, email, password, type } = req.body;
 
-// require('dotenv').config();
-// const express = require('express');
-// const Joi = require("joi");
-// const bcrypt = require("bcrypt");
-// const saltRounds = 12;
+    if (email && password && email) {
+        try {
+            console.log("Connected to MongoDB");
 
-// const cloudinary = require('cloudinary').v2;
+            hashedPassword = await bcrypt.hash(password, saltRounds);
+            const newUser = {
+                firstName: firstName,
+                lastName: lastName,
+                email: email,
+                password: hashedPassword,
+                type: type
+            };
 
-// const mongodb_host = process.env.MONGODB_HOST;
-// const mongodb_user = process.env.MONGODB_USER;
-// const mongodb_password = process.env.MONGODB_PASSWORD;
-// const mongodb_database = process.env.MONGODB_DATABASE;
+            const result = await appClient.db('biodiversityGo').collection("user").insertOne(newUser);
+            console.log("User created:", newUser);
+            console.log(`New user created with the following id: ${result.insertedId}`);
 
-// var { database } = include('databaseConnection');
-// const userCollection = database.db(mongodb_database).collection('user');
-// const speciesCollection = database.db(mongodb_database).collection('species');
+            req.session.user = email;
+        } catch (err) {
+            console.error("Error creating user:", err);
+            res.status(500).send('Internal Server Error');
+        } finally {
+            next();
+        }
+    } else {
+        console.log('Username, password, or email not provided.');
+        res.redirect('/');
+    }
+}
 
-// // Configure Cloudinary
-// cloudinary.config({
-//   cloud_name: process.env.CLOUDINARY_CLOUD_NAME,
-//   api_key: process.env.CLOUDINARY_API_KEY,
-//   api_secret: process.env.CLOUDINARY_API_SECRET,
-//   secure: true,
-// });
+/*
+Authentication middleware for all user types.
+*/
+function checkAuthorization(req, res, next) {
+    if (req.session.type === 'researcher') {
+        console.log('User is a researcher:', req.session.user);
+        res.redirect('/user/researcher');
+    }
+    else if (req.session.type === 'explorer') {
+        console.log('User is an explorer:', req.session.user);
+        res.redirect('/user/explorer');
+    } else {
+        console.log('invalid user type:', req.session.type);
+        res.redirect('/');
+    }
+}
 
-// // Handle adding species
-// const addSpecies = async (req, res) => {
-//   try {
-//     let speciesImageUrl = null;
+// These pairs of functions are used to check if the user is authorized as a researcher or explorer.
+function isAuthorizedResearcher(req, res, next) {
+    if (req.session.type === 'researcher') {
+        console.log('User is a researcher:', req.session.user);
+        next();
+    } else {
+        console.log('invalid user type:', req.session.type);
+        res.redirect('/');
+    }
+}
 
-//     // Check if a file was uploaded
-//     if (req.file) {
-//       // Upload image to Cloudinary from buffer
-//       // Giving it a unique public_id using field (e.g. speciesName if unique) and timestamp might be good
-//       // For simplicity, letting Cloudinary auto-generate public_id
-//       const result = await new Promise((resolve, reject) => {
-//         const uploadStream = cloudinary.uploader.upload_stream(
-//           { resource_type: 'image' }, // Can add folder: 'species_images' for organization
-//           (error, result) => {
-//             if (error) {
-//               console.error('Cloudinary Upload Error:', error);
-//               return reject(error);
-//             }
-//             resolve(result);
-//           }
-//         );
-//         uploadStream.end(req.file.buffer);
-//       });
-//       speciesImageUrl = result.secure_url;
-//     }
-
-//     const newSpecies = {
-//       speciesName: req.body.speciesName, // From form input name="speciesName"
-//       speciesScientificName: req.body.scientificName, // From form input name="scientificName"
-//       speciesImage: speciesImageUrl, // URL from Cloudinary or null
-//       speciesInfo: req.body.speciesInfo, // From form input name="speciesInfo"
-//     };
-
-//     await speciesCollection.insertOne(newSpecies);
-//     console.log('New species added to MongoDB:', newSpecies.speciesName);
-//     res.redirect("/species");
-
-//   } catch (error) {
-//     console.error("Error in addSpecies controller:", error);
-//     // Consider sending a user-friendly error page or message
-//     res.status(500).send("Error adding species. " + error.message);
-//   }
-// };
-
-// // sign up function.
-// const createUser = async (req, res) => {
-//   var firstName = req.body.firstName;
-//   var lastName = req.body.lastName;
-//   var email = req.body.email;
-//   var password = req.body.password;
-//   var type = req.body.userType;
-
-//   const schema = Joi.object({
-//     firstName: Joi.string().alphanum().max(20).required(),
-//     lastName: Joi.string().alphanum().max(20).required(),
-//     email: Joi.string().email().max(30).required(),
-//     password: Joi.string().max(20).required()
-//   });
-//   const validationResult = schema.validate({ firstName, lastName, email, password });
-//   /*
-//   if (validationResult.error != null) {
-//       res.send(`
-//           Invalid email/password combination.<br><br>
-//           <a href="/signup">Try again</a>
-//           `);
-//       return;
-//   }*/
-//   var hashedPassword = await bcrypt.hash(password, saltRounds);
-
-//   await userCollection.insertOne({ firstName: firstName, lastName: lastName, email: email, password: hashedPassword, type: type });
-
-//   res.redirect("/");
-// }
-
-
-// module.exports = {createUser};
-
-// const express = require('express');
-// const router  = express.Router();
-// const { isAuthenticated } = require('../middleware/auth');
-// const { database } = require('../utils/databaseConnection');
-// const speciesCollection = database.db('yourDBname').collection('species'); 
-
-// // show the “add species” form
-// router.get("/add-species", isAuthenticated, (req, res) => {
-//   res.render("add-species");
-// });
-
-// // handle the form POST
-// router.post("/add-species", isAuthenticated, async (req, res) => {
-//   const newSpecies = {
-//     commonName:     req.body.commonName,
-//     scientificName: req.body.scientificName,
-//     image:          req.body.image,
-//     description:    req.body.description,
-//     location: {
-//       center: {
-//         lat: parseFloat(req.body.lat),
-//         lng: parseFloat(req.body.lng)
-//       },
-//       rangeKm: parseFloat(req.body.rangeKm)
-//     }
-//   };
-//   await speciesCollection.insertOne(newSpecies);
-//   res.redirect("/species");
-// });
-
-// // list all species
-// router.get("/species", isAuthenticated, async (req, res) => {
-//   const speciesList = await speciesCollection.find().toArray();
-//   res.render("pages/species", { species: speciesList });
-// });
-
-// module.exports = router;
+module.exports = { authenticated, destroySession, authenticateUser, signUp, checkAuthorization, isAuthorizedResearcher };

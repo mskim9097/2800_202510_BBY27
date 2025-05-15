@@ -1,30 +1,75 @@
 const express = require('express');
 const router = express.Router();
 
-const {createSpecies, updateSpecies} = require('../controllers/researcherController');
+const appClient = require('../databaseConnection').database;
+const speciesCollection = appClient.db('biodiversityGo').collection('species');
 
+
+const {createSpecies, updateSpecies, deleteSpecies} = require('../controllers/speciesController');
+const { isAuthorizedResearcher } = require('../controllers/userController');
+
+const researcherDashboard = "/user/researcher";
+const addSpecies = 'pages/addSpecies';
+const update = 'pages/updateSpecies';
+const species = 'pages/species';
+
+// Multer configuration for memory storage
 const multer = require("multer");
-const upload = multer({ dest: "uploads/" });
-
-router.get('/addSpecies', (req, res) => {
-    res.render('pages/addSpecies');
+const storage = multer.memoryStorage();
+const upload = multer({ 
+  storage: storage,
+  limits: { fileSize: 10 * 1024 * 1024 }
 });
 
-router.post('/addSpecies', upload.single("speciesImage"), createSpecies, (req, res) => {
-    res.redirect("/researcher/dashboard");
+// list all species
+router.get("/",  async (req, res) => {
+  try {
+    const speciesList = await speciesCollection.find().toArray();
+    res.render(species, { species: speciesList, title: "All Species" });
+  } catch (err) {
+    console.error("Error fetching species list:", err);
+    res.status(500).send("Error fetching species list");
+  }
+});
+
+// Get a specific species by name
+router.get("/:speciesName", async (req, res) => {
+  try {
+    const speciesName = req.params.speciesName;
+    // Decode the speciesName in case it has URL encoded characters (e.g., spaces as %20)
+    const decodedSpeciesName = decodeURIComponent(speciesName);
+    const species = await speciesCollection.findOne({ speciesName: decodedSpeciesName });
+
+    if (!species) {
+      return res.status(404).render("pages/404", { title: "Not Found" }); // Assumes you have a 404.ejs page
+    }
+    res.render("pages/speciesDetail", { species: species, title: species.speciesName });
+  } catch (err) {
+    console.error("Error fetching species:", err);
+    res.status(500).send("Error fetching species details");
+  }
+});
+
+router.get('/addSpecies', isAuthorizedResearcher, (req, res) => {
+    res.render(addSpecies);
+});
+
+router.post('/addSpecies', isAuthorizedResearcher, upload.single("speciesImage"), createSpecies, (req, res) => {
+    res.redirect(researcherDashboard);
 });
 
 // NEED UPDATE SPECIES PAGE
-router.get('/updateSpecies', (req, res) => {
-    res.render('pages/updateSpecies');
+router.get('/updateSpecies', isAuthorizedResearcher, (req, res) => {
+    res.render(update);
 });
 
-router.post('/updateSpecies', upload.single("speciesImage"), createSpecies, (req, res) => {
-    res.redirect("/researcher/dashboard");
+router.post('/updateSpecies', isAuthorizedResearcher, upload.single("speciesImage"), updateSpecies, (req, res) => {
+    res.redirect(researcherDashboard);
 });
 
-router.post('/updateSpecies', updateSpecies);
-
+router.post('/deleteSpecies', isAuthorizedResearcher, deleteSpecies, (req, res) => {
+    res.redirect(researcherDashboard);
+});
 
 module.exports = router;
 
