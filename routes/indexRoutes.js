@@ -2,10 +2,11 @@ const express = require('express');
 const bcrypt = require('bcrypt');
 const saltRounds = 12;
 const router = express.Router();
-const speciesList = require("../dummy_species.json");
 const fs = require("fs");
 const path = require("path");
 const {signUp, destroySession, authenticateUser, authenticated} = require('../middleware/authentication');
+const { database } = require('../databaseConnection');
+const speciesCollection = database.db(process.env.MONGODB_DATABASE).collection('species');
 
 router.get('/', (req, res) => {
   res.render('pages/landing'); 
@@ -33,11 +34,31 @@ router.get('/logout', destroySession, (req, res) => {
 
 // list all species
 router.get("/species",  async (req, res) => {
-  const file = path.join(__dirname, "../dummy_species.json");
-  const speciesList = JSON.parse(fs.readFileSync(file, "utf8"));
-  //this line is for later when u connect to the database
-  // const speciesList = await speciesCollection.find().toArray();
-  res.render("pages/species", { species: speciesList });
+  try {
+    const speciesList = await speciesCollection.find().toArray();
+    res.render("pages/species", { species: speciesList, title: "All Species" });
+  } catch (err) {
+    console.error("Error fetching species list:", err);
+    res.status(500).send("Error fetching species list");
+  }
+});
+
+// Get a specific species by name
+router.get("/species/:speciesName", async (req, res) => {
+  try {
+    const speciesName = req.params.speciesName;
+    // Decode the speciesName in case it has URL encoded characters (e.g., spaces as %20)
+    const decodedSpeciesName = decodeURIComponent(speciesName);
+    const species = await speciesCollection.findOne({ speciesName: decodedSpeciesName });
+
+    if (!species) {
+      return res.status(404).render("pages/404", { title: "Not Found" }); // Assumes you have a 404.ejs page
+    }
+    res.render("pages/speciesDetail", { species: species, title: species.speciesName });
+  } catch (err) {
+    console.error("Error fetching species:", err);
+    res.status(500).send("Error fetching species details");
+  }
 });
 
 module.exports = router;

@@ -1,55 +1,71 @@
 require('dotenv').config();
 const express = require('express');
 const Joi = require("joi");
-const MongoStore = require('connect-mongo');
-const session = require('express-session');
 const bcrypt = require("bcrypt");
-const fs = require("fs");
 const saltRounds = 12;
-const expireTime = 24 * 60 * 60 * 1000;
-const path = require("path");
 
+const cloudinary = require('cloudinary').v2;
 
 const mongodb_host = process.env.MONGODB_HOST;
 const mongodb_user = process.env.MONGODB_USER;
 const mongodb_password = process.env.MONGODB_PASSWORD;
 const mongodb_database = process.env.MONGODB_DATABASE;
-const mongodb_session_secret = process.env.MONGODB_SESSION_SECRET;
-const node_session_secret = process.env.NODE_SESSION_SECRET;
 
 var { database } = include('databaseConnection');
 const userCollection = database.db(mongodb_database).collection('user');
+const speciesCollection = database.db(mongodb_database).collection('species');
 
+// Configure Cloudinary
+cloudinary.config({
+  cloud_name: process.env.CLOUDINARY_CLOUD_NAME,
+  api_key: process.env.CLOUDINARY_API_KEY,
+  api_secret: process.env.CLOUDINARY_API_SECRET,
+  secure: true,
+});
 
 // Handle adding species
 const addSpecies = async (req, res) => {
-  const newSpecies = {
-    commonName: req.body.commonName,
-    scientificName: req.body.scientificName,
-    image: req.body.image,
-    description: req.body.description,
-    location: {
-      center: {
-        lat: parseFloat(req.body.lat),
-        lng: parseFloat(req.body.lng),
-      },
-      rangeKm: parseFloat(req.body.rangeKm),
-    },
-  };
+  try {
+    let speciesImageUrl = null;
 
-  //  Skip database for now
-  // await speciesCollection.insertOne(newSpecies);
+    // Check if a file was uploaded
+    if (req.file) {
+      // Upload image to Cloudinary from buffer
+      // Giving it a unique public_id using field (e.g. speciesName if unique) and timestamp might be good
+      // For simplicity, letting Cloudinary auto-generate public_id
+      const result = await new Promise((resolve, reject) => {
+        const uploadStream = cloudinary.uploader.upload_stream(
+          { resource_type: 'image' }, // Can add folder: 'species_images' for organization
+          (error, result) => {
+            if (error) {
+              console.error('Cloudinary Upload Error:', error);
+              return reject(error);
+            }
+            resolve(result);
+          }
+        );
+        uploadStream.end(req.file.buffer);
+      });
+      speciesImageUrl = result.secure_url;
+    }
 
-  // Save to dummy_species.json
-  const file = path.join(__dirname, "../dummy_species.json");
-  const speciesList = JSON.parse(fs.readFileSync(file, "utf8"));
-  speciesList.push(newSpecies);
-  fs.writeFileSync(file, JSON.stringify(speciesList, null, 2));
+    const newSpecies = {
+      speciesName: req.body.speciesName, // From form input name="speciesName"
+      speciesScientificName: req.body.scientificName, // From form input name="scientificName"
+      speciesImage: speciesImageUrl, // URL from Cloudinary or null
+      speciesInfo: req.body.speciesInfo, // From form input name="speciesInfo"
+    };
 
-  res.redirect("/species");
+    await speciesCollection.insertOne(newSpecies);
+    console.log('New species added to MongoDB:', newSpecies.speciesName);
+    res.redirect("/species");
+
+  } catch (error) {
+    console.error("Error in addSpecies controller:", error);
+    // Consider sending a user-friendly error page or message
+    res.status(500).send("Error adding species. " + error.message);
+  }
 };
-
-
 
 // sign up function.
 const createUser = async (req, res) => {
@@ -80,6 +96,5 @@ const createUser = async (req, res) => {
 
   res.redirect("/");
 }
-
 
 module.exports = { createUser , addSpecies };
