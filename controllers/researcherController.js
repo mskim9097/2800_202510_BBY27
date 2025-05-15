@@ -22,8 +22,11 @@ const questCollection = database.db(mongodb_database).collection('quest');
 
 app.use(express.urlencoded({extended: false}));
 //logic related to researcher routes goes here
+const appClient = require('../databaseConnection').database;
+const questCollection = appClient.db('biodiversityGo').collection('quest');
+const speciesCollection = appClient.db('biodiversityGo').collection('species');
 
-const createQuest = async (req, res) => {
+const createQuest = async (req, res, next) => {
     var questName = req.query.questName;
     // var location = null;
     var questInfo = req.query.questInfo;
@@ -39,28 +42,68 @@ const createQuest = async (req, res) => {
         note: null,
         acceptedBy: null
     });
-
-    res.redirect("/");
+    next();
 }
 
-const getSpeciesByName = async (req, res) => {
-    try {
-        const speciesName = req.params.name;
-        const speciesFilePath = path.join(__dirname, "../dummy_species.json");
-        const speciesList = JSON.parse(fs.readFileSync(speciesFilePath, "utf8"));
+const createSpecies = async (req, res, next) => {
+    
+    console.log("createSpecies");
+    console.log(req.body);
+    const { speciesScientificName, speciesName, speciesInfo  } = req.body;
 
-        const species = speciesList.find(sp => sp.commonName.toLowerCase() === speciesName.toLowerCase());
+    //This fields are set to null until updated by quests
+    const speciesImage = [];
+    speciesImage[0] = req.query.speciesImage;
+    const speciesQuests = [];
+    const speciesLocations = {};
+    const speciesQuantity = 0;
 
-        if (species) {
-            res.render("pages/speciesDetail", { title: species.commonName, species: species });
-        } else {
-            // Optional: Create a specific 404 page for species not found
-            res.status(404).render("pages/404", { title: "Not Found" }); 
+    await speciesCollection.insertOne({
+        speciesName: speciesName,
+        speciesInfo: speciesInfo,
+        speciesImage: speciesImage,
+        speciesLocation: speciesLocations,
+        speciesQuantity: speciesQuantity,
+        speciesQuests: speciesQuests,
+        speciesScientificName: speciesScientificName
+    });
+    next();
+}
+
+//This updates the same fields as createSpecies
+const updateSpecies = async (req, res, next) => {
+
+    const { speciesScientificName, speciesName, speciesInfo  } = req.body;
+
+    // !!!!! NEED TO CHANGE THIS ONCE WE HAVE IMAGES !!!!!
+    const speciesImage = [];
+    speciesImage[0] = req.query.speciesImage;
+    //list of Quest IDs related to this species
+
+    await speciesCollection.updateOne(
+        { speciesName: speciesName },
+        {
+            $set: {
+                speciesInfo: speciesInfo,
+                speciesImage: speciesImage,
+                speciesLocation: speciesLocation,
+                speciesQuantity: speciesQuantity,
+                speciesQuests: speciesQuests,
+                speciesScientificName: speciesScientificName
+            }
         }
-    } catch (error) {
-        console.error("Error fetching species by name:", error);
-        res.status(500).send("Error retrieving species data.");
-    }
-};
+    );
+    next();
+}
 
-module.exports = {createQuest, getSpeciesByName};
+const getSpecies = async (req, res) => {
+    const speciesScientificName = req.query.speciesScientificName;
+    const species = await speciesCollection.findOne({ speciesName: speciesScientificName });
+    if (species) {
+        res.status(200).json(species);
+    } else {
+        res.status(404).json({ message: "Species not found" });
+    }
+}
+
+module.exports = { createQuest, createSpecies, updateSpecies, getSpecies };
