@@ -21,7 +21,7 @@ router.get('/viewQuest', (req, res, next) => {
 });
 // NEEDS QUEST LIST PAGE
 router.get('/questList', (req, res, next) => {
-    res.redirect(researcherDashboard);
+    res.render("pages/quests");
 });
 
 //Needs to be updated with actua
