@@ -29,7 +29,7 @@ router.get('/addQuest', isAuthorizedResearcher, (req, res, next) => {
     res.render(addQuest);
 });
 
-router.get('/searchTarget', searchTarget);
+// router.get('/searchTarget', searchTarget);
 
 router.post('/addQuest', isAuthorizedResearcher, upload.single("speciesImage"), createQuest, (req, res, next) => {
     res.redirect(researcherDashboard);

@@ -11,9 +11,20 @@
     <script src="https://api.mapbox.com/mapbox-gl-js/v2.15.0/mapbox-gl.js"></script>
     <!-- SwiperJS CSS -->
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.css" />
+    <style>
+       #content{
+            -ms-overflow-style: none;
+            scrollbar-width: none;
+            overflow-y: scroll;
+        }
+
+        #content::-webkit-scrollbar {
+            display: none;
+        }
+    </style>
 </head>
 
-<body class="h-screen overflow-y-auto">
+<body class="h-screen overflow-hidden">
     <% const quests=[ { id: 1, image: "/images/plant4.jpg" , title: "Explore the Wetlands" , location: "Burnaby Lake" ,
         mission: "Find and photograph 3 amphibians" , target: "Frogs, salamanders" , time: "Before sunset" ,
         difficulty: "Medium" }, { id: 2, image: "/images/plant2.jpg" , title: "Urban Pollinators" ,
@@ -28,7 +39,7 @@
 
         <div style="background-color:rgb(242, 242, 242)"
             class="flex flex-col p-4 justify-between h-full rounded-lg shadow-sm gap-4">
-            <div id="content" class="flex flex-col gap-4 overflow-y-auto ">
+            <div id="content" class="flex flex-col gap-4 overflow-y-scroll  ">
                 <div class="flex justify-between p-2">
                     <img class="w-10 h-10" src="/images/menu.svg" alt="">
                     <img class="w-10 h-10" src="/images/bell.svg" alt="">
@@ -44,7 +55,7 @@
                     </div>
                 </div>
 
-                <div id="explore_time" class="py-2 px-1 w-fit shadow text-sm rounded font-semibold m-auto">
+                <div id="explore_time" class="py-2 px-1 w-fit shadow text-sm rounded font-semibold m-auto text-center">
                     Is it a good day to explore .....
                 </div>
                 <!--Add Quest-->
@@ -104,31 +115,7 @@
         <script src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js"></script>
         <script src="/js/weather.js"></script>
         <script src="/js/map.js"></script>
-        <script>
-            const swiper = new Swiper(".mySwiper", {
-                slidesPerView: 1.2,
-                spaceBetween: 13,
-                freeMode: true,
-                grabCursor: true,
-                breakpoints: {
-                    410: {
-                        slidesPerView: 2,
-                    },
-                    640: {
-                        slidesPerView: 2.2,
-                    },
-                    768: {
-                        slidesPerView: 2.5,
-                    },
-                    1024: {
-                        slidesPerView: 3,
-                    },
-                }
-            });
-            setTimeout(() => {
-                swiper.update();
-            }, 100);
-        </script>
+        <script src="/js/swiper.js"></script>
 </body>
 
 </html>

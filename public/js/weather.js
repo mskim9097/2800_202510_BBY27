@@ -27,7 +27,7 @@ navigator.geolocation.getCurrentPosition(async (position) => {
             document.getElementById("explore_time").textContent = "Beware of snow, stay safe";
         }
         else{
-            document.getElementById("explore_time").textContent = "It’s always a good time to explore—just dress for the weather and stay safe!"
+            document.getElementById("explore_time").textContent = "🌧️ It’s always a good time to explore—just dress for the weather and stay safe!"
         }
     } catch (err) {
         weatherCaption.textContent = 'Failed to load weather';
