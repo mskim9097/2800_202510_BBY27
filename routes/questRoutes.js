@@ -1,7 +1,7 @@
 const express = require('express');
 const router = express.Router();
 
-const {createSpecies, updateSpecies, createQuest} = require('../controllers/researcherController');
+const {createSpecies, updateSpecies, createQuest, searchTarget} = require('../controllers/researcherController');
 
 const multer = require("multer");
 const upload = multer({ dest: "uploads/" });
@@ -10,6 +10,8 @@ const upload = multer({ dest: "uploads/" });
 router.get('/createQuest', (req, res, next) => {
     res.render('pages/addQuest');
 });
+
+router.get('/searchTarget', searchTarget);
 
 router.post('/createQuest', upload.single("speciesImage"), createQuest, (req, res, next) => {
     res.redirect("/researcher/dashboard");
