@@ -18,7 +18,7 @@ const mongodb_session_secret = process.env.MONGODB_SESSION_SECRET;
 const node_session_secret = process.env.NODE_SESSION_SECRET;
 
 var {database} = include('databaseConnection');
-const questCollection = database.db(mongodb_database).collection('quest');
+// const questCollection = database.db(mongodb_database).collection('quest');
 
 app.use(express.urlencoded({extended: false}));
 //logic related to researcher routes goes here
