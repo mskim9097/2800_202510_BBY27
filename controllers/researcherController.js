@@ -12,6 +12,9 @@ const app = express();
 // var {database} = include('databaseConnection');
 // const questCollection = database.db(mongodb_database).collection('quest');
 //logic related to researcher routes goes here
+const appClient = require('../databaseConnection').database;
+const questCollection = appClient.db('biodiversityGo').collection('quest');
+const speciesCollection = appClient.db('biodiversityGo').collection('species');
 
 const createQuest = async (req, res) => {
     var questName = req.query.questName;
@@ -33,16 +36,18 @@ const createQuest = async (req, res) => {
     res.redirect("/");
 }
 
-const createSpecies = async (req, res) => {
-    const speciesName = req.query.speciesName;
-    const speciesInfo = req.query.speciesInfo;
-    const speciesScientificName = req.query.speciesScientificName;
-    const speciesImage = [];
-    speciesImage[0] = req.query.speciesImage;
+const createSpecies = async (req, res, next) => {
+    
+    console.log("createSpecies");
+    console.log(req.body);
+    const { speciesScientificName, speciesName, speciesInfo  } = req.body;
 
     //This fields are set to null until updated by quests
+    const speciesImage = [];
+    speciesImage[0] = req.query.speciesImage;
     const speciesQuests = [];
     const speciesLocations = {};
+    const speciesQuantity = 0;
 
     await speciesCollection.insertOne({
         speciesName: speciesName,
@@ -53,14 +58,15 @@ const createSpecies = async (req, res) => {
         speciesQuests: speciesQuests,
         speciesScientificName: speciesScientificName
     });
-    res.redirect("/");
+    next();
 }
 
 //This updates the same fields as createSpecies
 const updateSpecies = async (req, res) => {
-    const speciesName = req.query.speciesName;
-    const speciesScientificName = req.query.speciesScientificName;
-    const speciesInfo = req.query.speciesInfo;
+
+    const { speciesScientificName, speciesName, speciesInfo  } = req.body;
+
+    // !!!!! NEED TO CHANGE THIS ONCE WE HAVE IMAGES !!!!!
     const speciesImage = [];
     speciesImage[0] = req.query.speciesImage;
     //list of Quest IDs related to this species

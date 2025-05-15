@@ -5,6 +5,7 @@ const router = express.Router();
 
 
 const {signUp, destroySession, authenticateUser, authenticated} = require('../middleware/authentication');
+const {isAuthorizedResearcher, isAuthorizedExplorer, checkAuthorization} = require('../middleware/authorization');
 
 router.get('/', (req, res) => {
   res.render('pages/landing'); 

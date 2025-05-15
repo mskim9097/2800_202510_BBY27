@@ -78,7 +78,7 @@ function destroySession(req, res, next) {
         }
         res.clearCookie('connect.sid');
         console.log('Session destroyed and cookie cleared.');
-        res.redirect('/');
+        next();
     });
 }
 

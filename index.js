@@ -63,8 +63,13 @@ const explorerRouter = require('./routes/explorerRoutes');
 app.use('/explorer',explorerRouter);
 
 const researcherRouter = require('./routes/researcherRoutes');
-app.use('/researcher',researcherRouter);const userRouter = require('./routes/userRoutes');
+app.use('/researcher',researcherRouter);
+
+const userRouter = require('./routes/userRoutes');
 app.use('/user', userRouter);
+
+const speciesRouter = require('./routes/speciesRoutes');
+app.use('/species', speciesRouter);
 
 const testRouter = require('./routes/testRoutes');
 app.use('/test', testRouter);

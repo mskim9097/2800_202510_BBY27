@@ -12,14 +12,14 @@ router.get('/explorer', authenticated, isAuthorizedExplorer, (req, res) => {
     /*
     Needs to be changed to the correct route (the explorer dashboard)
     */
-    res.render('tests/explorer');
+    res.render('pages/explorerDashboard');
 });
 
 router.get('/researcher', authenticated, isAuthorizedResearcher, (req, res) => {
     /*
     Needs to be changed to the correct route (the researcher dashboard)
     */
-    res.render('tests/researcher');
+    res.render('pages/researcherDashboard');
 });
 
 router.post('/logout', (req, res) => {

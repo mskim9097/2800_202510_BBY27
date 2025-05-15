@@ -5,7 +5,7 @@ const {createQuest} = require('../controllers/researcherController');
 
 router.get('/dashboard', (req, res) => {
     // This will render views/pages/researcherDashboard.ejs
-    res.render('pages/researcherDashboard2'); 
+    res.render('pages/researcherDashboard'); 
 });
 
 
