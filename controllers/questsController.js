@@ -14,6 +14,42 @@ const searchTarget = async (req, res) => {
     res.json(results);
 };
 
+/*
+const createQuest = async (req, res) => {
+    try {
+        const {
+            title,
+            mission,
+            latitude,
+            longitude,
+            target,      // this is the species ID from the dropdown
+            timeOfDay,
+            difficulty
+        } = req.body;
+        
+        const newQuest = new Quest({
+            title,
+            mission,
+            location: {
+                type: 'Point',
+                coordinates: [parseFloat(longitude), parseFloat(latitude)]
+            },
+            targetSpecies: target,  // Store the species ID
+            timeOfDay,
+            difficulty,
+            createdBy: req.user._id,  // assuming req.user is populated by auth middleware
+            acceptedBy: []            // starts empty
+        });
+
+        await newQuest.save();
+        res.redirect('/researcher/Dashboard');
+    } catch (error) {
+        console.error('Error creating quest:', error);
+        res.status(500).send('Something went wrong while creating the quest.');
+    }
+};
+*/
+
 // createQuest function that saves quest document in mongoDB.
 const createQuest = async (req, res, next) => {
     var title = req.body.title;
