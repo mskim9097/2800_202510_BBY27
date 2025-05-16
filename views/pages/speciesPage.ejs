@@ -6,60 +6,59 @@
     <title><%= title ? title : 'Species Detail' %></title>
     <!-- Link to your main stylesheet -->
     <link rel="stylesheet" href="/css/style.css"> <%- /* Adjust path if necessary */ %>
-    <style>
-        /* Basic styling for the detail page */
-        body {
-            font-family: Arial, sans-serif;
-            margin: 20px;
-            background-color: #f4f4f4;
-            color: #333;
-        }
-        .container {
-            background-color: #fff;
-            padding: 20px;
-            border-radius: 8px;
-            box-shadow: 0 0 10px rgba(0,0,0,0.1);
-            max-width: 800px;
-            margin: auto;
-        }
-        h1 {
-            color: #2c3e50;
-            text-align: center;
-        }
-        img.species-image {
-            max-width: 100%;
-            height: auto;
-            border-radius: 5px;
-            margin-bottom: 15px;
-            display: block;
-            margin-left: auto;
-            margin-right: auto;
-        }
-        .species-info p {
-            line-height: 1.6;
-        }
-        .species-info strong {
-            color: #555;
-        }
-        .back-link {
-            display: inline-block;
-            margin-top: 20px;
-            padding: 10px 15px;
-            background-color: #3498db;
-            color: white;
-            text-decoration: none;
-            border-radius: 5px;
-        }
-        .back-link:hover {
-            background-color: #2980b9;
-        }
-    </style>
+    <link rel="stylesheet" href="/css/species.css">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.13.1/font/bootstrap-icons.min.css">
 </head>
 <body>
+    <%- include("../partials/header") %>
     <div class="container">
-        <% if (typeof species !== 'undefined' && species) { %>
-            <h1><%= species.speciesName %></h1>
-            
+    <% if (typeof species !== 'undefined' && species) { %>
+        <% if (userType === 'researcher') { %>
+            <form action="/species/deleteSpecies/<%= species._id %>" method="POST">
+                <button id="deleteBtn" type="submit">
+                    <i class="bi bi-trash3"></i>
+                </button>
+            </form>
+            <form id="editForm" action="/species/updateSpecies/<%= species._id %>" method="POST" enctype="multipart/form-data">
+                <input type="text" name="speciesName" value="<%= species.speciesName %>" class="species-title" disabled>
+
+                <% if (species.speciesImage) { %>
+                    <img id="previewImage" src="<%= species.speciesImage %>" alt="Image of <%= species.speciesName %>" class="species-image">
+                <% } else { %>
+                    <p><em>No image available for this species.</em></p>
+                <% } %>
+                <div id="imageUploadSection"
+                    style="display: none;"
+                    class="mt-4 flex justify-center items-center text-center">
+                    
+                    <label for="speciesImageInput"
+                        class="inline-block px-4 py-2 text-white font-medium rounded cursor-pointer"
+                        style="background-color: green;">
+                        📁 Choose Image
+                    </label>
+
+                    <input type="file" name="speciesImage" id="speciesImageInput" accept="image/*" class="hidden">
+                </div>
+
+                <div class="species-info">
+                    <p><strong>Scientific Name:</strong>
+                        <input type="text" name="speciesScientificName" value="<%= species.speciesScientificName %>" class="species-view" disabled>
+                    </p>
+                    <p><strong>Information:</strong></p>
+                    <textarea name="speciesInfo" class="species-view" disabled><%= species.speciesInfo %></textarea>
+                </div>
+                <div style="text-align: right; margin-top: 10px;">
+                    <button id="editBtn" class="back-link" type="button" style="background-color: green;">Edit</button>
+                    <div id="editButtons" style="display: none;">
+                        <button type="submit" class="back-link" style="background-color: green;">Save</button>
+                        <button type="button" class="back-link" id="cancelBtn" style="background-color: gray;">Cancel</button>
+                    </div>
+                </div>
+            </form>
+        <% } else if (userType === 'explorer') { %>
+            <input type="text" value="<%= species.speciesName %>" class="species-title" disabled>
+
             <% if (species.speciesImage) { %>
                 <img src="<%= species.speciesImage %>" alt="Image of <%= species.speciesName %>" class="species-image">
             <% } else { %>
@@ -67,19 +66,27 @@
             <% } %>
 
             <div class="species-info">
-                <p><strong>Scientific Name:</strong> <%= species.speciesScientificName %></p>
+                <p><strong>Scientific Name:</strong>
+                    <input type="text" value="<%= species.speciesScientificName %>" class="species-view" disabled>
+                </p>
                 <p><strong>Information:</strong></p>
-                <p><%= species.speciesInfo %></p>
+                <textarea class="species-view" disabled><%= species.speciesInfo %></textarea>
             </div>
-            
-        <% } else { %>
-            <h1>Species Not Found</h1>
-            <p>The species you are looking for could not be found.</p>
         <% } %>
-
-        <a href="/species" class="back-link">Back to All Species</a>
-    </div>
+    <% } else { %>
+        <h1>Species Not Found</h1>
+        <p>The species you are looking for could not be found.</p>
+    <% } %>
+</div>
 
     <%- /* You might have a common footer include here, e.g., include('../partials/footer') */ %>
+    <% if (userType === 'researcher') { %>
+        <%- include("../partials/researcher-footer") %>
+    <% } %>
+    <% if (userType === 'explorer') { %>
+        <%- include("../partials/explorer-footer") %>
+    <% } %>
+    <script src="/js/species.js"></script>
+    <script src="/js/menu.js"></script>
 </body>
 </html> 

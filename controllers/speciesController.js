@@ -1,7 +1,7 @@
 const Species = require('../models/specieModel');
 require('dotenv').config();
+const { ObjectId } = require('mongodb');
 const cloudinary = require('cloudinary').v2;
-
 
 
 cloudinary.config({
@@ -68,28 +68,62 @@ const createSpecies = async (req, res, next) => {
 };
 
 const updateSpecies = async (req, res, next) => {
-    try {
-        const { speciesScientificName, speciesName, speciesInfo, speciesLocation } = req.body;
+    const speciesId = req.params.id;
+    const { speciesScientificName, speciesName, speciesInfo } = req.body;
 
-        const species = await Species.findOne({ speciesName });
-        if (!species) {
-            return res.status(404).json({ message: "Species not found" });
-        }
+    const speciesImageUrl = await addImage(req, res, next);
 
-        species.speciesScientificName = speciesScientificName || species.speciesScientificName;
-        species.speciesInfo = speciesInfo || species.speciesInfo;
-        species.speciesLocation = speciesLocation || species.speciesLocation;
+    const updateFields = {
+        speciesName: speciesName,
+        speciesInfo: speciesInfo,
+        speciesScientificName: speciesScientificName
+    };
 
-        if (req.file) {
-            const imageUrl = await uploadImageToCloudinary(req.file.buffer);
-            species.speciesImage.push(imageUrl);
-        }
+    if (speciesImageUrl) {
+        updateFields.speciesImage = speciesImageUrl;
+    }
 
-        await species.save();
-        next(); // or res.status(200).json(species);
-    } catch (error) {
-        console.error("Error updating species:", error);
-        res.status(500).send("Error updating species. " + error.message);
+    await speciesCollection.updateOne(
+        { _id: new ObjectId(speciesId) },
+        { $set:updateFields }
+    );
+    next();
+}
+
+const getSpecies = async (req, res) => {
+    const speciesScientificName = req.query.speciesScientificName;
+    const species = await speciesCollection.findOne({ speciesName: speciesScientificName });
+    if (species) {
+        res.status(200).json(species);
+    } else {
+        res.status(404).json({ message: "Species not found" });
+    }
+}
+
+// POSSIBLY GOOD FOR REUSING IN UPDATE SPECIES AND CREATE SPECIES
+const addImage = async (req, res, next) => {
+    let speciesImageUrl = null;
+
+    // Check if a file was uploaded
+    if (req.file) {
+        // Upload image to Cloudinary from buffer
+        // Giving it a unique public_id using field (e.g. speciesName if unique) and timestamp might be good
+        // For simplicity, letting Cloudinary auto-generate public_id
+        const result = await new Promise((resolve, reject) => {
+            const uploadStream = cloudinary.uploader.upload_stream(
+                { resource_type: 'image' }, // Can add folder: 'species_images' for organization
+                (error, result) => {
+                    if (error) {
+                        console.error('Cloudinary Upload Error:', error);
+                        return reject(error);
+                    }
+                    resolve(result);
+                }
+            );
+            uploadStream.end(req.file.buffer);
+        });
+        speciesImageUrl = result.secure_url;
+        return speciesImageUrl;
     }
 };
 
@@ -107,19 +141,15 @@ const updateSpecies = async (req, res, next) => {
 //     }
 // };
 
-const deleteSpecies = async (req, res) => {
-    try {
-        const speciesName = req.query.speciesName;
-        const species = await Species.findOne({ speciesName });
-        if (!species) {
-            return res.status(404).json({ message: "Species not found" });
-        }
-        await species.deleteOne();
-        res.status(200).json({ message: "Species deleted successfully" });
-    } catch (error) {
-        console.error("Error deleting species:", error);
-        res.status(500).send("Error deleting species. " + error.message);
+// DeleteFunction that deletes species data in mongoDB.
+const deleteSpecies = async (req, res, next) => {
+    const speciesId = req.params.id;
+    const objectId = new ObjectId(speciesId);
+    const species = await speciesCollection.findOne({ _id: objectId });
+    if (species) {
+        await speciesCollection.deleteOne({ _id: objectId });        
     }
-};
+    next();
+}
 
 module.exports = { createSpecies, updateSpecies, getSpecies, deleteSpecies };

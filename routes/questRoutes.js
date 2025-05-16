@@ -1,16 +1,14 @@
 const express = require('express');
 const router = express.Router();
 
-const { createQuest } = require('../controllers/questsController');
-
 const multer = require("multer");
 const upload = multer({ dest: "uploads/" });
 
 const researcherDashboard = "/user/researcher";
 const addQuest = "pages/addQuest";
 
+const { createQuest, searchTarget } = require('../controllers/questsController');
 const { isAuthorizedResearcher,authenticated } = require('../controllers/userController');
-const { searchTarget } = require('../controllers/questsController');
 
 // NEEDS QUEST LIST PAGE
 // Quest List Page
@@ -38,7 +36,7 @@ router.get('/addQuest',authenticated, isAuthorizedResearcher, (req, res, next) =
 
 router.get('/searchTarget', searchTarget);
 
-router.post('/addQuest', isAuthorizedResearcher, createQuest, (req, res, next) => {
+router.post('/createQuest', isAuthorizedResearcher, upload.single("speciesImage"), createQuest, (req, res, next) => {
     res.redirect(researcherDashboard);
 });
 
