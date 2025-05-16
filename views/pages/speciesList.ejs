@@ -1,21 +1,54 @@
-<%- include('partials/header') %>
+<%- include('../partials/header') %>
 
-    <body class="bg-gray-100 p-4 flex flex-col gap-4 min-h-screen text-sm">
+<body class="bg-gray-100 p-4 flex flex-col gap-4 min-h-screen text-sm">
 
-        <!-- Search Field -->
-        <div class="max-w-xl w-full mx-auto">
-            <input type="text" placeholder="Search species..."
-                class="w-full border border-gray-300 p-2 rounded-full shadow-sm focus:outline-none focus:ring-2 focus:ring-green-400"
-                id="searchInput" />
+    <!-- Search Field -->
+    <div class="max-w-xl w-full mx-auto">
+        <input type="text" placeholder="Search species..."
+            class="w-full border border-gray-300 p-2 rounded-full shadow-sm focus:outline-none focus:ring-2 focus:ring-green-400"
+            id="searchInput" />
+    </div>
+
+    <!-- Species Cards Section -->
+    <div id="speciesContainer" class="flex flex-col gap-4 mt-4 max-w-4xl mx-auto w-full">
+
+        <!-- Example Species Card -->
+        <div class="bg-white rounded-xl shadow flex flex-col sm:flex-row overflow-hidden">
+            -----<img src="/images/species-placeholder.jpg" alt="Species Image" class="w-full sm:w-40 h-40 object-cover">-----
+            <div class="p-4 flex flex-col justify-between">
+                <div>
+                    <h2 class="text-lg font-bold text-green-700">Common Name</h2>
+                    <p class="italic text-gray-600">Scientific Name</p>
+                    <p class="mt-2 text-gray-700 text-sm">
+                        This is where the species cards with information fetched from the database would ideally go.
+                    </p>
+                </div>
+            </div>
         </div>
 
-
-        <!-- Species Cards Section -->
-        <div id="speciesContainer" class="flex flex-col gap-4 mt-4 max-w-4xl mx-auto w-full">
-            <!-- This is where species cards will go -->
-            <!-- Species cards will be dynamically inserted here later -->
+        <!-- Placeholder Loading Spinner -->
+        <div id="loading" class="text-center py-4 text-gray-500 hidden">
+            Loading more species...
         </div>
 
-    </body>
+    </div>
 
-    <%- include('partials/researcher-footer') %>
+    <script>
+        // Placeholder infinite scroll logic
+        window.addEventListener('scroll', () => {
+            const loading = document.getElementById('loading');
+            if ((window.innerHeight + window.scrollY) >= document.body.offsetHeight - 100) {
+                loading.classList.remove('hidden');
+
+                // Simulated async fetch
+                setTimeout(() => {
+                    loading.classList.add('hidden');
+                    // Add dynamically loaded species cards here in the future
+                }, 1000);
+            }
+        });
+    </script>
+
+</body>
+
+    <%- include('../partials/researcher-footer') %>

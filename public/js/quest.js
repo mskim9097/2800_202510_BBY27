@@ -4,7 +4,7 @@ let suggestionClicked = false;
 
 resultBox.classList.add('bg-white', 'border', 'rounded', 'p-2', 'mt-1');
 searchBox.parentNode.appendChild(resultBox);
-
+// search function to select searched species
 searchBox.addEventListener('input', async () => {
     suggestionClicked = false;
     const query = searchBox.value.trim();
@@ -13,6 +13,7 @@ searchBox.addEventListener('input', async () => {
         return;
     }
 
+    // AI generated (line 17 - 22)
     const res = await fetch(`/quests/searchTarget?q=${encodeURIComponent(query)}`);
     const data = await res.json();
 

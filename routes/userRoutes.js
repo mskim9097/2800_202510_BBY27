@@ -7,7 +7,7 @@ router.get('/', (req, res) => {
     checkAuthorization(req, res);
 });
 
-router.get('/explorer', authenticated,isAuthorizedExplorer, (req, res) => {
+router.get('/explorer', authenticated, (req, res) => {
 
     res.render('pages/explorerDashboard');
 });
