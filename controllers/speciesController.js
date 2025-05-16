@@ -90,16 +90,6 @@ const updateSpecies = async (req, res, next) => {
     next();
 }
 
-const getSpecies = async (req, res) => {
-    const speciesScientificName = req.query.speciesScientificName;
-    const species = await speciesCollection.findOne({ speciesName: speciesScientificName });
-    if (species) {
-        res.status(200).json(species);
-    } else {
-        res.status(404).json({ message: "Species not found" });
-    }
-}
-
 // POSSIBLY GOOD FOR REUSING IN UPDATE SPECIES AND CREATE SPECIES
 const addImage = async (req, res, next) => {
     let speciesImageUrl = null;
