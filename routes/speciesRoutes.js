@@ -57,12 +57,13 @@ router.get('/updateSpecies', isAuthorizedResearcher, (req, res) => {
     res.render(update);
 });
 
-router.post('/updateSpecies', isAuthorizedResearcher, upload.single("speciesImage"), updateSpecies, (req, res) => {
-    res.redirect(researcherDashboard);
+router.post('/updateSpecies/:id', isAuthorizedResearcher, upload.single("speciesImage"), updateSpecies, (req, res) => {
+    const updatedName = req.body.speciesName;
+    res.redirect(`/species/${encodeURIComponent(updatedName)}`);
 });
 
-router.post('/deleteSpecies', isAuthorizedResearcher, deleteSpecies, (req, res) => {
-    res.redirect(researcherDashboard);
+router.post('/deleteSpecies/:id', isAuthorizedResearcher, deleteSpecies, (req, res) => {
+    res.redirect('/species');
 });
 
 // Get a specific species by name
@@ -76,7 +77,7 @@ router.get("/:speciesName", async (req, res) => {
     if (!species) {
       return res.status(404).render("pages/404", { title: "Not Found" }); // Assumes you have a 404.ejs page
     }
-    res.render("pages/speciesPage", { species: species, title: species.speciesName });
+    res.render("pages/speciesPage", { species: species, title: species.speciesName, userType: req.session.type });
   } catch (err) {
     console.error("Error fetching species:", err);
     res.status(500).send("Error fetching species details");
