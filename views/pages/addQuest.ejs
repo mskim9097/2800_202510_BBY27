@@ -45,11 +45,19 @@
             <label for="mission" class="font-semibold block mb-1">Mission</label>
             <input type="text" name="mission" id="mission" required class="w-full border border-gray-300 p-2 rounded" />
         </div>
-
         <div>
             <label for="target" class="font-semibold block mb-1">Target Species</label>
-            <input type="text" name="target" id="target" required class="w-full border border-gray-300 p-2 rounded" />
+            <select name="target" id="target" required class="w-full border border-gray-300 p-2 rounded">
+                <option value="663cb79e34a7e4bca0a22d93">Bald Eagle</option>
+                <option value="663cb79e34a7e4bca0a22d94">Western Toad</option>
+            </select>
         </div>
+
+
+        <!--<div>
+            <label for="target" class="font-semibold block mb-1">Target Species</label>
+            <input type="text" name="target" id="target"  class="w-full border border-gray-300 p-2 rounded" />
+        </div>-->
 
         <div>
             <label for="timeOfDay" class="font-semibold block mb-1">Time of Day</label>
@@ -76,7 +84,7 @@
     </form>
 
     <script src="/js/questMap.js"> </script>
-    <script src="/js/quest.js"></script>
+    <!--<script src="/js/quest.js"></script>-->
 </body>
 
 </html>

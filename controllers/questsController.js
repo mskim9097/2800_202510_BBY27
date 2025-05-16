@@ -1,3 +1,8 @@
+require('dotenv').config();
+const express = require('express');
+const Joi = require("joi");
+const Quest = require("../models/questModel");
+
 const appClient = require('../databaseConnection').database;
 const questCollection = appClient.db('biodiversityGo').collection('quest');
 const speciesCollection = appClient.db('biodiversityGo').collection('species');
@@ -14,6 +19,29 @@ const searchTarget = async (req, res) => {
     res.json(results);
 };
 
+//logic related to researcher routes goes here
+// const appClient = require('../databaseConnection').database;
+// const questCollection = appClient.db('biodiversityGo').collection('quest');
+
+// const createQuest = async (req, res, next) => {
+//     var questName = req.query.questName;
+//     // var location = null;
+//     var questInfo = req.query.questInfo;
+//     var quantity = req.query.quantity;
+
+//     await questCollection.insertOne({
+//         questName: questName,
+//         location: 'locationInfo',
+//         questInfo: questInfo,
+//         quantity: quantity,
+//         image: null,
+//         createdBy: 'loginUserID',
+//         note: null,
+//         acceptedBy: null
+//     });
+//     next();
+// }
+
 /*
 const createQuest = async (req, res) => {
     try {
@@ -26,7 +54,10 @@ const createQuest = async (req, res) => {
             timeOfDay,
             difficulty
         } = req.body;
-        
+        const userId = req.session.userId;
+        console.log('BODY:', req.body);
+        console.log('SESSION:', req.session);
+
         const newQuest = new Quest({
             title,
             mission,
@@ -37,12 +68,12 @@ const createQuest = async (req, res) => {
             targetSpecies: target,  // Store the species ID
             timeOfDay,
             difficulty,
-            createdBy: req.user._id,  // assuming req.user is populated by auth middleware
+            createdBy: userId,  // assuming req.user is populated by auth middleware
             acceptedBy: []            // starts empty
         });
 
         await newQuest.save();
-        res.redirect('/researcher/Dashboard');
+        res.redirect("/user/researcher");
     } catch (error) {
         console.error('Error creating quest:', error);
         res.status(500).send('Something went wrong while creating the quest.');
