@@ -3,6 +3,8 @@ require('dotenv').config();
 const { ObjectId } = require('mongodb');
 const cloudinary = require('cloudinary').v2;
 
+const appClient = require('../databaseConnection').database;
+const speciesCollection = appClient.db('biodiversityGo').collection('species');
 
 cloudinary.config({
     cloud_name: process.env.CLOUDINARY_CLOUD_NAME,

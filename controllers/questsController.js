@@ -18,30 +18,6 @@ const searchTarget = async (req, res) => {
         .toArray();
     res.json(results);
 };
-
-//logic related to researcher routes goes here
-// const appClient = require('../databaseConnection').database;
-// const questCollection = appClient.db('biodiversityGo').collection('quest');
-
-// const createQuest = async (req, res, next) => {
-//     var questName = req.query.questName;
-//     // var location = null;
-//     var questInfo = req.query.questInfo;
-//     var quantity = req.query.quantity;
-
-//     await questCollection.insertOne({
-//         questName: questName,
-//         location: 'locationInfo',
-//         questInfo: questInfo,
-//         quantity: quantity,
-//         image: null,
-//         createdBy: 'loginUserID',
-//         note: null,
-//         acceptedBy: null
-//     });
-//     next();
-// }
-
 /*
 const createQuest = async (req, res) => {
     try {
@@ -79,8 +55,8 @@ const createQuest = async (req, res) => {
         res.status(500).send('Something went wrong while creating the quest.');
     }
 };
-*/
 
+*/
 // createQuest function that saves quest document in mongoDB.
 const createQuest = async (req, res, next) => {
     var title = req.body.title;
