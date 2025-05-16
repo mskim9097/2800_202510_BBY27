@@ -12,16 +12,18 @@ const addQuest = "pages/addQuest";
 const { isAuthorizedResearcher } = require('../controllers/userController');
 const { searchTarget } = require('../controllers/questsController');
 
+// NEEDS QUEST LIST PAGE
+// Quest List Page
+router.get('/', (req, res, next) => {
+    // res.redirect(researcherDashboard);
+    res.render('pages/testQuest');
+});
 router.get('/completeQuest', (req, res, next) => {
     res.redirect(researcherDashboard);
 });
 
 // NEEDS QUEST PAGE
 router.get('/viewQuest', (req, res, next) => {
-    res.redirect(researcherDashboard);
-});
-// NEEDS QUEST LIST PAGE
-router.get('/questList', (req, res, next) => {
     res.redirect(researcherDashboard);
 });
 

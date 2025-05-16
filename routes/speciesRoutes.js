@@ -24,9 +24,9 @@ const upload = multer({
 // list all species
 router.get("/",  async (req, res) => {
   try {
-    const speciesList = await speciesCollection.find().toArray();
-    res.render(species, { species: speciesList, title: "All Species" });
-    // res.render("pages/speciesList");
+    // const speciesList = await speciesCollection.find().toArray();
+    // res.render(species, { species: speciesList, title: "All Species" });
+    res.render("pages/speciesList");
   } catch (err) {
     console.error("Error fetching species list:", err);
     res.status(500).send("Error fetching species list");
