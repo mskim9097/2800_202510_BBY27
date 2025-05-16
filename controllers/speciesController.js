@@ -71,22 +71,21 @@ const updateSpecies = async (req, res, next) => {
     const speciesId = req.params.id;
     const { speciesScientificName, speciesName, speciesInfo } = req.body;
 
+    const speciesImageUrl = await addImage(req, res, next);
 
-    // !!!!! NEED TO CHANGE THIS ONCE WE HAVE IMAGES !!!!!
-    //const speciesImage = [];
-    //speciesImage[0] = req.query.speciesImage;
-    //list of Quest IDs related to this species
+    const updateFields = {
+        speciesName: speciesName,
+        speciesInfo: speciesInfo,
+        speciesScientificName: speciesScientificName
+    };
+
+    if (speciesImageUrl) {
+        updateFields.speciesImage = speciesImageUrl;
+    }
 
     await speciesCollection.updateOne(
         { _id: new ObjectId(speciesId) },
-        {
-            $set: {
-                speciesName: speciesName,
-                speciesInfo: speciesInfo,
-                speciesScientificName: speciesScientificName
-                //speciesImage: speciesImage
-            }
-        }
+        { $set:updateFields }
     );
     next();
 }
