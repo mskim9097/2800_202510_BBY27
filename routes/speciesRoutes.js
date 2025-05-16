@@ -47,11 +47,12 @@ router.get('/updateSpecies', isAuthorizedResearcher, (req, res) => {
 });
 
 router.post('/updateSpecies/:id', isAuthorizedResearcher, upload.single("speciesImage"), updateSpecies, (req, res) => {
-    res.redirect(researcherDashboard);
+    const updatedName = req.body.speciesName;
+    res.redirect(`/species/${encodeURIComponent(updatedName)}`);
 });
 
 router.post('/deleteSpecies/:id', isAuthorizedResearcher, deleteSpecies, (req, res) => {
-    res.redirect(researcherDashboard);
+    res.redirect('/species');
 });
 
 // Get a specific species by name
