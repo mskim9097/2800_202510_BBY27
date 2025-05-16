@@ -41,7 +41,7 @@ const upload = multer({
 // });
 
 router.get("/",getSpecies,(req,res)=>{
-  res.render("pages/species",{ species: res.locals.speciesList});
+  res.render("pages/speciesCard",{ species: res.locals.speciesList});
 })
 
 router.get('/addSpecies', isAuthorizedResearcher, (req, res) => {

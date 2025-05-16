@@ -1,4 +1,4 @@
-const User = require('../models/userModel'); 
+const User = require('../models/userModel');
 const bcrypt = require('bcrypt');
 const saltRounds = 12;
 
@@ -82,38 +82,38 @@ function destroySession(req, res, next) {
 }
 
 async function signUp(req, res, next) {
-    const { firstName, lastName, email, password, type } = req.body;
+    try {
+        const { firstName, lastName, email, password, type } = req.body;
 
-    if (email && password && email) {
-        try {
-            console.log("Connected to MongoDB");
+        // Hash password
+        const hashedPassword = await bcrypt.hash(password, 10);
 
-            hashedPassword = await bcrypt.hash(password, saltRounds);
-            const newUser = new User({
-                firstName,
-                lastName,
-                email,
-                password: hashedPassword,
-                type
-            });
-            
-            const result = await newUser.save();
-            
-            console.log("User created:", newUser);
-            console.log(`New user created with the following id: ${result.insertedId}`);
+        // Create new user with matching fields
+        const newUser = new User({
+            firstName,
+            lastName,
+            email,
+            password: hashedPassword,
+            type,
+        });
 
-            req.session.user = email;
-        } catch (err) {
-            console.error("Error creating user:", err);
-            res.status(500).send('Internal Server Error');
-        } finally {
-            next();
-        }
-    } else {
-        console.log('Username, password, or email not provided.');
-        res.redirect('/');
+        const result = await newUser.save();
+
+        // Save user info in session
+        req.session.user = email;
+        req.session.userId = result._id.toString();
+        req.session.type = type;
+        req.session.name = `${firstName} ${lastName}`;
+
+        next(); // Or send response here
+
+    } catch (error) {
+        console.error(error);
+        res.status(500).send("Error creating user.");
     }
 }
+
+
 
 /*
 Authentication middleware for all user types.
