@@ -65,5 +65,23 @@ router.post('/deleteSpecies', isAuthorizedResearcher, deleteSpecies, (req, res) 
     res.redirect(researcherDashboard);
 });
 
+// Get a specific species by name
+router.get("/:speciesName", async (req, res) => {
+  try {
+    const speciesName = req.params.speciesName;
+    // Decode the speciesName in case it has URL encoded characters (e.g., spaces as %20)
+    const decodedSpeciesName = decodeURIComponent(speciesName);
+    const species = await speciesCollection.findOne({ speciesName: decodedSpeciesName });
+
+    if (!species) {
+      return res.status(404).render("pages/404", { title: "Not Found" }); // Assumes you have a 404.ejs page
+    }
+    res.render("pages/speciesPage", { species: species, title: species.speciesName });
+  } catch (err) {
+    console.error("Error fetching species:", err);
+    res.status(500).send("Error fetching species details");
+  }
+});
+
 module.exports = router;
 
