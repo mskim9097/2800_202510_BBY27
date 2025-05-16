@@ -92,7 +92,7 @@ const updateSpecies = async (req, res, next) => {
     next();
 }
 
-const getSpecies = async (req, res) => {
+const targetSpecies = async (req, res) => {
     const speciesScientificName = req.query.q;
 
     console.log("getSpecies");
@@ -148,4 +148,4 @@ const deleteSpecies = async (req, res) => {
     }
 }
 
-module.exports = { createSpecies, updateSpecies, getSpecies, deleteSpecies };
+module.exports = { createSpecies, updateSpecies, targetSpecies, deleteSpecies };
