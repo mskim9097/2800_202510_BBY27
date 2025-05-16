@@ -1,43 +1,6 @@
-require('dotenv').config();
-const express = require('express');
-const Joi = require("joi");
-const quest = require("../models/questModel");
-
-//logic related to researcher routes goes here
-
-const createQuest = async (req, res) => {
-    try {
-        const {
-            title,
-            mission,
-            latitude,
-            longitude,
-            target,      // this is the species ID from the dropdown
-            timeOfDay,
-            difficulty
-        } = req.body;
-        
-        const newQuest = new Quest({
-            title,
-            mission,
-            location: {
-                type: 'Point',
-                coordinates: [parseFloat(longitude), parseFloat(latitude)]
-            },
-            targetSpecies: target,  // Store the species ID
-            timeOfDay,
-            difficulty,
-            createdBy: req.user._id,  // assuming req.user is populated by auth middleware
-            acceptedBy: []            // starts empty
-        });
-
-        await newQuest.save();
-        res.redirect('/researcher/Dashboard');
-    } catch (error) {
-        console.error('Error creating quest:', error);
-        res.status(500).send('Something went wrong while creating the quest.');
-    }
-};
+const appClient = require('../databaseConnection').database;
+const questCollection = appClient.db('biodiversityGo').collection('quest');
+const speciesCollection = appClient.db('biodiversityGo').collection('species');
 
 // searchTarget function to search spicies that match input from mongoDB
 const searchTarget = async (req, res) => {
@@ -50,5 +13,31 @@ const searchTarget = async (req, res) => {
         .toArray();
     res.json(results);
 };
+
+// createQuest function that saves quest document in mongoDB.
+const createQuest = async (req, res, next) => {
+    var title = req.body.title;
+    var latitude = req.body.latitude;
+    var longitude = req.body.longitude;
+    var mission = req.body.mission;
+    var target = req.body.target;
+    var timeOfDay = req.body.timeOfDay;
+    var difficulty = req.body.difficulty;
+
+    await questCollection.insertOne({
+        questTitle: title,
+        questLatitude: latitude,
+        questLongitude: longitude,
+        questMission: mission,
+        speciesName: target,
+        questTimeOfDay: timeOfDay,
+        questDifficulty: difficulty,
+        questCreatedBy: req.session.user,
+        questImage: null,
+        questFieldNote: null,
+        questAcceptedBy: null
+    });
+    next();
+}
 
 module.exports = { createQuest, searchTarget }
