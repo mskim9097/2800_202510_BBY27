@@ -1,4 +1,5 @@
 require('dotenv').config();
+const { ObjectId } = require('mongodb');
 
 const appClient = require('../databaseConnection').database;
 const speciesCollection = appClient.db('biodiversityGo').collection('species');
@@ -67,25 +68,23 @@ const createSpecies = async (req, res, next) => {
 //This updates the same fields as createSpecies
 // NEED TO FIGURE OUT HOW CHANGING THE IMAGE WORKS
 const updateSpecies = async (req, res, next) => {
-
+    const speciesId = req.params.id;
     const { speciesScientificName, speciesName, speciesInfo } = req.body;
 
 
     // !!!!! NEED TO CHANGE THIS ONCE WE HAVE IMAGES !!!!!
-    const speciesImage = [];
-    speciesImage[0] = req.query.speciesImage;
+    //const speciesImage = [];
+    //speciesImage[0] = req.query.speciesImage;
     //list of Quest IDs related to this species
 
     await speciesCollection.updateOne(
-        { speciesName: speciesName },
+        { _id: new ObjectId(speciesId) },
         {
             $set: {
+                speciesName: speciesName,
                 speciesInfo: speciesInfo,
-                speciesImage: speciesImage,
-                speciesLocation: speciesLocation,
-                speciesQuantity: speciesQuantity,
-                speciesQuests: speciesQuests,
                 speciesScientificName: speciesScientificName
+                //speciesImage: speciesImage
             }
         }
     );

@@ -24,12 +24,14 @@ const createQuest = async (req, res, next) => {
     var timeOfDay = req.body.timeOfDay;
     var difficulty = req.body.difficulty;
 
+    const species = await speciesCollection.findOne({ speciesName: target });
+
     await questCollection.insertOne({
         questTitle: title,
         questLatitude: latitude,
         questLongitude: longitude,
         questMission: mission,
-        speciesName: target,
+        speciesId: species._id,
         questTimeOfDay: timeOfDay,
         questDifficulty: difficulty,
         questCreatedBy: req.session.user,
