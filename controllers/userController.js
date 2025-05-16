@@ -1,3 +1,4 @@
+const User = require('../models/userModel'); 
 const bcrypt = require('bcrypt');
 const saltRounds = 12;
 
@@ -10,11 +11,12 @@ const schema = Joi.object({
     firstName: Joi.string().alphanum().max(20).required(),
     lastName: Joi.string().alphanum().max(20).required(),
     email: Joi.string().email().max(30).required(),
-    password: Joi.string().max(20).required()
+    password: Joi.string().max(20).required(),
+    type: Joi.string().valid('researcher', 'explorer').required()
 });
 
 //MongoDB connection
-const appClient = require('../databaseConnection').database;
+// const appClient = require('../databaseConnection').database;
 
 // Authenticates the user by checking the users login credentials.
 // If the credentials are valid, it creates a session for the user and saves it to MongoDB.
@@ -25,7 +27,7 @@ async function authenticateUser(req, res, next) {
     if (error) return res.status(400).send("Validation failed.");
 
     const { email, password } = value;
-    const user = await appClient.db('biodiversityGo').collection("user").findOne({ email });
+    const user = await User.findOne({ email });
 
     if (!user || !(await bcrypt.compare(password, user.password))) {
         console.log(`Authentication failed for ${email}`);
@@ -44,6 +46,7 @@ async function authenticateUser(req, res, next) {
         }
         console.log("User type:", user.firstName);
         console.log("User type:", req.session.type);
+        console.log("User type:", req.session.userId);
         next();
     });
 }
@@ -55,6 +58,7 @@ async function authenticateUser(req, res, next) {
 function authenticated(req, res, next) {
     if (req.session.user) {
         console.log('User is authenticated:', req.session.user);
+        console.log('User is authenticated:', req.session.userId);
         next();
     } else {
         console.log('User is not authenticated');
@@ -85,15 +89,16 @@ async function signUp(req, res, next) {
             console.log("Connected to MongoDB");
 
             hashedPassword = await bcrypt.hash(password, saltRounds);
-            const newUser = {
-                firstName: firstName,
-                lastName: lastName,
-                email: email,
+            const newUser = new User({
+                firstName,
+                lastName,
+                email,
                 password: hashedPassword,
-                type: type
-            };
-
-            const result = await appClient.db('biodiversityGo').collection("user").insertOne(newUser);
+                type
+            });
+            
+            const result = await newUser.save();
+            
             console.log("User created:", newUser);
             console.log(`New user created with the following id: ${result.insertedId}`);
 

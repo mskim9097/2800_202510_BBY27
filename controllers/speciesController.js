@@ -1,143 +1,125 @@
+const Species = require('../models/specieModel');
 require('dotenv').config();
-
-const appClient = require('../databaseConnection').database;
-const speciesCollection = appClient.db('biodiversityGo').collection('species');
-
-// Configure Cloudinary
 const cloudinary = require('cloudinary').v2;
+
+
+
 cloudinary.config({
-  cloud_name: process.env.CLOUDINARY_CLOUD_NAME,
-  api_key: process.env.CLOUDINARY_API_KEY,
-  api_secret: process.env.CLOUDINARY_API_SECRET,
-  secure: true,
+    cloud_name: process.env.CLOUDINARY_CLOUD_NAME,
+    api_key: process.env.CLOUDINARY_API_KEY,
+    api_secret: process.env.CLOUDINARY_API_SECRET,
+    secure: true,
 });
+
+const uploadImageToCloudinary = (buffer) => {
+    return new Promise((resolve, reject) => {
+        const uploadStream = cloudinary.uploader.upload_stream(
+            { resource_type: 'image' },
+            (error, result) => {
+                if (error) {
+                    console.error('Cloudinary Upload Error:', error);
+                    return reject(error);
+                }
+                resolve(result.secure_url);
+            }
+        );
+        uploadStream.end(buffer);
+    });
+};
+
+const getSpecies = async (req, res, next) => {
+    try {
+        const speciesList = await Species.find();
+        // Attach the species list to `res.locals` to pass to the route/render layer
+        res.locals.speciesList = speciesList;
+        next();
+    } catch (err) {
+        console.error("Error fetching species list:", err);
+        res.status(500).send("Error fetching species list");
+    }
+};
 
 const createSpecies = async (req, res, next) => {
     try {
-        console.log("createSpecies");
-        console.log(req.body);
-        const { speciesScientificName, speciesName, speciesInfo} = req.body;
+        const { speciesScientificName, speciesName, speciesInfo, speciesHabitat,speciesType } = req.body;
 
-        let speciesImageUrl = null;
-
-        // Check if a file was uploaded
+        let speciesImage = [];
         if (req.file) {
-            // Upload image to Cloudinary from buffer
-            // Giving it a unique public_id using field (e.g. speciesName if unique) and timestamp might be good
-            // For simplicity, letting Cloudinary auto-generate public_id
-            const result = await new Promise((resolve, reject) => {
-                const uploadStream = cloudinary.uploader.upload_stream(
-                    { resource_type: 'image' }, // Can add folder: 'species_images' for organization
-                    (error, result) => {
-                        if (error) {
-                            console.error('Cloudinary Upload Error:', error);
-                            return reject(error);
-                        }
-                        resolve(result);
-                    }
-                );
-                uploadStream.end(req.file.buffer);
-            });
-            speciesImageUrl = result.secure_url;
+            const imageUrl = await uploadImageToCloudinary(req.file.buffer);
+            speciesImage.push(imageUrl);
         }
-        //This fields are set to null until updated by quests
-        const speciesImage = [];
-        speciesImage[0] = speciesImageUrl;
-        const speciesQuests = [];
-        const speciesLocations = {};
-        const speciesQuantity = 0;
-
-        await speciesCollection.insertOne({
-            speciesName: speciesName,
-            speciesInfo: speciesInfo,
-            speciesImage: speciesImage,
-            speciesLocation: speciesLocations,
-            speciesQuantity: speciesQuantity,
-            speciesQuests: speciesQuests,
-            speciesScientificName: speciesScientificName
+        const createdBy = req.session.userId;
+        const newSpecies = new Species({
+            speciesScientificName,
+            speciesName,
+            speciesInfo,
+            speciesImage,
+            speciesHabitat,
+            speciesType,
+            createdBy,
         });
-        next();
+
+        await newSpecies.save();
+        next(); // or res.status(201).json(newSpecies);
     } catch (error) {
-        console.error("Error in addSpecies controller:", error);
-        // Consider sending a user-friendly error page or message
+        console.error("Error creating species:", error);
         res.status(500).send("Error adding species. " + error.message);
     }
-}
+};
 
-//This updates the same fields as createSpecies
-// NEED TO FIGURE OUT HOW CHANGING THE IMAGE WORKS
 const updateSpecies = async (req, res, next) => {
+    try {
+        const { speciesScientificName, speciesName, speciesInfo, speciesLocation } = req.body;
 
-    const { speciesScientificName, speciesName, speciesInfo } = req.body;
-
-
-    // !!!!! NEED TO CHANGE THIS ONCE WE HAVE IMAGES !!!!!
-    const speciesImage = [];
-    speciesImage[0] = req.query.speciesImage;
-    //list of Quest IDs related to this species
-
-    await speciesCollection.updateOne(
-        { speciesName: speciesName },
-        {
-            $set: {
-                speciesInfo: speciesInfo,
-                speciesImage: speciesImage,
-                speciesLocation: speciesLocation,
-                speciesQuantity: speciesQuantity,
-                speciesQuests: speciesQuests,
-                speciesScientificName: speciesScientificName
-            }
+        const species = await Species.findOne({ speciesName });
+        if (!species) {
+            return res.status(404).json({ message: "Species not found" });
         }
-    );
-    next();
-}
 
-const getSpecies = async (req, res) => {
-    const speciesScientificName = req.query.speciesScientificName;
-    const species = await speciesCollection.findOne({ speciesName: speciesScientificName });
-    if (species) {
-        res.status(200).json(species);
-    } else {
-        res.status(404).json({ message: "Species not found" });
+        species.speciesScientificName = speciesScientificName || species.speciesScientificName;
+        species.speciesInfo = speciesInfo || species.speciesInfo;
+        species.speciesLocation = speciesLocation || species.speciesLocation;
+
+        if (req.file) {
+            const imageUrl = await uploadImageToCloudinary(req.file.buffer);
+            species.speciesImage.push(imageUrl);
+        }
+
+        await species.save();
+        next(); // or res.status(200).json(species);
+    } catch (error) {
+        console.error("Error updating species:", error);
+        res.status(500).send("Error updating species. " + error.message);
     }
-}
+};
 
-// POSSIBLY GOOD FOR REUSING IN UPDATE SPECIES AND CREATE SPECIES
-const addImage = async (req, res, next) => {
-    let speciesImageUrl = null;
-
-    // Check if a file was uploaded
-    if (req.file) {
-        // Upload image to Cloudinary from buffer
-        // Giving it a unique public_id using field (e.g. speciesName if unique) and timestamp might be good
-        // For simplicity, letting Cloudinary auto-generate public_id
-        const result = await new Promise((resolve, reject) => {
-            const uploadStream = cloudinary.uploader.upload_stream(
-                { resource_type: 'image' }, // Can add folder: 'species_images' for organization
-                (error, result) => {
-                    if (error) {
-                        console.error('Cloudinary Upload Error:', error);
-                        return reject(error);
-                    }
-                    resolve(result);
-                }
-            );
-            uploadStream.end(req.file.buffer);
-        });
-        speciesImageUrl = result.secure_url;
-        return speciesImageUrl;
-    }
-}
+// const getSpecies = async (req, res) => {
+//     try {
+//         const speciesScientificName = req.query.speciesScientificName;
+//         const species = await Species.findOne({ speciesScientificName });
+//         if (!species) {
+//             return res.status(404).json({ message: "Species not found" });
+//         }
+//         res.status(200).json(species);
+//     } catch (error) {
+//         console.error("Error fetching species:", error);
+//         res.status(500).send("Error fetching species. " + error.message);
+//     }
+// };
 
 const deleteSpecies = async (req, res) => {
-    const speciesName = req.query.speciesName;
-    const species = await speciesCollection.findOne({ speciesName: speciesName });
-    if (species) {
-        await speciesCollection.deleteOne({ speciesName: speciesName });
+    try {
+        const speciesName = req.query.speciesName;
+        const species = await Species.findOne({ speciesName });
+        if (!species) {
+            return res.status(404).json({ message: "Species not found" });
+        }
+        await species.deleteOne();
         res.status(200).json({ message: "Species deleted successfully" });
-    } else {
-        res.status(404).json({ message: "Species not found" });
+    } catch (error) {
+        console.error("Error deleting species:", error);
+        res.status(500).send("Error deleting species. " + error.message);
     }
-}
+};
 
 module.exports = { createSpecies, updateSpecies, getSpecies, deleteSpecies };

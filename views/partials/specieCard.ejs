@@ -1,0 +1,39 @@
+<div class="flex flex-col justify-center gap-6 p-4 ">
+    <% speciesList.forEach(sp=> { %>
+        <div class="flex flex-col gap-2 bg-white border border-gray-200 rounded-xl shadow-md max-w-[400px] p-4"
+            data-type="<%= sp.speciesType ? sp.speciesType.toLowerCase() : 'unknown' %>">
+            <% if (sp.speciesImage) { %>
+                <img src="<%= sp.speciesImage %>" alt="Image of <%= sp.speciesName %>"
+                    class="w-full h-48 object-cover rounded-lg">
+                <% } else { %>
+                    <div
+                        class="w-full h-48 bg-gray-100 flex items-center justify-center rounded-lg text-xl text-gray-500">
+                        🖼️ No image
+                    </div>
+                    <% } %>
+
+                        <h3 class="mt-4 text-lg font-semibold text-gray-800">🧬 <%= sp.speciesName || "Unnamed Species"
+                                %>
+                        </h3>
+
+                        <p class="text-sm text-gray-600 mt-1"><strong>🔬 Scientific Name:</strong>
+                            <em>
+                                <%= sp.speciesScientificName || "N/A" %>
+                            </em>
+                        </p>
+
+                        <p class="text-sm text-gray-600 mt-1"><strong>🌍 Habitat:</strong>
+                            <%= sp.speciesHabitat || "Unknown" %>
+                        </p>
+
+                        <p class="text-sm text-gray-600 mt-1"><strong>🏷️ Type:</strong>
+                            <%= sp.speciesType || "Unknown" %>
+                        </p>
+
+                        <p class="text-sm text-gray-600 mt-1 line-clamp-2">
+                            <strong>📖 Description:</strong>
+                            <%= sp.speciesInfo || "No description provided." %>
+                        </p>
+        </div>
+        <% }); %>
+</div>

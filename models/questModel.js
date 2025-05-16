@@ -12,12 +12,12 @@ const questSchema = new mongoose.Schema({
     targetSpecies: { type: mongoose.Schema.Types.ObjectId, ref: 'Species' },//required: true
     timeOfDay: { type: String, enum: ['Morning', 'Afternoon', 'Evening', 'Night'], required: true },
     difficulty: { type: String, enum: ['Easy', 'Medium', 'Hard'], required: true },
-     createdBy: { type: mongoose.Schema.Types.ObjectId, ref: 'User' },//required: true
+    createdBy: { type: mongoose.Schema.Types.ObjectId, ref: 'User' },//required: true
     acceptedBy: [{ type: mongoose.Schema.Types.ObjectId, ref: 'User' }]
 }, {
     timestamps: true
 });
 
-questSchema.index({ location: '2dsphere' }); // For geolocation queries
+questSchema.index({ location: '2dsphere' }); 
 
 module.exports = mongoose.model('Quest', questSchema);
