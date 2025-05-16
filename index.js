@@ -3,7 +3,7 @@ require('dotenv').config();
 const express = require('express');
 const app = express();
 app.use(express.json());
-app.use(express.urlencoded({extended: false}));
+app.use(express.urlencoded({extended: true}));
 const path = require('path');
 const PORT = process.env.PORT || 8000;
 
@@ -56,8 +56,8 @@ app.use(session({
     }
 })();
 
-//Routes from index.js files in the routes folder will be handled here
-//We should organize routes in this way.
+// Routes from index.js files in the routes folder will be handled here
+// We should organize routes in this way.
 const indexRouter = require('./routes/indexRoutes');
 app.use('/', indexRouter);
 
@@ -72,3 +72,7 @@ app.use('/quests', authenticated, questRouter);
 
 const testRouter = require('./routes/testRoutes');
 app.use('/test', testRouter);
+
+const aiRouter = require("./routes/aiRoutes.js");
+app.use("/ai",aiRouter);
+  

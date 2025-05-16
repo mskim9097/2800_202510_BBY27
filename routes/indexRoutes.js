@@ -12,7 +12,7 @@ router.get('/signup', (req, res) => {
 });
 
 router.post('/createUser',signUp, async (req, res) => {
-  res.redirect("/");
+  res.redirect("/login");
 });
 
 router.get('/login', (req, res) => {
