@@ -8,12 +8,18 @@
     <link rel="stylesheet" href="/css/style.css"> <%- /* Adjust path if necessary */ %>
     <link rel="stylesheet" href="/css/species.css">
     <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.13.1/font/bootstrap-icons.min.css">
 </head>
 <body>
     <%- include("../partials/header") %>
     <div class="container">
     <% if (typeof species !== 'undefined' && species) { %>
         <% if (userType === 'researcher') { %>
+            <form action="/species/deleteSpecies/<%= species._id %>" method="POST">
+                <button id="deleteBtn" type="submit">
+                    <i class="bi bi-trash3"></i>
+                </button>
+            </form>
             <form id="editForm" action="/species/updateSpecies/<%= species._id %>" method="POST">
                 <input type="text" name="speciesName" value="<%= species.speciesName %>" class="species-title" disabled>
 
@@ -30,9 +36,8 @@
                     <p><strong>Information:</strong></p>
                     <textarea name="speciesInfo" class="species-view" disabled><%= species.speciesInfo %></textarea>
                 </div>
-
                 <div style="text-align: right; margin-top: 10px;">
-                    <button id="editBtn" class="back-link" type="button">Edit</button>
+                    <button id="editBtn" class="back-link" type="button" style="background-color: green;">Edit</button>
                     <div id="editButtons" style="display: none;">
                         <button type="submit" class="back-link" style="background-color: green;">Save</button>
                         <button type="button" class="back-link" id="cancelBtn" style="background-color: gray;">Cancel</button>

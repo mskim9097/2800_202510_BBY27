@@ -128,15 +128,15 @@ const addImage = async (req, res, next) => {
     }
 }
 
-const deleteSpecies = async (req, res) => {
-    const speciesName = req.query.speciesName;
-    const species = await speciesCollection.findOne({ speciesName: speciesName });
+// DeleteFunction that deletes species data in mongoDB.
+const deleteSpecies = async (req, res, next) => {
+    const speciesId = req.params.id;
+    const objectId = new ObjectId(speciesId);
+    const species = await speciesCollection.findOne({ _id: objectId });
     if (species) {
-        await speciesCollection.deleteOne({ speciesName: speciesName });
-        res.status(200).json({ message: "Species deleted successfully" });
-    } else {
-        res.status(404).json({ message: "Species not found" });
+        await speciesCollection.deleteOne({ _id: objectId });        
     }
+    next();
 }
 
 module.exports = { createSpecies, updateSpecies, getSpecies, deleteSpecies };

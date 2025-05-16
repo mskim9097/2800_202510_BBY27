@@ -50,7 +50,7 @@ router.post('/updateSpecies/:id', isAuthorizedResearcher, upload.single("species
     res.redirect(researcherDashboard);
 });
 
-router.post('/deleteSpecies', isAuthorizedResearcher, deleteSpecies, (req, res) => {
+router.post('/deleteSpecies/:id', isAuthorizedResearcher, deleteSpecies, (req, res) => {
     res.redirect(researcherDashboard);
 });
 
