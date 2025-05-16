@@ -93,14 +93,22 @@ const updateSpecies = async (req, res, next) => {
 }
 
 const getSpecies = async (req, res) => {
-    const speciesScientificName = req.query.speciesScientificName;
-    const species = await speciesCollection.findOne({ speciesName: speciesScientificName });
-    if (species) {
-        res.status(200).json(species);
-    } else {
-        res.status(404).json({ message: "Species not found" });
+    const speciesScientificName = req.query.q;
+
+    console.log("getSpecies");
+
+    if (!speciesScientificName) {
+        return res.status(400).json({ error: "Missing query" });
     }
-}
+
+    const species = await speciesCollection.findOne({ speciesScientificName });
+
+    if (species) {
+        res.status(200).json([species]); // return as array for consistency with frontend
+    } else {
+        res.json([]); // return empty array if no match
+    }
+};
 
 // POSSIBLY GOOD FOR REUSING IN UPDATE SPECIES AND CREATE SPECIES
 const addImage = async (req, res, next) => {

@@ -5,7 +5,7 @@ const appClient = require('../databaseConnection').database;
 const speciesCollection = appClient.db('biodiversityGo').collection('species');
 
 
-const {createSpecies, updateSpecies, deleteSpecies} = require('../controllers/speciesController');
+const {createSpecies, updateSpecies, deleteSpecies, getSpecies} = require('../controllers/speciesController');
 const { isAuthorizedResearcher } = require('../controllers/userController');
 
 const researcherDashboard = "/user/researcher";
@@ -32,6 +32,8 @@ router.get("/",  async (req, res) => {
     res.status(500).send("Error fetching species list");
   }
 });
+
+router.get('/searchTarget', getSpecies);
 
 router.get('/addSpecies', isAuthorizedResearcher, (req, res) => {
     res.render(addSpecies);
