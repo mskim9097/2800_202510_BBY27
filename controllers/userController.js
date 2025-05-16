@@ -137,14 +137,4 @@ function isAuthorizedResearcher(req, res, next) {
     }
 }
 
-function isAuthorizedExplorer(req, res, next) {
-    if (req.session.type === 'explorer') {
-        console.log('User is a explorer:', req.session.user);
-        next();
-    } else {
-        console.log('invalid user type:', req.session.type);
-        res.redirect('/');
-    }
-}
-
-module.exports = { authenticated, destroySession, authenticateUser, signUp, checkAuthorization, isAuthorizedResearcher,isAuthorizedExplorer };
+module.exports = { authenticated, destroySession, authenticateUser, signUp, checkAuthorization, isAuthorizedResearcher };

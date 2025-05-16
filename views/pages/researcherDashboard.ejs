@@ -40,20 +40,8 @@
         <div style="background-color:rgb(242, 242, 242)"
             class="flex flex-col p-4 justify-between h-full rounded-lg shadow-sm gap-4">
             <div id="content" class="flex flex-col gap-4 overflow-y-scroll  ">
-                <div class="flex justify-between p-2">
-                    <img class="w-10 h-10" src="/images/menu.svg" alt="">
-                    <img class="w-10 h-10" src="/images/bell.svg" alt="">
-                </div>
-                <div class="flex items-center gap-5">
-                    <img src="/images/photo.svg" alt="">
-                    <div>
-                        <span class="text-xl">Hello,</span> <span class="font-bold text-xl">Blair!</span>
-                    </div>
-                    <!-- forecast -->
-                    <div id="weather-caption" class=" text-black px-1 py-2 rounded shadow text-sm">
-                        Loading weather...
-                    </div>
-                </div>
+
+                <%- include('../partials/header') %>
 
                 <div id="explore_time" class="py-2 px-1 w-fit shadow text-sm rounded font-semibold m-auto text-center">
                     Is it a good day to explore .....
@@ -99,23 +87,14 @@
                 </div>
 
             </div>
-            <div id="footer" class=" w-full py-3 px-3 self-center  rounded-3xl relative bg-green-700 ">
+            <%- include('../partials/researcher-footer') %>
 
-                <div class="flex items-center justify-between">
-                    <img class="hover:bg-[#dad7b2] rounded p-2 " src="/images/home.svg" width="40" height="30" alt="">
-                    <img class="hover:bg-[#dad7b2] rounded p-2" src="/images/dna-icon.svg" width="40" height="30"
-                        alt="">
-                    <img class="hover:bg-[#dad7b2] rounded p-2" src="https://img.icons8.com/ios/30/ffffff/quest--v1.png"
-                        width="40" height="30" alt="quest" />
-                    <img class="hover:bg-[#dad7b2] rounded p-2" src="/images/heart.svg" width="40" height="30" alt="">
-                </div>
-
-            </div>
         </div>
         <script src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js"></script>
         <script src="/js/weather.js"></script>
         <script src="/js/map.js"></script>
         <script src="/js/swiper.js"></script>
+        <script src="/js/menu.js"></script>
 </body>
 
 </html>
