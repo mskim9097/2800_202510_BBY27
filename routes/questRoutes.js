@@ -38,7 +38,7 @@ router.get('/addQuest',authenticated, isAuthorizedResearcher, (req, res, next) =
 
 router.get('/searchTarget', searchTarget);
 
-router.post('/addQuest', isAuthorizedResearcher, upload.single("speciesImage"), createQuest, (req, res, next) => {
+router.post('/addQuest', isAuthorizedResearcher, createQuest, (req, res, next) => {
     res.redirect(researcherDashboard);
 });
 
