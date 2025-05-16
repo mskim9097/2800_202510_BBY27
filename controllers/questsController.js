@@ -20,4 +20,16 @@ const createQuest = async (req, res, next) => {
     next();
 }
 
-module.exports = { createQuest }
+// searchTarget function to search spicies that match input from mongoDB
+const searchTarget = async (req, res) => {
+    const keyword = req.query.q;
+    if (!keyword) return res.json([]);
+
+    const results = await speciesCollection
+        .find({ speciesName: { $regex: keyword, $options: 'i' } })
+        .limit(5)
+        .toArray();
+    res.json(results);
+};
+
+module.exports = { createQuest, searchTarget }

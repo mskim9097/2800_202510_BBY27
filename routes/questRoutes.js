@@ -10,6 +10,7 @@ const researcherDashboard = "/user/researcher";
 const addQuest = "pages/addQuest";
 
 const { isAuthorizedResearcher } = require('../controllers/userController');
+const { searchTarget } = require('../controllers/questsController');
 
 router.get('/completeQuest', (req, res, next) => {
     res.redirect(researcherDashboard);
@@ -28,6 +29,8 @@ router.get('/questList', (req, res, next) => {
 router.get('/addQuest', isAuthorizedResearcher, (req, res, next) => {
     res.render(addQuest);
 });
+
+router.get('/searchTarget', searchTarget);
 
 router.post('/addQuest', isAuthorizedResearcher, upload.single("speciesImage"), createQuest, (req, res, next) => {
     res.redirect(researcherDashboard);
