@@ -92,6 +92,24 @@ const updateSpecies = async (req, res, next) => {
     next();
 }
 
+const targetSpecies = async (req, res) => {
+    const speciesScientificName = req.query.q;
+
+    console.log("getSpecies");
+
+    if (!speciesScientificName) {
+        return res.status(400).json({ error: "Missing query" });
+    }
+
+    const species = await speciesCollection.findOne({ speciesScientificName });
+
+    if (species) {
+        res.status(200).json([species]); // return as array for consistency with frontend
+    } else {
+        res.json([]); // return empty array if no match
+    }
+};
+
 // POSSIBLY GOOD FOR REUSING IN UPDATE SPECIES AND CREATE SPECIES
 const addImage = async (req, res, next) => {
     let speciesImageUrl = null;
@@ -119,20 +137,6 @@ const addImage = async (req, res, next) => {
     }
 };
 
-// const getSpecies = async (req, res) => {
-//     try {
-//         const speciesScientificName = req.query.speciesScientificName;
-//         const species = await Species.findOne({ speciesScientificName });
-//         if (!species) {
-//             return res.status(404).json({ message: "Species not found" });
-//         }
-//         res.status(200).json(species);
-//     } catch (error) {
-//         console.error("Error fetching species:", error);
-//         res.status(500).send("Error fetching species. " + error.message);
-//     }
-// };
-
 // DeleteFunction that deletes species data in mongoDB.
 const deleteSpecies = async (req, res, next) => {
     const speciesId = req.params.id;
@@ -144,4 +148,4 @@ const deleteSpecies = async (req, res, next) => {
     next();
 }
 
-module.exports = { createSpecies, updateSpecies, getSpecies, deleteSpecies };
+module.exports = { createSpecies, updateSpecies, targetSpecies, deleteSpecies, getSpecies };
