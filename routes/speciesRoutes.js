@@ -26,12 +26,14 @@ router.get("/", getSpecies,  async (req, res) => {
   try {
     // const speciesList = await speciesCollection.find().toArray();
     // res.render(species, { species: speciesList, title: "All Species" });
-    res.render("pages/speciesList");
+    res.render("pages/speciesCard");
   } catch (err) {
     console.error("Error fetching species list:", err);
     res.status(500).send("Error fetching species list");
   }
 });
+
+router.get('/searchTarget', targetSpecies);
 
 router.get('/addSpecies', isAuthorizedResearcher, (req, res) => {
     res.render(addSpecies);
