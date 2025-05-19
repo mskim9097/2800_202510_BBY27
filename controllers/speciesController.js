@@ -71,14 +71,20 @@ const createSpecies = async (req, res, next) => {
 
 const updateSpecies = async (req, res, next) => {
     const speciesId = req.params.id;
-    const { speciesScientificName, speciesName, speciesInfo } = req.body;
+    const { speciesName,
+            speciesScientificName, 
+            speciesHabitat, 
+            speciesType,
+            speciesInfo } = req.body;
 
     const speciesImageUrl = await addImage(req, res, next);
 
     const updateFields = {
         speciesName: speciesName,
+        speciesScientificName: speciesScientificName,
+        speciesHabitat: speciesHabitat,
+        speciesType: speciesType,
         speciesInfo: speciesInfo,
-        speciesScientificName: speciesScientificName
     };
 
     if (speciesImageUrl) {

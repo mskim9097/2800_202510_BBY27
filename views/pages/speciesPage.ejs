@@ -42,11 +42,17 @@
                 </div>
 
                 <div class="species-info">
-                    <p><strong>Scientific Name:</strong>
+                    <p><strong>🔬 Scientific Name:</strong>
                         <input type="text" name="speciesScientificName" value="<%= species.speciesScientificName %>" class="species-view" disabled>
+                    </p>                    
+                    <p><strong>🌍 Habitat:</strong>
+                        <input type="text" name="speciesHabitat" value="<%= species.speciesHabitat %>" class="species-view" disabled>
                     </p>
-                    <p><strong>Information:</strong></p>
-                    <textarea name="speciesInfo" class="species-view" disabled><%= species.speciesInfo %></textarea>
+                    <p><strong>🏷️ Type:</strong>
+                        <input type="text" name="speciesType" value="<%= species.speciesType %>" class="species-view" disabled>
+                    </p>
+                    <p><strong>📖 Description:</strong></p>
+                    <textarea class="species-view" name="speciesInfo"disabled><%= species.speciesInfo %></textarea>
                 </div>
                 <div style="text-align: right; margin-top: 10px;">
                     <button id="editBtn" class="back-link" type="button" style="background-color: green;">Edit</button>
@@ -66,11 +72,18 @@
             <% } %>
 
             <div class="species-info">
-                <p><strong>Scientific Name:</strong>
-                    <input type="text" value="<%= species.speciesScientificName %>" class="species-view" disabled>
+                <p><strong>🔬 Scientific Name:</strong>
+                    <input type="text" name="speciesScientificName" value="<%= species.speciesScientificName %>" class="species-view" disabled>
                 </p>
-                <p><strong>Information:</strong></p>
-                <textarea class="species-view" disabled><%= species.speciesInfo %></textarea>
+                <p><strong>🌍 Habitat:</strong>
+                    <input type="text" name="speciesHabitat" value="<%= species.speciesHabitat %>" class="species-view" disabled>
+                </p>
+                <p><strong>🏷️ Type:</strong>
+                    <input type="text" name="speciesType" value="<%= species.speciesType %>" class="species-view" disabled>
+                </p>
+                <p><strong>📖 Description:</strong>
+                    <textarea name="speciesInfo" class="species-view" disabled><%= species.speciesInfo %> </textarea>
+                </p>
             </div>
         <% } %>
     <% } else { %>
