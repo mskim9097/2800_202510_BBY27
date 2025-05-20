@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <title>Document</title>
+</head>
+
+
+<body class="bg-gray-100 p-4 flex flex-col gap-4 min-h-screen text-sm">
+    <%- include('../partials/header') %>
+
+        <!-- Search Field -->
+        <div
+            class="flex  max-w-xl bg-white border border-gray-300 rounded-full shadow-sm px-4 py-2 items-center gap-2">
+            <span class="text-gray-500 text-lg">🔍</span>
+            <input id="searchInput" type="text" placeholder="Search Quests..."
+                class="flex-grow focus:outline-none text-sm text-gray-800 placeholder-gray-400 bg-transparent">
+        </div>
+        <div id="filterContainer"">
+            <select id="difficultyFilter"
+            class="border border-gray-300 rounded-full text-sm px-3 py-2 bg-white shadow-sm focus:outline-none mt-2">
+                <option value="">Difficulty</option>
+                <option value="easy">🟢 Easy</option>
+                <option value="medium">🟡 Medium</option>
+                <option value="high">🔴 High</option>
+            </select>
+            <select id="timeFilter"
+            class="border border-gray-300 rounded-full text-sm px-3 py-2 bg-white shadow-sm focus:outline-none mt-2">
+                <option value="">Time of Day</option>
+                <option value="morning">🌅 Morning</option>
+                <option value="afternoon">🌤️ Afternoon </option>
+                <option value="evening">🌇 Evening</option>
+                <option value="night">🌙 Night</option>
+            </select>
+        </div>
+
+        <!-- Quest Cards Section (Horizontal Scroll) -->
+        <div class="mt-4 max-w-6xl mx-auto w-full relative">
+            <div id="speciesContainer" class="flex gap-4 overflow-x-auto pb-4 scroll-smooth"
+                style="scrollbar-width: none;">
+            </div>
+
+            <!-- Loading Spinner -->
+            <div id="loading" class="text-center text-gray-500 text-sm mt-2 hidden">
+                Loading more quests...
+            </div>
+        </div>
+        <%- include('../partials/researcher-footer') %>
+
+        <script>
+            const questData = <%- JSON.stringify(questList) %>;
+        </script>
+
+        <script src="/js/menu.js"></script>
+        <script src="/js/questList.js"></script>
+
+</body>
+
+</html>
