@@ -15,8 +15,8 @@
     <div class="container">
     <% if (typeof species !== 'undefined' && species) { %>
         <% if (userType === 'researcher') { %>
-            <form action="/species/deleteSpecies/<%= species._id %>" method="POST">
-                <button id="deleteBtn" type="submit">
+            <form id="deleteForm" action="/species/deleteSpecies/<%= species._id %>" method="POST">
+                <button id="deleteBtn" type="button">
                     <i class="bi bi-trash3"></i>
                 </button>
             </form>
@@ -101,5 +101,19 @@
     <% } %>
     <script src="/js/species.js"></script>
     <script src="/js/menu.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            const deleteButton = document.getElementById('deleteBtn');
+            if (deleteButton) {
+                deleteButton.addEventListener('click', function (event) {
+                    event.preventDefault(); // Prevent form submission
+                    const confirmation = confirm('Are you sure you want to delete this species?');
+                    if (confirmation) {
+                        document.getElementById('deleteForm').submit();
+                    }
+                });
+            }
+        });
+    </script>
 </body>
 </html> 
