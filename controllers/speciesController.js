@@ -110,18 +110,17 @@ const targetSpecies = async (req, res) => {
     }
 };
 
-// POSSIBLY GOOD FOR REUSING IN UPDATE SPECIES AND CREATE SPECIES
+// Helper function that handles image upload to Cloudinary.
 const addImage = async (req, res, next) => {
     let speciesImageUrl = null;
 
     // Check if a file was uploaded
     if (req.file) {
         // Upload image to Cloudinary from buffer
-        // Giving it a unique public_id using field (e.g. speciesName if unique) and timestamp might be good
-        // For simplicity, letting Cloudinary auto-generate public_id
+        // For simplicity, Cloudinary auto-generate public_id
         const result = await new Promise((resolve, reject) => {
             const uploadStream = cloudinary.uploader.upload_stream(
-                { resource_type: 'image' }, // Can add folder: 'species_images' for organization
+                { resource_type: 'image' }, 
                 (error, result) => {
                     if (error) {
                         console.error('Cloudinary Upload Error:', error);

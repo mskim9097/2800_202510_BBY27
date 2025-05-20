@@ -14,6 +14,12 @@
     <div class="bg-white/10 backdrop-blur-sm p-8 rounded-xl shadow-xl max-w-md w-full text-white">
         <h2 class="text-3xl font-bold mb-6 text-center">Log In to Your Account</h2>
 
+        <% if (typeof error !== 'undefined' && error) { %>
+            <div class="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded relative mb-4" role="alert">
+                <span class="block sm:inline"><%= error %></span>
+            </div>
+        <% } %>
+
         <form action="/login" method="POST" class="space-y-4">
             <div>
                 <label for="email" class="text-sm font-medium">Email</label>
