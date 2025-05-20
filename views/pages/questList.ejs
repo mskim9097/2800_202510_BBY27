@@ -1,69 +1,44 @@
-<%- include('partials/header') %>
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <title>Document</title>
+</head>
+
 
 <body class="bg-gray-100 p-4 flex flex-col gap-4 min-h-screen text-sm">
+    <%- include('../partials/header') %>
 
-    <!-- Search Field -->
-    <div class="max-w-xl w-full mx-auto">
-        <input type="text" placeholder="Search species..."
-            class="w-full border border-gray-300 p-2 rounded-full shadow-sm focus:outline-none focus:ring-2 focus:ring-green-400"
-            id="searchInput" />
-    </div>
+        <!-- Search Field -->
+        <div class="max-w-xl w-full mx-auto">
+            <input type="text" placeholder="Search species..."
+                class="w-full border border-gray-300 p-2 rounded-full shadow-sm focus:outline-none focus:ring-2 focus:ring-green-400"
+                id="searchInput" />
+        </div>
 
-    <!-- Species Cards Section (Horizontal Scroll) -->
-    <div class="mt-4 max-w-6xl mx-auto w-full relative">
-        <div id="speciesContainer"
-            class="flex gap-4 overflow-x-auto pb-4 scroll-smooth"
-            style="scrollbar-width: none;">
-            <!-- Example Species Card -->
-            <div class="min-w-[250px] bg-white rounded-xl shadow flex-shrink-0">
-                <img src="/images/species-placeholder.jpg" alt="Location Image/mapbox" class="w-full h-40 object-cover rounded-t-xl">
-                <div class="p-3">
-                    <h2 class="text-lg font-bold text-green-700">Quest Title</h2>
-                    <p class="italic text-gray-600">Mission</p>
-                    <p class="mt-2 text-gray-700 text-sm">
-                        Quest specifics and description here...
-                    </p>
-                </div>
+        <!-- Quest Cards Section (Horizontal Scroll) -->
+        <div class="mt-4 max-w-6xl mx-auto w-full relative">
+            <div id="speciesContainer" class="flex gap-4 overflow-x-auto pb-4 scroll-smooth"
+                style="scrollbar-width: none;">
             </div>
 
-            <!-- Add more cards manually or dynamically later -->
-
+            <!-- Loading Spinner -->
+            <div id="loading" class="text-center text-gray-500 text-sm mt-2 hidden">
+                Loading more quests...
+            </div>
         </div>
+        <%- include('../partials/researcher-footer') %>
 
-        <!-- Loading Spinner -->
-        <div id="loading" class="text-center text-gray-500 text-sm mt-2 hidden">
-            Loading more quests...
-        </div>
-    </div>
+        <script>
+            const questData = <%- JSON.stringify(questList) %>;
+        </script>
 
-    <script>
-        const container = document.getElementById('speciesContainer');
-        const loading = document.getElementById('loading');
-
-        container.addEventListener('scroll', () => {
-            if (container.scrollLeft + container.clientWidth >= container.scrollWidth - 100) {
-                loading.classList.remove('hidden');
-
-                // Simulate async card loading
-                setTimeout(() => {
-                    loading.classList.add('hidden');
-
-                    // Append new mock card
-                    const card = document.createElement('div');
-                    card.className = "min-w-[250px] bg-white rounded-xl shadow flex-shrink-0";
-                    card.innerHTML = `
-                        <img src="/images/species-placeholder.jpg" alt="Species Image" class="w-full h-40 object-cover rounded-t-xl">
-                        <div class="p-3">
-                            <h2 class="text-lg font-bold text-green-700">Loaded Species</h2>
-                            <p class="italic text-gray-600">Scientific Name</p>
-                            <p class="mt-2 text-gray-700 text-sm">Dynamically added species card...</p>
-                        </div>`;
-                    container.appendChild(card);
-                }, 1000);
-            }
-        });
-    </script>
+        <script src="/js/menu.js"></script>
+        <script src="/js/questList.js"></script>
 
 </body>
 
-<%- include('partials/researcher-footer') %>
+</html>

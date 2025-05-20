@@ -154,4 +154,17 @@ const deleteSpecies = async (req, res, next) => {
     next();
 }
 
-module.exports = { createSpecies, updateSpecies, targetSpecies, deleteSpecies, getSpecies };
+const selectTarget = async (req, res) => {
+    const id = req.query.id;
+    if (!id) return res.status(400).json({ error: 'Missing species ID' });
+
+    try {
+        const species = await speciesCollection.findOne({ _id: new ObjectId(id) });
+        if (!species) return res.status(404).json({ error: 'Species not found' });
+        res.json(species);
+    } catch (err) {
+        res.status(500).json({ error: 'Server error' });
+    }
+};
+
+module.exports = { createSpecies, updateSpecies, targetSpecies, deleteSpecies, getSpecies, selectTarget };

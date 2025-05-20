@@ -29,7 +29,7 @@ const createQuest = async (req, res, next) => {
     var questTimeOfDay = req.body.timeOfDay;
     var questDifficulty = req.body.difficulty;
 
-    const species = await speciesCollection.findOne({ speciesName: target });
+    let species = await speciesCollection.findOne({ speciesName: target });
     const userId = req.session.userId;
 
     const newQuest = new Quest({
@@ -52,4 +52,16 @@ const createQuest = async (req, res, next) => {
     next();
 }
 
-module.exports = { createQuest, searchTarget }
+const selectQuestList = async (req, res, next) => {
+    try {
+        const questList = await Quest.find();
+
+        res.locals.questList = questList;
+        next();
+    } catch (err) {
+        console.error("Error fetching quest list:", err);
+        res.status(500).send("Error fetching quest list");
+    }
+};
+
+module.exports = { createQuest, searchTarget, selectQuestList }
