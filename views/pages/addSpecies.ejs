@@ -18,8 +18,8 @@
   <!-- Add Species Form -->
   <form action="/species/addSpecies" method="POST" enctype="multipart/form-data"
     class="flex flex-col gap-4 bg-white p-4 rounded shadow-md max-w-xl mx-auto">
-    
-    <h1 class="text-xl font-bold text-center">Add New Species</h1>
+
+    <h1 class="text-xl font-bold text-center">🌿Add New Species🦋</h1>
 
     <!-- Scientific Name -->
     <div>
@@ -35,26 +35,47 @@
         class="w-full border border-gray-300 p-2 rounded" />
     </div>
 
+    <!-- Species Type -->
+    <div>
+      <label for="speciesType" class="font-semibold block mb-1">Species Type</label>
+      <select name="speciesType" id="speciesType" required class="w-full border border-gray-300 p-2 rounded bg-white">
+        <option value="" disabled selected>Select type</option>
+        <option value="Plant">🌿 Plant</option>
+        <option value="Animal">🦓 Animal</option>
+        <option value="Bird">🐦 Bird</option>
+        <option value="Insect">🐞 Insect</option>
+        <option value="Other">❓ Other</option>
+      </select>
+    </div>
+
     <!-- Species Info -->
     <div>
       <label for="speciesInfo" class="font-semibold block mb-1">Species Info</label>
-      <input type="text" name="speciesInfo" id="speciesInfo" rows="4" required
+      <textarea name="speciesInfo" id="speciesInfo" rows="4" required
         class="w-full border border-gray-300 p-2 rounded"></textarea>
+    </div>
+
+    <!-- Location -->
+    <div>
+      <label for="speciesHabitat" class="font-semibold block mb-1">Habitat</label>
+      <input type="text" name="speciesHabitat" id="speciesHabitat" required
+        class="w-full border border-gray-300 p-2 rounded" />
     </div>
 
     <!-- Species Image Upload -->
     <div>
       <label for="image" class="font-semibold block mb-1">Species Image</label>
-      <input type="file" name="image" id="image" accept="image/*"
+      <input type="file" name="speciesImage" id="speciesImage" accept="image/*"
         class="w-full border border-gray-300 p-2 rounded bg-white file:mr-2 file:py-1 file:px-3 file:rounded file:border-0 file:bg-green-600 file:text-white hover:file:bg-green-700" />
     </div>
 
     <!-- Submit Button -->
-    <button type="submit"
-      class="bg-green-600 text-white p-2 rounded font-semibold hover:bg-green-700">
+    <button type="submit" class="bg-green-600 text-white p-2 rounded font-semibold hover:bg-green-700">
       Submit Species
     </button>
   </form>
+
+  <script src="/js/species.js"></script>
 
 </body>
 

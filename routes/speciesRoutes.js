@@ -5,8 +5,8 @@ const appClient = require('../databaseConnection').database;
 const speciesCollection = appClient.db('biodiversityGo').collection('species');
 
 
-const {createSpecies, updateSpecies, deleteSpecies} = require('../controllers/speciesController');
-const { isAuthorizedResearcher } = require('../controllers/userController');
+const {createSpecies, updateSpecies, deleteSpecies, getSpecies, targetSpecies} = require('../controllers/speciesController');
+const { isAuthorizedResearcher, authenticated } = require('../controllers/userController');
 
 const researcherDashboard = "/user/researcher";
 const addSpecies = 'pages/addSpecies';
@@ -22,16 +22,18 @@ const upload = multer({
 });
 
 // list all species
-router.get("/",  async (req, res) => {
+router.get("/", getSpecies,  async (req, res) => {
   try {
     // const speciesList = await speciesCollection.find().toArray();
     // res.render(species, { species: speciesList, title: "All Species" });
-    res.render("pages/speciesList");
+    res.render("pages/speciesCard");
   } catch (err) {
     console.error("Error fetching species list:", err);
     res.status(500).send("Error fetching species list");
   }
 });
+
+router.get('/searchTarget', targetSpecies);
 
 router.get('/addSpecies', isAuthorizedResearcher, (req, res) => {
     res.render(addSpecies);
@@ -46,12 +48,13 @@ router.get('/updateSpecies', isAuthorizedResearcher, (req, res) => {
     res.render(update);
 });
 
-router.post('/updateSpecies', isAuthorizedResearcher, upload.single("speciesImage"), updateSpecies, (req, res) => {
-    res.redirect(researcherDashboard);
+router.post('/updateSpecies/:id', isAuthorizedResearcher, upload.single("speciesImage"), updateSpecies, (req, res) => {
+    const updatedName = req.body.speciesName;
+    res.redirect(`/species/${encodeURIComponent(updatedName)}`);
 });
 
-router.post('/deleteSpecies', isAuthorizedResearcher, deleteSpecies, (req, res) => {
-    res.redirect(researcherDashboard);
+router.post('/deleteSpecies/:id', isAuthorizedResearcher, deleteSpecies, (req, res) => {
+    res.redirect('/species');
 });
 
 // Get a specific species by name
@@ -65,7 +68,7 @@ router.get("/:speciesName", async (req, res) => {
     if (!species) {
       return res.status(404).render("pages/404", { title: "Not Found" }); // Assumes you have a 404.ejs page
     }
-    res.render("pages/speciesPage", { species: species, title: species.speciesName });
+    res.render("pages/speciesPage", { species: species, title: species.speciesName, userType: req.session.type });
   } catch (err) {
     console.error("Error fetching species:", err);
     res.status(500).send("Error fetching species details");

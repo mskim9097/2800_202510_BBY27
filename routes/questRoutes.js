@@ -1,22 +1,20 @@
 const express = require('express');
 const router = express.Router();
 
-const { createQuest } = require('../controllers/questsController');
-
 const multer = require("multer");
 const upload = multer({ dest: "uploads/" });
 
 const researcherDashboard = "/user/researcher";
 const addQuest = "pages/addQuest";
 
-const { isAuthorizedResearcher } = require('../controllers/userController');
-const { searchTarget } = require('../controllers/questsController');
+const { createQuest, searchTarget } = require('../controllers/questsController');
+const { isAuthorizedResearcher,authenticated } = require('../controllers/userController');
 
 // NEEDS QUEST LIST PAGE
 // Quest List Page
 router.get('/', (req, res, next) => {
     // res.redirect(researcherDashboard);
-    res.render('pages/testQuest');
+    res.render('pages/quests');
 });
 router.get('/completeQuest', (req, res, next) => {
     res.redirect(researcherDashboard);
@@ -26,15 +24,19 @@ router.get('/completeQuest', (req, res, next) => {
 router.get('/viewQuest', (req, res, next) => {
     res.redirect(researcherDashboard);
 });
+// NEEDS QUEST LIST PAGE
+router.get('/questList', (req, res, next) => {
+    res.render("pages/quests");
+});
 
 //Needs to be updated with actua
-router.get('/addQuest', isAuthorizedResearcher, (req, res, next) => {
+router.get('/addQuest',authenticated, isAuthorizedResearcher, (req, res, next) => {
     res.render(addQuest);
 });
 
 router.get('/searchTarget', searchTarget);
 
-router.post('/addQuest', isAuthorizedResearcher, upload.single("speciesImage"), createQuest, (req, res, next) => {
+router.post('/createQuest', isAuthorizedResearcher, upload.single("speciesImage"), createQuest, (req, res, next) => {
     res.redirect(researcherDashboard);
 });
 
