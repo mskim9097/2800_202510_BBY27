@@ -13,10 +13,28 @@
     <%- include('../partials/header') %>
 
         <!-- Search Field -->
-        <div class="max-w-xl w-full mx-auto">
-            <input type="text" placeholder="Search species..."
-                class="w-full border border-gray-300 p-2 rounded-full shadow-sm focus:outline-none focus:ring-2 focus:ring-green-400"
-                id="searchInput" />
+        <div
+            class="flex  max-w-xl bg-white border border-gray-300 rounded-full shadow-sm px-4 py-2 items-center gap-2">
+            <span class="text-gray-500 text-lg">🔍</span>
+            <input id="searchInput" type="text" placeholder="Search Quests..."
+                class="flex-grow focus:outline-none text-sm text-gray-800 placeholder-gray-400 bg-transparent">
+        </div>
+        <div id="filterContainer"">
+            <select id="difficultyFilter"
+            class="border border-gray-300 rounded-full text-sm px-3 py-2 bg-white shadow-sm focus:outline-none mt-2">
+                <option value="">Difficulty</option>
+                <option value="easy">🟢 Easy</option>
+                <option value="medium">🟡 Medium</option>
+                <option value="high">🔴 High</option>
+            </select>
+            <select id="timeFilter"
+            class="border border-gray-300 rounded-full text-sm px-3 py-2 bg-white shadow-sm focus:outline-none mt-2">
+                <option value="">Time of Day</option>
+                <option value="morning">🌅 Morning</option>
+                <option value="afternoon">🌤️ Afternoon </option>
+                <option value="evening">🌇 Evening</option>
+                <option value="night">🌙 Night</option>
+            </select>
         </div>
 
         <!-- Quest Cards Section (Horizontal Scroll) -->
