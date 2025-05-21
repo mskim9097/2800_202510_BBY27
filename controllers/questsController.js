@@ -54,7 +54,14 @@ const createQuest = async (req, res, next) => {
 
 const selectQuestList = async (req, res, next) => {
     try {
-        const questList = await Quest.find();
+        let questList;
+
+        if (req.session.type === "researcher") {
+            const userId = req.session.userId;
+            questList = await Quest.find({ questCreatedBy: userId }).sort({ createdAt: -1 });
+        } else {
+            questList = await Quest.find().sort({ createdAt: -1 });
+        }
 
         res.locals.questList = questList;
         next();
