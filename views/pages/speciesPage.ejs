@@ -22,7 +22,7 @@
             </form>
             <form id="editForm" action="/species/updateSpecies/<%= species._id %>" method="POST" enctype="multipart/form-data">
                 <div class="field-wrapper">
-                    <input type="text" name="speciesName" value="<%= species.speciesName %>" class="species-title" disabled>
+                    <input type="text" name="speciesName" value="<%= species.speciesName %>" class="species-title" disabled> <span style="color: red; display: none;" class="edit-indicator">*</span>
                     <i class="bi bi-pencil edit-indicator" style="display: none;"></i>
                 </div>
 
@@ -49,23 +49,23 @@
 
                 <div class="species-info">
                     <div class="field-wrapper">
-                        <p><strong>🔬 Scientific Name:</strong></p>
+                        <p><strong>🔬 Scientific Name: <span style="color: red; display: none;" class="edit-indicator">*</span></strong></p>
                         <input type="text" name="speciesScientificName" value="<%= species.speciesScientificName %>" class="species-view" disabled>
                         <i class="bi bi-pencil edit-indicator" style="display: none;"></i>
                     </div>
                     <div class="field-wrapper">
-                        <p><strong>🌍 Habitat:</strong></p>
+                        <p><strong>🌍 Habitat: <span style="color: red; display: none;" class="edit-indicator">*</span></strong></p>
                         <input type="text" name="speciesHabitat" value="<%= species.speciesHabitat %>" class="species-view" disabled>
                         <i class="bi bi-pencil edit-indicator" style="display: none;"></i>
                     </div>
                     <div class="field-wrapper">
-                        <p><strong>🏷️ Type:</strong></p>
+                        <p><strong>🏷️ Type: <span style="color: red; display: none;" class="edit-indicator">*</span></strong></p>
                         <input type="text" name="speciesType" value="<%= species.speciesType %>" class="species-view" disabled>
                         <i class="bi bi-pencil edit-indicator" style="display: none;"></i>
                     </div>
-                    <p><strong>📖 Description:</strong></p>
+                    <p><strong>📖 Description: <span style="color: red; display: none;" class="edit-indicator">*</span></strong></p>
                     <div class="field-wrapper">
-                        <textarea class="species-view" name="speciesInfo" disabled><%= species.speciesInfo %></textarea>
+                        <textarea class="species-view" name="speciesInfo" disabled><%= species.speciesInfo %></textarea> 
                         <i class="bi bi-pencil edit-indicator" style="display: none;"></i>
                     </div>
                 </div>

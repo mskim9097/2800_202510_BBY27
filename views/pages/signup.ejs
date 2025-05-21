@@ -16,28 +16,28 @@
 
         <form action="/createUser" method="POST" class="space-y-4">
             <div>
-                <label for="fname" class="text-sm font-medium">First Name</label>
+                <label for="fname" class="text-sm font-medium">First Name <span style="color: red;">*</span></label>
                 <input type="text" name="firstName" id="fname" required
                     class="w-full mt-1 p-2 rounded bg-white/20 focus:outline-none focus:ring-2 focus:ring-green-400 placeholder-white"
                     placeholder="Your name">
             </div>
 
             <div>
-                <label for="lname" class="text-sm font-medium">Last Name</label>
+                <label for="lname" class="text-sm font-medium">Last Name <span style="color: red;">*</span></label>
                 <input type="text" name="lastName" id="lname" required
                     class="w-full mt-1 p-2 rounded bg-white/20 focus:outline-none focus:ring-2 focus:ring-green-400 placeholder-white"
                     placeholder="Your name">
             </div>
 
             <div>
-                <label for="email" class="text-sm font-medium">Email</label>
+                <label for="email" class="text-sm font-medium">Email <span style="color: red;">*</span></label>
                 <input type="email" name="email" id="email" required
                     class="w-full mt-1 p-2 rounded bg-white/20 focus:outline-none focus:ring-2 focus:ring-green-400 placeholder-white"
                     placeholder="you@example.com">
             </div>
 
             <div class="flex flex-col gap-3">
-                <label for="userType" class="text-sm font-medium">Account</label>
+                <label for="userType" class="text-sm font-medium">Account <span style="color: red;">*</span></label>
                 <div class="flex justify-between min-w-[40%]">
                     <div>
                         <input type="radio" id="explorer" name="type" value="explorer">
@@ -51,7 +51,7 @@
             </div>
 
             <div>
-                <label for="password" class="text-sm font-medium">Password</label>
+                <label for="password" class="text-sm font-medium">Password <span style="color: red;">*</span></label>
                 <input type="password" name="password" id="password" required
                     class="w-full mt-1 p-2 rounded bg-white/20 focus:outline-none focus:ring-2 focus:ring-green-400 placeholder-white"
                     placeholder="••••••••">
