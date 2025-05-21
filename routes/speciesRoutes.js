@@ -26,7 +26,7 @@ router.get("/", getSpecies, async (req, res) => {
     try {
         // const speciesList = await speciesCollection.find().toArray();
         // res.render(species, { species: speciesList, title: "All Species" });
-        res.render("pages/speciesCard", {userType: req.session.type, name: req.session.name});
+        res.render("pages/speciesCard", {userType: req.session.type});
     } catch (err) {
         console.error("Error fetching species list:", err);
         res.status(500).send("Error fetching species list");
@@ -71,7 +71,7 @@ router.get("/:speciesName", async (req, res) => {
         if (!species) {
             return res.status(404).render("pages/404", { title: "Not Found" }); // Assumes you have a 404.ejs page
         }
-        res.render("pages/speciesPage", { species: species, title: species.speciesName, userType: req.session.type });
+        res.render("pages/speciesPage", { species: species, title: species.speciesName, userType: req.session.type, name: req.session.name });
     } catch (err) {
         console.error("Error fetching species:", err);
         res.status(500).send("Error fetching species details");
