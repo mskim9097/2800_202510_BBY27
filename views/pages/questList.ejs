@@ -51,7 +51,7 @@
         <%- include('../partials/researcher-footer') %>
 
         <script>
-            const questData = <%- JSON.stringify(questList) %>;
+            const questData = JSON.parse('<%- JSON.stringify(questList || null) %>');
         </script>
 
         <script src="/js/menu.js"></script>
