@@ -21,10 +21,16 @@
                 </button>
             </form>
             <form id="editForm" action="/species/updateSpecies/<%= species._id %>" method="POST" enctype="multipart/form-data">
-                <input type="text" name="speciesName" value="<%= species.speciesName %>" class="species-title" disabled>
+                <div class="field-wrapper">
+                    <input type="text" name="speciesName" value="<%= species.speciesName %>" class="species-title" disabled>
+                    <i class="bi bi-pencil edit-indicator" style="display: none;"></i>
+                </div>
 
                 <% if (species.speciesImage) { %>
-                    <img id="previewImage" src="<%= species.speciesImage %>" alt="Image of <%= species.speciesName %>" class="species-image">
+                    <div style="position: relative; display: inline-block;" class="field-wrapper-image">
+                        <img id="previewImage" src="<%= species.speciesImage %>" alt="Image of <%= species.speciesName %>" class="species-image">
+                        <i class="bi bi-pencil edit-indicator" id="editImageIndicator" style="display: none; position: absolute; top: 10px; right: 10px; background-color: white; padding: 5px; border-radius: 50%;"></i>
+                    </div>
                 <% } else { %>
                     <p><em>No image available for this species.</em></p>
                 <% } %>
@@ -42,17 +48,26 @@
                 </div>
 
                 <div class="species-info">
-                    <p><strong>🔬 Scientific Name:</strong>
+                    <div class="field-wrapper">
+                        <p><strong>🔬 Scientific Name:</strong></p>
                         <input type="text" name="speciesScientificName" value="<%= species.speciesScientificName %>" class="species-view" disabled>
-                    </p>                    
-                    <p><strong>🌍 Habitat:</strong>
+                        <i class="bi bi-pencil edit-indicator" style="display: none;"></i>
+                    </div>
+                    <div class="field-wrapper">
+                        <p><strong>🌍 Habitat:</strong></p>
                         <input type="text" name="speciesHabitat" value="<%= species.speciesHabitat %>" class="species-view" disabled>
-                    </p>
-                    <p><strong>🏷️ Type:</strong>
+                        <i class="bi bi-pencil edit-indicator" style="display: none;"></i>
+                    </div>
+                    <div class="field-wrapper">
+                        <p><strong>🏷️ Type:</strong></p>
                         <input type="text" name="speciesType" value="<%= species.speciesType %>" class="species-view" disabled>
-                    </p>
+                        <i class="bi bi-pencil edit-indicator" style="display: none;"></i>
+                    </div>
                     <p><strong>📖 Description:</strong></p>
-                    <textarea class="species-view" name="speciesInfo"disabled><%= species.speciesInfo %></textarea>
+                    <div class="field-wrapper">
+                        <textarea class="species-view" name="speciesInfo" disabled><%= species.speciesInfo %></textarea>
+                        <i class="bi bi-pencil edit-indicator" style="display: none;"></i>
+                    </div>
                 </div>
                 <div style="text-align: right; margin-top: 10px;">
                     <button id="editBtn" class="back-link" type="button" style="background-color: green;">Edit</button>

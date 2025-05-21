@@ -2,6 +2,8 @@ document.addEventListener('DOMContentLoaded', () => {
     const editBtn = document.getElementById('editBtn');
     const cancelBtn = document.getElementById('cancelBtn');
     const editButtons = document.getElementById('editButtons');
+    const editIndicators = document.querySelectorAll('.edit-indicator');
+    const imageEditIndicator = document.getElementById('editImageIndicator');
 
     const inputs = document.querySelectorAll('.species-title, .species-view');
     const originalValues = {};
@@ -20,9 +22,12 @@ document.addEventListener('DOMContentLoaded', () => {
         editBtn.addEventListener('click', function() {
             inputs.forEach(function(input) {
                 input.disabled = false;
+                input.classList.add('editable-field-background');
             });
             editBtn.style.display = 'none';
             editButtons.style.display = 'inline-block';
+            editIndicators.forEach(icon => icon.style.display = 'inline');
+            if (imageEditIndicator) imageEditIndicator.style.display = 'block';
 
             if (imageUploadSection) {
                 imageUploadSection.style.display = 'block';
@@ -35,9 +40,12 @@ document.addEventListener('DOMContentLoaded', () => {
         inputs.forEach(function (input, index) {
             input.disabled = true;
             input.value = originalValues[index];
+            input.classList.remove('editable-field-background');
         });
         editBtn.style.display = 'inline-block';
         editButtons.style.display = 'none';
+        editIndicators.forEach(icon => icon.style.display = 'none');
+        if (imageEditIndicator) imageEditIndicator.style.display = 'none';
 
         if (imageUploadSection) {
             imageUploadSection.style.display = 'none';
