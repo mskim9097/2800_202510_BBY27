@@ -48,7 +48,12 @@
                 Loading more quests...
             </div>
         </div>
-        <%- include('../partials/researcher-footer') %>
+        <% if (userType === 'researcher') { %>
+            <%- include("../partials/researcher-footer") %>
+        <% } %>
+        <% if (userType === 'explorer') { %>
+            <%- include("../partials/explorer-footer") %>
+        <% } %>
 
         <script>
             const questData = <%- JSON.stringify(questList) %>;
