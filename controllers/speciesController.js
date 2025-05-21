@@ -78,6 +78,7 @@ const createSpecies = async (req, res, next) => {
         });
 
         await newSpecies.save();
+        req.speciesName = speciesName;
         next(); // or res.status(201).json(newSpecies);
     } catch (error) {
         console.error("Error creating species:", error);
@@ -133,18 +134,17 @@ const targetSpecies = async (req, res) => {
     }
 };
 
-// POSSIBLY GOOD FOR REUSING IN UPDATE SPECIES AND CREATE SPECIES
+// Helper function that handles image upload to Cloudinary.
 const addImage = async (req, res, next) => {
     let speciesImageUrl = null;
 
     // Check if a file was uploaded
     if (req.file) {
         // Upload image to Cloudinary from buffer
-        // Giving it a unique public_id using field (e.g. speciesName if unique) and timestamp might be good
-        // For simplicity, letting Cloudinary auto-generate public_id
+        // For simplicity, Cloudinary auto-generate public_id
         const result = await new Promise((resolve, reject) => {
             const uploadStream = cloudinary.uploader.upload_stream(
-                { resource_type: 'image' }, // Can add folder: 'species_images' for organization
+                { resource_type: 'image' }, 
                 (error, result) => {
                     if (error) {
                         console.error('Cloudinary Upload Error:', error);
@@ -173,4 +173,17 @@ const deleteSpecies = async (req, res) => {
   };
   
 
-module.exports = { createSpecies, updateSpecies, targetSpecies, deleteSpecies, getSpecies,getSpeciesById };
+const selectTarget = async (req, res) => {
+    const id = req.query.id;
+    if (!id) return res.status(400).json({ error: 'Missing species ID' });
+
+    try {
+        const species = await speciesCollection.findOne({ _id: new ObjectId(id) });
+        if (!species) return res.status(404).json({ error: 'Species not found' });
+        res.json(species);
+    } catch (err) {
+        res.status(500).json({ error: 'Server error' });
+    }
+};
+
+module.exports = { createSpecies, updateSpecies, targetSpecies, deleteSpecies, getSpecies, selectTarget,getSpeciesById };

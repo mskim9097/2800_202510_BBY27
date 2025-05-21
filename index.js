@@ -40,6 +40,17 @@ app.use(session({
   cookie: { maxAge: 24 * 60 * 60 * 1000 } // 1 hour
 }));
 
+// AI Generated middleware
+// Middleware to make session data available to templates
+app.use((req, res, next) => {
+  if (req.session) {
+    res.locals.name = req.session.name;
+    res.locals.userType = req.session.type;
+    // You can add other session variables here if needed
+  }
+  next();
+});
+
 // Connect to MongoDB with Mongoose and start server
 mongoose.connect(mongoURI, {
   useNewUrlParser: true,

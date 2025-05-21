@@ -27,4 +27,8 @@ router.get('/logout', destroySession, (req, res) => {
   res.redirect('/');
 });
 
+router.get('/invalid', (req, res) => {
+  res.render('pages/login', { error: 'Invalid email or password. Please try again.' });
+});
+
 module.exports = router;

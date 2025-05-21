@@ -7,14 +7,14 @@ const upload = multer({ dest: "uploads/" });
 const researcherDashboard = "/user/researcher";
 const addQuest = "pages/addQuest";
 
-const { createQuest, searchTarget } = require('../controllers/questsController');
+const { createQuest, searchTarget, selectQuestList } = require('../controllers/questsController');
 const { isAuthorizedResearcher,authenticated } = require('../controllers/userController');
 
 // NEEDS QUEST LIST PAGE
 // Quest List Page
-router.get('/', (req, res, next) => {
+router.get('/', selectQuestList, (req, res, next) => {
     // res.redirect(researcherDashboard);
-    res.render('pages/quests');
+    res.render('pages/questList', {userType: req.session.type, name: req.session.name});
 });
 router.get('/completeQuest', (req, res, next) => {
     res.redirect(researcherDashboard);
@@ -26,7 +26,7 @@ router.get('/viewQuest', (req, res, next) => {
 });
 // NEEDS QUEST LIST PAGE
 router.get('/questList', (req, res, next) => {
-    res.render("pages/quests");
+    res.render("pages/questList");
 });
 
 //Needs to be updated with actua

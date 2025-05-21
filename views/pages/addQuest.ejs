@@ -32,27 +32,27 @@
     <form action="/quests/createQuest" method="POST" class="flex flex-col gap-4 bg-white p-4 rounded shadow-md">
         <h1 class="text-xl font-bold text-center">Create a New Quest</h1>
         <div>
-            <label for="title" class="font-semibold block mb-1">Title</label>
+            <label for="title" class="font-semibold block mb-1">Title <span style="color: red;">*</span></label>
             <input type="text" name="title" id="title" required class="w-full border border-gray-300 p-2 rounded" />
         </div>
         <div>
-            <label class="font-semibold block mb-1">Choose Location on Map</label>
+            <label class="font-semibold block mb-1">Choose Location on Map <span style="color: red;">*</span></label>
             <div id="map" class="w-full h-64 rounded border border-gray-300 mb-2"></div>
             <input type="hidden" name="latitude" id="latitude" />
             <input type="hidden" name="longitude" id="longitude" />
         </div>
         <div>
-            <label for="mission" class="font-semibold block mb-1">Mission</label>
+            <label for="mission" class="font-semibold block mb-1">Mission <span style="color: red;">*</span></label>
             <input type="text" name="mission" id="mission" required class="w-full border border-gray-300 p-2 rounded" />
         </div>
 
         <div>
-            <label for="target" class="font-semibold block mb-1">Target Species</label>
+            <label for="target" class="font-semibold block mb-1">Target Species <span style="color: red;">*</span></label>
             <input type="text" name="target" id="target" required class="w-full border border-gray-300 p-2 rounded" />
         </div>
 
         <div>
-            <label for="timeOfDay" class="font-semibold block mb-1">Time of Day</label>
+            <label for="timeOfDay" class="font-semibold block mb-1">Time of Day <span style="color: red;">*</span></label>
             <select name="timeOfDay" id="timeOfDay" required class="w-full border border-gray-300 p-2 rounded">
                 <option value="Morning">Morning</option>
                 <option value="Afternoon">Afternoon</option>
@@ -62,7 +62,7 @@
         </div>
 
         <div>
-            <label for="difficulty" class="font-semibold block mb-1">Difficulty</label>
+            <label for="difficulty" class="font-semibold block mb-1">Difficulty <span style="color: red;">*</span></label>
             <select name="difficulty" id="difficulty" required class="w-full border border-gray-300 p-2 rounded">
                 <option value="Easy">Easy</option>
                 <option value="Medium">Medium</option>
