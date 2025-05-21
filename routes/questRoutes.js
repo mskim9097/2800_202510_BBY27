@@ -14,7 +14,7 @@ const { isAuthorizedResearcher,authenticated } = require('../controllers/userCon
 // Quest List Page
 router.get('/', selectQuestList, (req, res, next) => {
     // res.redirect(researcherDashboard);
-    res.render('pages/questList');
+    res.render('pages/questList', {userType: req.session.type});
 });
 router.get('/completeQuest', (req, res, next) => {
     res.redirect(researcherDashboard);

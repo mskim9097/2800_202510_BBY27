@@ -26,7 +26,7 @@ router.get("/", getSpecies, async (req, res) => {
     try {
         // const speciesList = await speciesCollection.find().toArray();
         // res.render(species, { species: speciesList, title: "All Species" });
-        res.render("pages/speciesCard");
+        res.render("pages/speciesCard", {userType: req.session.type});
     } catch (err) {
         console.error("Error fetching species list:", err);
         res.status(500).send("Error fetching species list");
