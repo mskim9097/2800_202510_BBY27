@@ -42,7 +42,8 @@ router.get('/addSpecies', isAuthorizedResearcher, (req, res) => {
 });
 
 router.post('/addSpecies', isAuthorizedResearcher, upload.single("speciesImage"), createSpecies, (req, res) => {
-    res.redirect(researcherDashboard);
+    const speciesName = req.speciesName;
+    res.redirect(`/species/${encodeURIComponent(speciesName)}`);
 });
 
 // NEED UPDATE SPECIES PAGE
@@ -52,7 +53,7 @@ router.get('/updateSpecies', isAuthorizedResearcher, (req, res) => {
 
 router.post('/updateSpecies/:id', isAuthorizedResearcher, upload.single("speciesImage"), updateSpecies, (req, res) => {
     const updatedName = req.body.speciesName;
-    res.redirect(`/species/${encodeURIComponent(updatedName)}`);
+    res.redirect(`/${encodeURIComponent(updatedName)}`);
 });
 
 router.post('/deleteSpecies/:id', isAuthorizedResearcher, deleteSpecies, (req, res) => {
