@@ -59,6 +59,7 @@ function authenticated(req, res, next) {
     if (req.session.user) {
         console.log('User is authenticated:', req.session.user);
         console.log('User is authenticated:', req.session.userId);
+        console.log('User type in session:', req.session.type);
         next();
     } else {
         console.log('User is not authenticated');

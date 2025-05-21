@@ -5,7 +5,7 @@ const appClient = require('../databaseConnection').database;
 const speciesCollection = appClient.db('biodiversityGo').collection('species');
 
 
-const {createSpecies, updateSpecies, deleteSpecies, getSpecies, targetSpecies} = require('../controllers/speciesController');
+const { createSpecies, updateSpecies, deleteSpecies, getSpecies, targetSpecies, getSpeciesById } = require('../controllers/speciesController');
 const { isAuthorizedResearcher, authenticated } = require('../controllers/userController');
 
 const researcherDashboard = "/user/researcher";
@@ -16,45 +16,53 @@ const species = 'pages/species';
 // Multer configuration for memory storage
 const multer = require("multer");
 const storage = multer.memoryStorage();
-const upload = multer({ 
+const upload = multer({
   storage: storage,
   limits: { fileSize: 10 * 1024 * 1024 }
 });
 
 // list all species
-router.get("/", getSpecies,  async (req, res) => {
+router.get("/",authenticated, getSpecies, async (req, res) => {
   try {
     // const speciesList = await speciesCollection.find().toArray();
     // res.render(species, { species: speciesList, title: "All Species" });
-    res.render("pages/speciesCard");
+    console.log("User type from session:", req.session.type);
+    res.render("pages/speciesList", { speciesList: res.locals.speciesList, userType: req.session.type });
   } catch (err) {
     console.error("Error fetching species list:", err);
     res.status(500).send("Error fetching species list");
   }
 });
 
-router.get('/searchTarget', targetSpecies);
+router.get("/:id", getSpeciesById);
 
-router.get('/addSpecies', isAuthorizedResearcher, (req, res) => {
-    res.render(addSpecies);
+router.put('/species/:id', upload.single('image'), updateSpecies, (req, res) => {
+  res.redirect(`/species/${req.params.id}`);
 });
 
+
+router.get('/searchTarget', targetSpecies);
+
+// router.get('/addSpecies', isAuthorizedResearcher, (req, res) => {
+//   res.render(addSpecies);
+// });
+
 router.post('/addSpecies', isAuthorizedResearcher, upload.single("speciesImage"), createSpecies, (req, res) => {
-    res.redirect(researcherDashboard);
+  res.redirect(researcherDashboard);
 });
 
 // NEED UPDATE SPECIES PAGE
-router.get('/updateSpecies', isAuthorizedResearcher, (req, res) => {
-    res.render(update);
-});
+// router.get('/updateSpecies', isAuthorizedResearcher, (req, res) => {
+//   res.render(update);
+// });
 
-router.post('/updateSpecies/:id', isAuthorizedResearcher, upload.single("speciesImage"), updateSpecies, (req, res) => {
-    const updatedName = req.body.speciesName;
-    res.redirect(`/species/${encodeURIComponent(updatedName)}`);
-});
+// router.post('/updateSpecies/:id', isAuthorizedResearcher, upload.single("speciesImage"), updateSpecies, (req, res) => {
+//   const updatedName = req.body.speciesName;
+//   res.redirect(`/species/${encodeURIComponent(updatedName)}`);
+// });
 
-router.post('/deleteSpecies/:id', isAuthorizedResearcher, deleteSpecies, (req, res) => {
-    res.redirect('/species');
+router.delete('/:id', deleteSpecies, (req, res) => {
+  res.redirect('/species'); // or homepage
 });
 
 // Get a specific species by name

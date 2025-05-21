@@ -1,6 +1,6 @@
 const Species = require('../models/specieModel');
 require('dotenv').config();
-const { ObjectId } = require('mongodb');
+const mongoose = require('mongoose');
 const cloudinary = require('cloudinary').v2;
 
 const appClient = require('../databaseConnection').database;
@@ -32,7 +32,6 @@ const uploadImageToCloudinary = (buffer) => {
 const getSpecies = async (req, res, next) => {
     try {
         const speciesList = await Species.find();
-        // Attach the species list to `res.locals` to pass to the route/render layer
         res.locals.speciesList = speciesList;
         next();
     } catch (err) {
@@ -41,9 +40,26 @@ const getSpecies = async (req, res, next) => {
     }
 };
 
+const getSpeciesById = async (req, res) => {
+    try {
+        const speciesId = req.params.id;
+        const species = await Species.findById(speciesId);
+
+        if (!species) {
+            return res.status(404).send("Species not found");
+        }
+
+        res.render("pages/speciesDetails", { species });
+    } catch (error) {
+        console.error("Error fetching species:", error);
+        res.status(500).send("Error retrieving species details");
+    }
+};
+
+
 const createSpecies = async (req, res, next) => {
     try {
-        const { speciesScientificName, speciesName, speciesInfo, speciesHabitat,speciesType } = req.body;
+        const { speciesScientificName, speciesName, speciesInfo, speciesHabitat, speciesType } = req.body;
 
         let speciesImage = [];
         if (req.file) {
@@ -72,10 +88,10 @@ const createSpecies = async (req, res, next) => {
 const updateSpecies = async (req, res, next) => {
     const speciesId = req.params.id;
     const { speciesName,
-            speciesScientificName, 
-            speciesHabitat, 
-            speciesType,
-            speciesInfo } = req.body;
+        speciesScientificName,
+        speciesHabitat,
+        speciesType,
+        speciesInfo } = req.body;
 
     const speciesImageUrl = await addImage(req, res, next);
 
@@ -88,12 +104,13 @@ const updateSpecies = async (req, res, next) => {
     };
 
     if (speciesImageUrl) {
-        updateFields.speciesImage = speciesImageUrl;
+        updateFields.speciesImage = [speciesImageUrl];
+
     }
 
     await speciesCollection.updateOne(
         { _id: new ObjectId(speciesId) },
-        { $set:updateFields }
+        { $set: updateFields }
     );
     next();
 }
@@ -144,14 +161,16 @@ const addImage = async (req, res, next) => {
 };
 
 // DeleteFunction that deletes species data in mongoDB.
-const deleteSpecies = async (req, res, next) => {
-    const speciesId = req.params.id;
-    const objectId = new ObjectId(speciesId);
-    const species = await speciesCollection.findOne({ _id: objectId });
-    if (species) {
-        await speciesCollection.deleteOne({ _id: objectId });        
+const deleteSpecies = async (req, res) => {
+    try {
+      const speciesId = req.params.id;
+      await Species.findByIdAndDelete(speciesId);
+      res.redirect('/species');
+    } catch (err) {
+      console.error('Error deleting species:', err);
+      res.status(500).send('Internal server error');
     }
-    next();
-}
+  };
+  
 
-module.exports = { createSpecies, updateSpecies, targetSpecies, deleteSpecies, getSpecies };
+module.exports = { createSpecies, updateSpecies, targetSpecies, deleteSpecies, getSpecies,getSpeciesById };
