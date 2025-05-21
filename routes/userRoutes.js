@@ -9,12 +9,12 @@ router.get('/', (req, res) => {
 
 router.get('/explorer', authenticated, (req, res) => {
 
-    res.render('pages/explorerDashboard');
+    res.render('pages/explorerDashboard', { name: req.session.name });
 });
 
 router.get('/researcher', authenticated, isAuthorizedResearcher, (req, res) => {
 
-    res.render('pages/researcherDashboard');
+    res.render('pages/researcherDashboard', { name: req.session.name });
 });
 
 module.exports = router;
