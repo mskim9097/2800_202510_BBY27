@@ -59,10 +59,10 @@ router.post('/addSpecies', isAuthorizedResearcher, upload.single("speciesImage")
 //   res.render(update);
 // });
 
-router.post('/updateSpecies/:id', isAuthorizedResearcher, upload.single("speciesImage"), updateSpecies, (req, res) => {
-    const updatedName = req.body.speciesName;
-    res.redirect(`/${encodeURIComponent(updatedName)}`);
-});
+// router.post('/updateSpecies/:id', isAuthorizedResearcher, upload.single("speciesImage"), updateSpecies, (req, res) => {
+//     const updatedName = req.body.speciesName;
+//     res.redirect(`/${encodeURIComponent(updatedName)}`);
+// });
 
 router.delete('/:id', deleteSpecies, (req, res) => {
   res.redirect('/species'); // or homepage

@@ -49,7 +49,7 @@ const getSpeciesById = async (req, res) => {
             return res.status(404).send("Species not found");
         }
 
-        res.render("pages/speciesDetails", { species });
+        res.render("pages/speciesPage", { species });
     } catch (error) {
         console.error("Error fetching species:", error);
         res.status(500).send("Error retrieving species details");
