@@ -36,18 +36,20 @@ router.get("/",authenticated, getSpecies, async (req, res) => {
 
 router.get("/:id", getSpeciesById);
 
-router.put('/species/:id', upload.single('image'), updateSpecies, (req, res) => {
-  res.redirect(`/species/${req.params.id}`);
-});
+// router.put('/species/:id', upload.single('image'), updateSpecies, (req, res) => {
+//   console.log('Received update:', req.body);
+//     console.log('Image:', req.file);
+//   res.redirect(`/species/${req.params.id}`);
+// });
 
 
 router.get('/searchTarget', targetSpecies);
 
 router.get('/selectTarget', selectTarget);
 
-// router.get('/addSpecies', isAuthorizedResearcher, (req, res) => {
-//   res.render(addSpecies);
-// });
+router.get('/addSpecies', isAuthorizedResearcher, (req, res) => {
+  res.render(addSpecies);
+});
 
 router.post('/addSpecies', isAuthorizedResearcher, upload.single("speciesImage"), createSpecies, (req, res) => {
     const speciesName = req.speciesName;
@@ -59,12 +61,11 @@ router.post('/addSpecies', isAuthorizedResearcher, upload.single("speciesImage")
 //   res.render(update);
 // });
 
-// router.post('/updateSpecies/:id', isAuthorizedResearcher, upload.single("speciesImage"), updateSpecies, (req, res) => {
-//     const updatedName = req.body.speciesName;
-//     res.redirect(`/${encodeURIComponent(updatedName)}`);
-// });
+router.post('/updateSpecies/:id', isAuthorizedResearcher, upload.single("speciesImage"), updateSpecies, (req, res) => {
+    res.redirect(`/species/${req.params.id}`);
+});
 
-router.delete('/:id', deleteSpecies, (req, res) => {
+router.post('/:id', deleteSpecies, (req, res) => {
   res.redirect('/species'); // or homepage
 });
 

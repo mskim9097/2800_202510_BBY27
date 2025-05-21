@@ -66,6 +66,11 @@ mongoose.connect(mongoURI, {
   process.exit(1);
 });
 
+app.use((req, res, next) => {
+  console.log(`${req.method} ${req.originalUrl}`);
+  next();
+});
+
 // Route protection middleware
 const { authenticated } = require('./controllers/userController');
 

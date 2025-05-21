@@ -87,34 +87,40 @@ const createSpecies = async (req, res, next) => {
 };
 
 const updateSpecies = async (req, res, next) => {
-    const speciesId = req.params.id;
-    const { speciesName,
-        speciesScientificName,
-        speciesHabitat,
-        speciesType,
-        speciesInfo } = req.body;
+    try {
+        const speciesId = req.params.id;
 
-    const speciesImageUrl = await addImage(req, res, next);
+        const {
+            speciesName,
+            speciesScientificName,
+            speciesHabitat,
+            speciesType,
+            speciesInfo
+        } = req.body;
 
-    const updateFields = {
-        speciesName: speciesName,
-        speciesScientificName: speciesScientificName,
-        speciesHabitat: speciesHabitat,
-        speciesType: speciesType,
-        speciesInfo: speciesInfo,
-    };
+        const speciesImageUrl = await addImage(req, res, next);
 
-    if (speciesImageUrl) {
-        updateFields.speciesImage = [speciesImageUrl];
+        const updateFields = {
+            speciesName,
+            speciesScientificName,
+            speciesHabitat,
+            speciesType,
+            speciesInfo,
+        };
 
+        if (speciesImageUrl) {
+            updateFields.speciesImage = [speciesImageUrl];
+        }
+
+        await Species.findByIdAndUpdate(speciesId, updateFields, { new: true });
+
+        next();
+    } catch (err) {
+        console.error('Error updating species:', err);
+        res.status(500).send('Internal server error');
     }
+};
 
-    await speciesCollection.updateOne(
-        { _id: new ObjectId(speciesId) },
-        { $set: updateFields }
-    );
-    next();
-}
 
 const targetSpecies = async (req, res) => {
     const speciesScientificName = req.query.q;
@@ -144,7 +150,7 @@ const addImage = async (req, res, next) => {
         // For simplicity, Cloudinary auto-generate public_id
         const result = await new Promise((resolve, reject) => {
             const uploadStream = cloudinary.uploader.upload_stream(
-                { resource_type: 'image' }, 
+                { resource_type: 'image' },
                 (error, result) => {
                     if (error) {
                         console.error('Cloudinary Upload Error:', error);
@@ -160,18 +166,17 @@ const addImage = async (req, res, next) => {
     }
 };
 
-// DeleteFunction that deletes species data in mongoDB.
 const deleteSpecies = async (req, res) => {
     try {
-      const speciesId = req.params.id;
-      await Species.findByIdAndDelete(speciesId);
-      res.redirect('/species');
+        const speciesId = req.params.id;
+        await Species.findByIdAndDelete(speciesId);
+        res.redirect('/species');
     } catch (err) {
-      console.error('Error deleting species:', err);
-      res.status(500).send('Internal server error');
+        console.error('Error deleting species:', err);
+        res.status(500).send('Internal server error');
     }
-  };
-  
+};
+
 
 const selectTarget = async (req, res) => {
     const id = req.query.id;
@@ -186,4 +191,4 @@ const selectTarget = async (req, res) => {
     }
 };
 
-module.exports = { createSpecies, updateSpecies, targetSpecies, deleteSpecies, getSpecies, selectTarget,getSpeciesById };
+module.exports = { createSpecies, updateSpecies, targetSpecies, deleteSpecies, getSpecies, selectTarget, getSpeciesById };
