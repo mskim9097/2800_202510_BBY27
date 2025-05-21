@@ -26,7 +26,7 @@ router.get("/", getSpecies, async (req, res) => {
     try {
         // const speciesList = await speciesCollection.find().toArray();
         // res.render(species, { species: speciesList, title: "All Species" });
-        res.render("pages/speciesCard", { name: req.session.name });
+        res.render("pages/speciesCard", {userType: req.session.type, name: req.session.name});
     } catch (err) {
         console.error("Error fetching species list:", err);
         res.status(500).send("Error fetching species list");
@@ -42,7 +42,8 @@ router.get('/addSpecies', isAuthorizedResearcher, (req, res) => {
 });
 
 router.post('/addSpecies', isAuthorizedResearcher, upload.single("speciesImage"), createSpecies, (req, res) => {
-    res.redirect(researcherDashboard);
+    const speciesName = req.speciesName;
+    res.redirect(`/species/${encodeURIComponent(speciesName)}`);
 });
 
 // NEED UPDATE SPECIES PAGE
@@ -52,7 +53,7 @@ router.get('/updateSpecies', isAuthorizedResearcher, (req, res) => {
 
 router.post('/updateSpecies/:id', isAuthorizedResearcher, upload.single("speciesImage"), updateSpecies, (req, res) => {
     const updatedName = req.body.speciesName;
-    res.redirect(`/species/${encodeURIComponent(updatedName)}`);
+    res.redirect(`/${encodeURIComponent(updatedName)}`);
 });
 
 router.post('/deleteSpecies/:id', isAuthorizedResearcher, deleteSpecies, (req, res) => {

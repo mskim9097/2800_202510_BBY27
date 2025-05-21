@@ -62,6 +62,7 @@ const createSpecies = async (req, res, next) => {
         });
 
         await newSpecies.save();
+        req.speciesName = speciesName;
         next(); // or res.status(201).json(newSpecies);
     } catch (error) {
         console.error("Error creating species:", error);
