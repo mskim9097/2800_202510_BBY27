@@ -1,53 +1,75 @@
 const express = require('express');
+
 const router = express.Router();
 
-const multer = require("multer");
-const upload = multer({ dest: "uploads/" });
+const multer = require('multer');
 
-const researcherDashboard = "/user/researcher";
-const addQuest = "pages/addQuest";
+const upload = multer({ dest: 'uploads/' });
 
-const { createQuest, searchTarget, selectQuestList } = require('../controllers/questsController');
-const { isAuthorizedResearcher,authenticated } = require('../controllers/userController');
+const researcherDashboard = '/user/researcher';
+const addQuest = 'pages/addQuest';
+
+const {
+  createQuest,
+  searchTarget,
+  selectQuestList,
+} = require('../controllers/questsController');
+const {
+  isAuthorizedResearcher,
+  authenticated,
+} = require('../controllers/userController');
 
 // NEEDS QUEST LIST PAGE
 // Quest List Page
 router.get('/', selectQuestList, (req, res, next) => {
-    // res.redirect(researcherDashboard);
-    res.render('pages/questList', {userType: req.session.type, name: req.session.name});
+  // res.redirect(researcherDashboard);
+  res.render('pages/questList', {
+    userType: req.session.type,
+    name: req.session.name,
+  });
 });
 router.get('/completeQuest', (req, res, next) => {
-    res.redirect(researcherDashboard);
+  res.redirect(researcherDashboard);
 });
 
 // NEEDS QUEST PAGE
 router.get('/viewQuest', (req, res, next) => {
-    res.redirect(researcherDashboard);
+  res.redirect(researcherDashboard);
 });
 // NEEDS QUEST LIST PAGE
 router.get('/questList', (req, res, next) => {
-    res.render("pages/questList");
+  res.render('pages/questList');
 });
 
-//Needs to be updated with actua
-router.get('/addQuest',authenticated, isAuthorizedResearcher, (req, res, next) => {
+// Needs to be updated with actua
+router.get(
+  '/addQuest',
+  authenticated,
+  isAuthorizedResearcher,
+  (req, res, next) => {
     res.render(addQuest);
-});
+  }
+);
 
 router.get('/searchTarget', searchTarget);
 
-router.post('/createQuest', isAuthorizedResearcher, upload.single("speciesImage"), createQuest, (req, res, next) => {
+router.post(
+  '/createQuest',
+  isAuthorizedResearcher,
+  upload.single('speciesImage'),
+  createQuest,
+  (req, res, next) => {
     res.redirect(researcherDashboard);
-});
+  }
+);
 
-//!!!! NEEDS MIDDLEWARE FOR UPDATING QUESTS !!!!!
+//! !!! NEEDS MIDDLEWARE FOR UPDATING QUESTS !!!!!
 router.get('/updateQuest', isAuthorizedResearcher, (req, res, next) => {
-    // NEEDS PAGE FOR UPDATING QUESTS
-    res.redirect(researcherDashboard);
+  // NEEDS PAGE FOR UPDATING QUESTS
+  res.redirect(researcherDashboard);
 });
 router.post('/updateQuest', isAuthorizedResearcher, (req, res, next) => {
-    res.redirect(researcherDashboard);
+  res.redirect(researcherDashboard);
 });
-
 
 module.exports = router;

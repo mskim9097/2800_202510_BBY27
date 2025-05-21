@@ -13,10 +13,12 @@ let isRendering = false;
 
 // create card
 async function createCard(quest) {
-  const species = await fetch(`/species/selectTarget?id=${quest.speciesId}`).then(res => res.json());
+  const species = await fetch(
+    `/species/selectTarget?id=${quest.speciesId}`
+  ).then((res) => res.json());
 
   const card = document.createElement('div');
-  card.className = "min-w-[250px] bg-white rounded-xl shadow flex-shrink-0";
+  card.className = 'min-w-[250px] bg-white rounded-xl shadow flex-shrink-0';
 
   card.innerHTML = `
     <img src="${species.speciesImage}" alt="${species.speciesName}" class="w-full h-40 object-cover rounded-t-xl">
@@ -42,8 +44,8 @@ async function renderNextBatch() {
 
 // function to render filtered results
 async function renderFilteredResults(filteredList) {
-    if (isRendering) return;
-  isRendering = true;   
+  if (isRendering) return;
+  isRendering = true;
   container.innerHTML = '';
   for (const quest of filteredList) {
     const card = await createCard(quest);
@@ -74,7 +76,7 @@ function filterQuest() {
     return;
   }
 
-  const filtered = questData.filter(q => {
+  const filtered = questData.filter((q) => {
     const difficulty = q.questDifficulty.toLowerCase();
     const time = q.questTimeOfDay.toLowerCase();
     const title = q.questTitle.toLowerCase();
@@ -101,7 +103,10 @@ function debounceFilterQuest() {
 function scrollHandler() {
   if (isLoading || currentIndex >= questData.length) return;
 
-  if (container.scrollLeft + container.clientWidth >= container.scrollWidth - 100) {
+  if (
+    container.scrollLeft + container.clientWidth >=
+    container.scrollWidth - 100
+  ) {
     isLoading = true;
     loading.classList.remove('hidden');
     setTimeout(async () => {

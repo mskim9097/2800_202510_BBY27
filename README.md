@@ -27,7 +27,7 @@ These words/phrases are what will be used throughout our documentation. Each wor
 
 ## Features
 
-- Generic -> Google sign API, so that users do not need to remember their password/username when logging into   our app.
+- Generic -> 
 - Researcher -> Create a quest for Explorers to complete.
             Quests Contain
                 -> geographic position that the quest needs to be completed in

@@ -27,10 +27,10 @@
 // 	}
 // })
 // /*
-// app.use(session({ 
+// app.use(session({
 //     secret: node_session_secret,
-//     store: mongoStore, //default is memory store 
-//     saveUninitialized: false, 
+//     store: mongoStore, //default is memory store
+//     saveUninitialized: false,
 //     resave: true
 // }
 // ));
@@ -47,7 +47,7 @@
 // const testSelectImage = async (req, res) => {
 //     const images = await imageCollection.find().toArray(); // DB에서 전부 가져오기
 //     res.render('pages/testSelectImage', { images });
-    
+
 // };
 
 // module.exports = {testCreateImage, testSelectImage};
