@@ -1,5 +1,6 @@
 // @Rayen Ben Moussa
 // used AI to generate this code responsible for adding a camera feature
+// Chat GPT 4 Turbo
 
 lucide.createIcons();
 const startCameraBtn = document.getElementById('start-camera');

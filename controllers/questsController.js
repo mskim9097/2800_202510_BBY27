@@ -1,10 +1,7 @@
 require('dotenv').config();
-// const express = require('express');
-// const Joi = require("joi");
 const Quest = require('../models/questModel');
 
 const appClient = require('../databaseConnection').database;
-// const questCollection = appClient.db('biodiversityGo').collection('quests');
 const speciesCollection = appClient.db('biodiversityGo').collection('species');
 
 // searchTarget function to search spicies that match input from mongoDB

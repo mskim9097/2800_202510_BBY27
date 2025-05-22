@@ -6,10 +6,7 @@
     "node": true,
     "jest": true
   },
-  "extends": [
-    "airbnb-base",
-    "plugin:prettier/recommended"
-  ],
+  "extends": ["airbnb-base", "plugin:prettier/recommended"],
   "parserOptions": {
     "ecmaVersion": "latest"
   },
@@ -20,4 +17,4 @@
     "consistent-return": "off",
     "no-underscore-dangle": ["error", { "allow": ["_id"] }]
   }
-} 
+}

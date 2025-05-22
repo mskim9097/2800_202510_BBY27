@@ -1,6 +1,6 @@
-- .git/ []
-- README.md []
-- routes/ []
+- .git/ 
+- README.md 
+- routes/ 
   - speciesRoutes.js []
   - userRoutes.js []
   - questRoutes.js []
@@ -8,43 +8,43 @@
   - aiRoutes.js []
   - testRoutes.js []
 - index.js []
-- controllers/ []
+- controllers/ 
   - userController.js [x]
   - aiController.js []
   - questsController.js []
   - speciesController.js [x]
   - testController.js [] <-DELETE
-- package-lock.json []
-- package.json []
-- models/ []
+- package-lock.json [] <-NA
+- package.json [] <-NA
+- models/ 
   - questModel.js [x]
   - specieModel.js [x]
   - userModel.js [x]
-- node_modules/ [] 
+- node_modules/ [] <-NA
 - dummy_species.json [] <-- DELETED
 - uploads/ [] <-- DELETED
-- views/ []
-  - pages/ []
-    - speciesCard.ejs []
-    - questList.ejs []
-    - quests.ejs []
-    - speciesPage.ejs []
-    - addSpecies.ejs []
-    - addQuest.ejs []
-    - signup.ejs []
-    - login.ejs []
-    - 404.ejs []
-    - speciesList.ejs []
-    - explorerDashboard.ejs []
-    - researcherDashboard.ejs []
-    - riddle.ejs []
-    - riddleQuizz.ejs []
+- views/ 
+  - pages/ 
+    - speciesCard.ejs [x]
+    - questList.ejs [x]
+    - quests.ejs [x]
+    - speciesPage.ejs [x]
+    - addSpecies.ejs [x]
+    - addQuest.ejs [x]
+    - signup.ejs [x]
+    - login.ejs [x]
+    - 404.ejs [x]
+    - speciesList.ejs [x]
+    - explorerDashboard.ejs [x]
+    - researcherDashboard.ejs [x]
+    - riddle.ejs [x]
+    - riddleQuizz.ejs [x]
     - quizzResult.ejs []
     - testQuest.ejs []
     - testCreateImage.ejs []
     - testSelectImage.ejs []
-    - landing.ejs []
-  - partials/ []
+    - landing.ejs [x]
+  - partials/ 
     - header.ejs [x]
     - dropdownFilter.ejs [x]
     - specieCard.ejs [x]
@@ -53,15 +53,15 @@
     - questCard.ejs [x]
     - camera.ejs [x]
     - cards.ejs [x]
-  - tests/ []
+  - tests/ [] <- DELETED
     - blair_test.ejs []
     - explorer.ejs []
     - researcher.ejs []
-- tests/ []
+- tests/ <- DELETED
   - blair_test.html []
   - loginRoutes.js []
-- utils.js []
-- public/ []
+- utils.js [] <-NA
+- public/ 
   - js/ []
     - questList.js []
     - species.js []

@@ -1,4 +1,4 @@
-// Ai generated code (all of menu.js) - ChatGPT
+// Ai generated code (all of menu.js) - ChatGPT 4 Turbo
 const btn = document.getElementById('dropdownButton');
 const menu = document.getElementById('dropdownMenu');
 

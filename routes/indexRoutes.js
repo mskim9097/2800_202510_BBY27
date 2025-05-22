@@ -41,4 +41,8 @@ router.get('/invalid', (req, res) => {
   });
 });
 
+router.get('/about', (req, res) => {
+  res.render('pages/about');
+});
+
 module.exports = router;

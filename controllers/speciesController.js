@@ -7,6 +7,12 @@ const appClient = require('../databaseConnection').database;
 
 const speciesCollection = appClient.db('biodiversityGo').collection('species');
 
+/**
+ * Configures the Cloudinary SDK with credentials from environment variables.
+ * This setup is essential for enabling image upload and management functionalities
+ * provided by Cloudinary within the application.
+ * @author https://chat.openai.com/ (Chat GPT Gemini 2.5-pro)
+ */
 cloudinary.config({
   cloud_name: process.env.CLOUDINARY_CLOUD_NAME,
   api_key: process.env.CLOUDINARY_API_KEY,

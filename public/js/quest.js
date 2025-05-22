@@ -13,7 +13,7 @@ searchBox.addEventListener('input', async () => {
     return;
   }
 
-  // AI generated (line 17 - 22)
+  // AI generated (line 17 - 22) Chat GPT 4 Turbo
   const res = await fetch(
     `/quests/searchTarget?q=${encodeURIComponent(query)}`
   );
