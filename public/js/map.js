@@ -20,26 +20,41 @@ function showMap() {
         initializeMap(defaultCoords);
     }
 
-    function initializeMap(coords) {
-        mapboxgl.accessToken = 'pk.eyJ1IjoidG9ueXhjaGVuIiwiYSI6ImNtOGdjMGYydTBsdjcyaW9pa2xqNWw3ODUifQ.zNywMAWcRkug0iD3Aej6hw';
-        
-        const map = new mapboxgl.Map({
-            container: 'map',
-            style: 'mapbox://styles/mapbox/streets-v11',
-            center: [coords.lng, coords.lat],
-            zoom: 11
-        });
-        // add marker
-        new mapboxgl.Marker()
-        .setLngLat([coords.lng, coords.lat])
-        .addTo(map);
-    
-        // Store the map globally
-        window.globalMap = map;
-    
-       
-    }
-    
 }
+function initializeMap(coords) {
+    mapboxgl.accessToken = 'pk.eyJ1IjoidG9ueXhjaGVuIiwiYSI6ImNtOGdjMGYydTBsdjcyaW9pa2xqNWw3ODUifQ.zNywMAWcRkug0iD3Aej6hw';
+
+    const map = new mapboxgl.Map({
+        container: 'map',
+        style: 'mapbox://styles/mapbox/streets-v11',
+        center: [coords.lng, coords.lat],
+        zoom: 11
+    });
+
+    // Marker for user location
+    new mapboxgl.Marker({ color: 'rgba(118, 164, 210, 0.8)' })
+        .setLngLat([coords.lng, coords.lat])
+        .setPopup(new mapboxgl.Popup().setText("Your Location"))
+        .addTo(map);
+
+    // ✅ Add quest markers
+    if (typeof quests !== 'undefined' && Array.isArray(quests)) {
+        quests.forEach(quest => {
+            if (quest.coordinates && quest.coordinates.lat && quest.coordinates.lng) {
+                new mapboxgl.Marker({ color: 'rgba(92, 203, 92, 0.8)'  })
+                    .setLngLat([quest.coordinates.lng, quest.coordinates.lat])
+                    .setPopup(new mapboxgl.Popup().setHTML(`
+                        <h3>${quest.questTitle}</h3>
+                        <p>${quest.questLocation}</p>
+                        <p><strong>Mission:</strong> ${quest.questMission}</p>
+                    `))
+                    .addTo(map);
+            }
+        });
+    }
+
+    window.globalMap = map;
+}
+
 showMap();
 

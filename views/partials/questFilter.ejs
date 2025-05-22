@@ -1,0 +1,48 @@
+<!-- Filter Section -->
+<div
+  class="flex flex-col md:flex-row md:items-center md:justify-between gap-3 w-full max-w-6xl mx-auto mt-4 px-4">
+  
+  <!-- Search Field -->
+  <div
+    class="flex m-auto w-full max-w-sm bg-white border border-gray-300 rounded-full shadow-sm px-4 py-2 items-center gap-2">
+    <span class="text-gray-500 text-lg">🔍</span>
+    <input id="search" type="search" placeholder="Search Quests..."
+      value="<%= currentFilters.search || '' %>"
+      class="flex-grow focus:outline-none text-sm text-gray-800 placeholder-gray-400 bg-transparent">
+    <button id="filterToggle" class="text-gray-500 hover:text-gray-700 text-lg" title="Filter">
+      🧪
+    </button>
+  </div>
+
+  <!-- Filters -->
+  <div id="filtersContainer" class="flex gap-2 flex-wrap justify-center">
+    <a href="/quests"
+      class="border border-gray-300 rounded-full text-sm px-3 py-2 bg-white shadow-sm focus:outline-none">
+      🧹 Clear All Filters / Show All
+    </a>
+
+    <select id="difficultyFilter"
+      class="border border-gray-300 rounded-full text-sm px-3 py-2 bg-white shadow-sm focus:outline-none">
+      <option value="" <%= currentFilters.difficulty === "" ? "selected" : "" %>>🔺 All Difficulties</option>
+      <option value="Easy" <%= currentFilters.difficulty === "Easy" ? "selected" : "" %>>🟢 Easy</option>
+      <option value="Medium" <%= currentFilters.difficulty === "Medium" ? "selected" : "" %>>🟡 Medium</option>
+      <option value="Hard" <%= currentFilters.difficulty === "Hard" ? "selected" : "" %>>🔴 Hard</option>
+    </select>
+
+    <select id="timeFilter"
+      class="border border-gray-300 rounded-full text-sm px-3 py-2 bg-white shadow-sm focus:outline-none">
+      <option value="" <%= currentFilters.time === "" ? "selected" : "" %>>⏰ Time of Day</option>
+      <option value="Morning" <%= currentFilters.time === "Morning" ? "selected" : "" %>>🌅 Morning</option>
+      <option value="Afternoon" <%= currentFilters.time === "Afternoon" ? "selected" : "" %>>🌤️ Afternoon</option>
+      <option value="Evening" <%= currentFilters.time === "Evening" ? "selected" : "" %>>🌇 Evening</option>
+      <option value="Night" <%= currentFilters.time === "Night" ? "selected" : "" %>>🌙 Night</option>
+    </select>
+
+    <select id="creatorFilter"
+      class="border border-gray-300 rounded-full text-sm px-3 py-2 bg-white shadow-sm focus:outline-none">
+      <option value="" <%= currentFilters.creator === "" ? "selected" : "" %>>🧑‍🔬 All Creators</option>
+      <option value="me" <%= currentFilters.creator === "me" ? "selected" : "" %>>My Quests</option>
+      <option value="others" <%= currentFilters.creator === "others" ? "selected" : "" %>>Others' Quests</option>
+    </select>
+  </div>
+</div>
