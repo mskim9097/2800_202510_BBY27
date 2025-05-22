@@ -365,6 +365,36 @@ const addImage = async (req, res, next) => {
 //     }
 // };
 
-module.exports = { createQuest, searchTarget, renderCreateQuestPage, getQuests, getResearcherDashboard, selectQuestList, selectQuest, updateQuest, deleteQuest, updateSighting }
+const getExplorerDashboard = async (req, res) => {
+  try {
+    // Get all quests
+    const quests = await Quest.find().lean();
+
+    // Format the data for the frontend map script
+    const mapQuests = quests.map(q => ({
+      _id: q._id,
+      questTitle: q.questTitle,
+      questMission: q.questMission,
+      difficulty: q.difficulty,
+      questLocation: q.questLocation?.coordinates
+        ? `(${q.questLocation.coordinates[1]}, ${q.questLocation.coordinates[0]})`
+        : 'Unknown',
+      coordinates: {
+        lat: q.questLocation?.coordinates[1],
+        lng: q.questLocation?.coordinates[0]
+      }
+    }));
+
+    res.render('pages/explorerDashboard', { 
+      quests: mapQuests,
+      name: req.session.name 
+    });
+  } catch (err) {
+    console.error("Error fetching quests:", err);
+    res.status(500).send("Internal Server Error");
+  }
+};
+
+module.exports = { createQuest, searchTarget, renderCreateQuestPage, getQuests, getResearcherDashboard, selectQuestList, selectQuest, updateQuest, deleteQuest, updateSighting, getExplorerDashboard }
 
 
