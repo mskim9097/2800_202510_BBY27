@@ -2,6 +2,7 @@ require('dotenv').config();
 const express = require('express');
 const Joi = require("joi");
 const Quest = require("../models/questModel");
+const Species = require('../models/specieModel');
 
 const appClient = require('../databaseConnection').database;
 const questCollection = appClient.db('biodiversityGo').collection('quests');
@@ -41,19 +42,25 @@ const selectQuestList = async (req, res, next) => {
 
 // select specific quest
 const selectQuest = async (req, res) => {
-    try {
-        const questId = req.params.id;
-        const quest = await Quest.findById(questId);
+  try {
+    const questId = req.params.id;
+    const quest = await Quest.findById(questId);
 
-        if (!quest) {
-            return res.status(404).send("Species not found");
-        }
-
-        res.render("pages/quest", { quest });
-    } catch (error) {
-        console.error("Error fetching species:", error);
-        res.status(500).send("Error retrieving species details");
+    if (!quest) {
+      return res.status(404).send("Quest not found");
     }
+
+    const species = await Species.findById(quest.speciesId);
+
+    if (!species) {
+      return res.status(404).send("Species not found");
+    }
+
+    res.render("pages/quest", { quest, species });
+  } catch (error) {
+    console.error("Error fetching quest or species:", error);
+    res.status(500).send("Error retrieving quest details");
+  }
 };
 
 // createQuest function that saves quest document in mongoDB.

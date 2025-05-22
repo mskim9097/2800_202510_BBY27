@@ -37,3 +37,4 @@ form.addEventListener('submit', (e) => {
         alert('Please select a species from the suggestion list.');
     }
 });
+
