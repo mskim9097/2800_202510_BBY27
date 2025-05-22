@@ -6,6 +6,7 @@ const Quest = require("../models/questModel");
 const appClient = require('../databaseConnection').database;
 const questCollection = appClient.db('biodiversityGo').collection('quests');
 const speciesCollection = appClient.db('biodiversityGo').collection('species');
+const { ObjectId } = require("mongodb");
 
 // searchTarget function to search spicies that match input from mongoDB
 const searchTarget = async (req, res) => {
@@ -17,6 +18,25 @@ const searchTarget = async (req, res) => {
         .limit(5)
         .toArray();
     res.json(results);
+};
+
+const selectQuestList = async (req, res, next) => {
+    try {
+        let questList;
+
+        if (req.session.type === "researcher") {
+            const userId = req.session.userId;
+            questList = await Quest.find({ questCreatedBy: userId }).sort({ createdAt: -1 });
+        } else {
+            questList = await Quest.find().sort({ createdAt: -1 });
+        }
+
+        res.locals.questList = questList;
+        next();
+    } catch (err) {
+        console.error("Error fetching quest list:", err);
+        res.status(500).send("Error fetching quest list");
+    }
 };
 
 // select specific quest
@@ -68,24 +88,5 @@ const createQuest = async (req, res, next) => {
 
     next();
 }
-
-const selectQuestList = async (req, res, next) => {
-    try {
-        let questList;
-
-        if (req.session.type === "researcher") {
-            const userId = req.session.userId;
-            questList = await Quest.find({ questCreatedBy: userId }).sort({ createdAt: -1 });
-        } else {
-            questList = await Quest.find().sort({ createdAt: -1 });
-        }
-
-        res.locals.questList = questList;
-        next();
-    } catch (err) {
-        console.error("Error fetching quest list:", err);
-        res.status(500).send("Error fetching quest list");
-    }
-};
 
 module.exports = { createQuest, searchTarget, selectQuestList, selectQuest }

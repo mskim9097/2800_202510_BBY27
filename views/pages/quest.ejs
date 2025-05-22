@@ -27,12 +27,12 @@
         <div>
             <a href="/quests" class="text-green-600 font-medium">← Back to Quest List</a>
         </div>
-        <% if (typeof species !=='undefined' && species) { %>
+        <% if (typeof quest !=='undefined' && quest) { %>
             <% if (userType==='researcher' ) { %>
-                <form id="editForm" action="/species/updateSpecies/<%= species._id %>" method="POST"
+                <form id="editForm" action="/quests/updateQuest/<%= quest._id %>" method="POST"
                     enctype="multipart/form-data" class="bg-white p-6 rounded shadow flex flex-col gap-4">
                     <!--Image-->
-                    <% if (species.speciesImage) { %>
+                    <% if (.speciesImage) { %>
                         <div class="inline-block">
                             <img id="previewImage" src="<%= species.speciesImage %>"
                                 alt="Image of <%= species.speciesName %>" class="species-image rounded shadow" />
@@ -157,7 +157,7 @@
             <% } %>
         <% } else { %>
             <div class="text-center">
-                <h1 class="text-2xl font-semibold">Species Not Found</h1>
+                <h1 class="text-2xl font-semibold">Quest Not Found</h1>
                 <p>The species you are looking for could not be found.</p>
             </div>
         <% } %>

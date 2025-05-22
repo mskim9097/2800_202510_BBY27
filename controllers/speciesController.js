@@ -1,6 +1,7 @@
 const Species = require('../models/specieModel');
 require('dotenv').config();
 const mongoose = require('mongoose');
+const { ObjectId } = require("mongodb");
 const cloudinary = require('cloudinary').v2;
 
 const appClient = require('../databaseConnection').database;
