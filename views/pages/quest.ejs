@@ -229,6 +229,15 @@
                                                     name="questMission" disabled><%= quest.questMission %></textarea>
                                             </div>
                                         </div>
+
+                                        <!-- Update Sighting-->
+                                        <div class="flex justify-end items-center space-x-4 mt-6">
+                                            <a href="/quests/sighting/<%= quest._id %>"
+                                                class="bg-green-500 hover:bg-green-600 text-white text-lg px-3 py-2 rounded inline-flex items-center space-x-2">
+                                                <i class="bi bi-pencil"></i>
+                                                <span>Accept</span>
+                                            </a>
+                                        </div>
                         </div>
                         <% } %>
                             <% } else { %>

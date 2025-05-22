@@ -1,10 +1,15 @@
 const express = require('express');
-
+const Quest = require('../models/questModel');
 const router = express.Router();
 
 const multer = require('multer');
 
-const upload = multer({ dest: 'uploads/' });
+// Multer configuration for memory storage
+const storage = multer.memoryStorage();
+const upload = multer({
+  storage,
+  limits: { fileSize: 10 * 1024 * 1024 },
+});
 
 const {
   createQuest,
@@ -13,6 +18,7 @@ const {
   selectQuest,
   updateQuest,
   deleteQuest,
+  updateSighting
 } = require('../controllers/questsController');
 const {
   isAuthorizedResearcher,
@@ -61,7 +67,15 @@ router.post(
 
 router.post('/deleteQuest/:id', deleteQuest, (req, res) => {
   res.redirect('/quests');
+});
+
+router.get('/sighting/:id', async (req, res) => {
+  const quest = await Quest.findById(req.params.id);
+  res.render("pages/sighting", {quest});
 })
+router.post('/updateSighting/:id', upload.single("questImage"), updateSighting, (req, res) => {
+  res.redirect(`/quests/${req.params.id}`);
+});
 
 //! !!! NEEDS MIDDLEWARE FOR UPDATING QUESTS !!!!!
 router.get('/updateQuest', isAuthorizedResearcher, (req, res, next) => {
@@ -71,5 +85,7 @@ router.get('/updateQuest', isAuthorizedResearcher, (req, res, next) => {
 router.post('/updateQuest', isAuthorizedResearcher, (req, res, next) => {
   res.redirect(researcherDashboard);
 });
+
+
 
 module.exports = router;

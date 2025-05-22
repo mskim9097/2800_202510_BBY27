@@ -3,12 +3,42 @@ const express = require('express');
 const Joi = require("joi");
 const Quest = require("../models/questModel");
 const Species = require('../models/specieModel');
+const cloudinary = require('cloudinary').v2;
 
 const appClient = require('../databaseConnection').database;
 
 const speciesCollection = appClient.db('biodiversityGo').collection('species');
 const questCollection = appClient.db('biodiversityGo').collection('quests');
 const { ObjectId } = require('mongodb');
+
+/**
+ * Configures the Cloudinary SDK with credentials from environment variables.
+ * This setup is essential for enabling image upload and management functionalities
+ * provided by Cloudinary within the application.
+ * @author https://chat.openai.com/ (Chat GPT Gemini 2.5-pro)
+ */
+cloudinary.config({
+  cloud_name: process.env.CLOUDINARY_CLOUD_NAME,
+  api_key: process.env.CLOUDINARY_API_KEY,
+  api_secret: process.env.CLOUDINARY_API_SECRET,
+  secure: true,
+});
+
+const uploadImageToCloudinary = (buffer) => {
+  return new Promise((resolve, reject) => {
+    const uploadStream = cloudinary.uploader.upload_stream(
+      { resource_type: 'image' },
+      (error, result) => {
+        if (error) {
+          console.error('Cloudinary Upload Error:', error);
+          return reject(error);
+        }
+        resolve(result.secure_url);
+      }
+    );
+    uploadStream.end(buffer);
+  });
+};
 
 // searchTarget function to search spicies that match input from mongoDB
 const searchTarget = async (req, res) => {
@@ -138,4 +168,62 @@ const deleteQuest = async (req, res, next) => {
   next();
 };
 
-module.exports = { createQuest, searchTarget, selectQuestList, selectQuest, updateQuest, deleteQuest };
+const updateSighting = async (req, res, next) => {
+  const questId = req.params.id;
+  const { userId } = req.session;
+  const {
+    questFieldNote,
+    questImage,
+    latitude,
+    longitude
+  } = req.body;
+
+const questImageUrl = await addImage(req, res, next);
+
+  const updateFields = {
+    questFieldNote,
+    questLocation: {
+      type: 'Point',
+      coordinates: [parseFloat(longitude), parseFloat(latitude)]
+    },
+    questAcceptedBy: userId
+  };
+  if (questImageUrl) {
+    updateFields.questImage = questImageUrl;
+  }
+  updateFields.updatedAt = new Date();
+
+  await Quest.updateOne(
+    { _id: questId },
+    { $set: updateFields }
+  );
+  next();
+};
+
+// Helper function that handles image upload to Cloudinary.
+const addImage = async (req, res, next) => {
+  let speciesImageUrl = null;
+
+  // Check if a file was uploaded
+  if (req.file) {
+    // Upload image to Cloudinary from buffer
+    // For simplicity, Cloudinary auto-generate public_id
+    const result = await new Promise((resolve, reject) => {
+      const uploadStream = cloudinary.uploader.upload_stream(
+        { resource_type: 'image' },
+        (error, result) => {
+          if (error) {
+            console.error('Cloudinary Upload Error:', error);
+            return reject(error);
+          }
+          resolve(result);
+        }
+      );
+      uploadStream.end(req.file.buffer);
+    });
+    speciesImageUrl = result.secure_url;
+    return speciesImageUrl;
+  }
+};
+
+module.exports = { createQuest, searchTarget, selectQuestList, selectQuest, updateQuest, deleteQuest, updateSighting };
