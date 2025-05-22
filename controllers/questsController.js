@@ -79,6 +79,7 @@ const selectQuest = async (req, res) => {
   try {
     const questId = req.params.id;
     const quest = await Quest.findById(questId);
+    const userId = req.session.userId;
 
     if (!quest) {
       return res.status(404).send("Quest not found");
@@ -90,7 +91,7 @@ const selectQuest = async (req, res) => {
       return res.status(404).send("Species not found");
     }
 
-    res.render("pages/quest", { quest, species });
+    res.render("pages/quest", { quest, species, userId });
   } catch (error) {
     console.error("Error fetching quest or species:", error);
     res.status(500).send("Error retrieving quest details");
