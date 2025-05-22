@@ -3,6 +3,7 @@ const loading = document.getElementById('loading');
 const difficultyFilter = document.getElementById('difficultyFilter');
 const timeFilter = document.getElementById('timeFilter');
 const searchInput = document.getElementById('searchInput');
+const statusFilter = document.getElementById('statusFilter');
 
 let currentIndex = 0;
 const batchSize = 5;
@@ -20,6 +21,13 @@ async function createCard(quest) {
   const card = document.createElement('div');
   card.className = 'min-w-[250px] bg-white rounded-xl shadow flex-shrink-0';
 
+  let completedText = '';
+  if (quest.questAcceptedBy && quest.questAcceptedBy.length > 0) {
+    completedText = '<p class="text-sm font-semibold text-green-600 mt-1">Completed</p>';
+  } else {
+    completedText = '<p class="text-sm font-semibold text-red-600 mt-1">Not Accepted</p>';
+  }
+
   card.innerHTML = `
     <img src="${species.speciesImage}" alt="${species.speciesName}" class="w-full h-40 object-cover rounded-t-xl">
     <div class="p-3">
@@ -27,6 +35,7 @@ async function createCard(quest) {
       <p class="italic text-gray-600">${quest.questMission}</p>
       <p class="mt-2 text-gray-700 text-sm">Target: ${species.speciesName}</p>
       <p class="mt-2 text-gray-700 text-sm">Time: ${quest.questTimeOfDay} | Difficulty: ${quest.questDifficulty}</p>
+      ${completedText}
       <a href="/quests/${quest._id}" class="inline-block mt-4 bg-green-600 hover:bg-green-700 text-white py-1.5 px-4 rounded">View Details</a>
     </div>`;
   return card;
@@ -59,8 +68,9 @@ function filterQuest() {
   const selectedDifficulty = difficultyFilter.value.toLowerCase();
   const selectedTime = timeFilter.value.toLowerCase();
   const searchTerm = searchInput.value.toLowerCase();
+  const selectedStatus = statusFilter.value.toLowerCase();
 
-  const isFiltering = selectedDifficulty || selectedTime || searchTerm;
+  const isFiltering = selectedDifficulty || selectedTime || searchTerm || selectedStatus;
 
   if (isFiltering && isScrollAttached) {
     container.removeEventListener('scroll', scrollHandler);
@@ -81,11 +91,15 @@ function filterQuest() {
     const time = q.questTimeOfDay.toLowerCase();
     const title = q.questTitle.toLowerCase();
     const mission = q.questMission.toLowerCase();
+    const isCompleted = q.questAcceptedBy && q.questAcceptedBy.length > 0;
 
     return (
       (!selectedDifficulty || difficulty === selectedDifficulty) &&
       (!selectedTime || time === selectedTime) &&
-      (title.includes(searchTerm) || mission.includes(searchTerm))
+      (title.includes(searchTerm) || mission.includes(searchTerm)) &&
+      (!selectedStatus || 
+       (selectedStatus === "completed" && isCompleted) || 
+       (selectedStatus === "notaccepted" && !isCompleted))
     );
   });
 
@@ -120,6 +134,7 @@ function scrollHandler() {
 difficultyFilter.addEventListener('change', debounceFilterQuest);
 timeFilter.addEventListener('change', debounceFilterQuest);
 searchInput.addEventListener('input', debounceFilterQuest);
+statusFilter.addEventListener('change', debounceFilterQuest);
 
 renderNextBatch();
 container.addEventListener('scroll', scrollHandler);

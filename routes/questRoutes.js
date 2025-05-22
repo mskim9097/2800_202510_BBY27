@@ -32,6 +32,7 @@ router.get('/', selectQuestList, (req, res, next) => {
   res.render('pages/questList', {
     userType: req.session.type,
     name: req.session.name,
+    questList: res.locals.questList,
   });
 });
 router.get('/completeQuest', (req, res, next) => {

@@ -35,6 +35,12 @@
                 <option value="evening">🌇 Evening</option>
                 <option value="night">🌙 Night</option>
             </select>
+            <select id="statusFilter"
+            class="border border-gray-300 rounded-full text-sm px-3 py-2 bg-white shadow-sm focus:outline-none mt-2">
+                <option value="">Status</option>
+                <option value="completed">✅ Completed</option>
+                <option value="notAccepted">❌ Not Accepted</option>
+            </select>
         </div>
 
         <!-- Quest Cards Section (Horizontal Scroll) -->
@@ -56,7 +62,7 @@
         <% } %>
 
         <script>
-            const questData = JSON.parse('<%- JSON.stringify(questList || null) %>');
+            const questData = JSON.parse(`<%- JSON.stringify(questList || null) %>`);
         </script>
 
         <script src="/js/menu.js"></script>

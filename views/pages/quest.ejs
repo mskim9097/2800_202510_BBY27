@@ -60,44 +60,65 @@
                                             </p>
                                         </div>
 
+                                        <% if (quest.questAcceptedBy && quest.questAcceptedBy.length > 0 && quest.questImage) { %>
+                                            <div class="mb-3">
+                                                <p class="font-semibold block mb-1">🖼️ Sighting Image:</p>
+                                                <img src="<%= quest.questImage %>" alt="Sighting Image"
+                                                    class="species-image rounded shadow w-full h-auto object-cover" />
+                                            </div>
+                                        <% } %>
+
                                         <div>
-                                            <label class="font-semibold block mb-1">📍 Location:</label>
+                                            <label class="font-semibold block mb-1">📍 <%= quest.questAcceptedBy && quest.questAcceptedBy.length > 0 ? "Sighting Location" : "Approximate Location" %>:</label>
                                             <div id="map" class="w-full h-64 rounded border border-gray-300 mb-2"></div>
                                             <input type="hidden" name="latitude" id="latitude" />
                                             <input type="hidden" name="longitude" id="longitude" />
                                         </div>
 
-                                        <div class="field-wrapper mb-3">
-                                            <p><strong>🕒 Time of Day: <span
-                                                        class="edit-indicator text-red-500 hidden">*</span></strong></p>
-                                            <select name="questTimeOfDay" class="species-view bg-gray-100" disabled>
-                                                <option value="morning" <%=quest.questTimeOfDay==="morning" ? "selected"
-                                                    : "" %>>🌅 Morning
-                                                </option>
-                                                <option value="afternoon" <%=quest.questTimeOfDay==="afternoon"
-                                                    ? "selected" : "" %>>🌤️
-                                                    Afternoon</option>
-                                                <option value="evening" <%=quest.questTimeOfDay==="evening" ? "selected"
-                                                    : "" %>>🌇 Evening
-                                                </option>
-                                                <option value="night" <%=quest.questTimeOfDay==="night" ? "selected"
-                                                    : "" %>>🌙 Night</option>
-                                            </select>
-                                        </div>
+                                        <% if (!quest.questAcceptedBy || quest.questAcceptedBy.length === 0) { %>
+                                            <div class="field-wrapper mb-3">
+                                                <p><strong>🕒 Time of Day: <span
+                                                            class="edit-indicator text-red-500 hidden">*</span></strong></p>
+                                                <select name="questTimeOfDay" class="species-view bg-gray-100" disabled>
+                                                    <option value="Morning" <% if (quest.questTimeOfDay === "Morning") { %>selected<% } %>>🌅 Morning
+                                                    </option>
+                                                    <option value="Afternoon" <% if (quest.questTimeOfDay === "Afternoon") { %>selected<% } %>>🌤️
+                                                        Afternoon</option>
+                                                    <option value="Evening" <% if (quest.questTimeOfDay === "Evening") { %>selected<% } %>>🌇 Evening
+                                                    </option>
+                                                    <option value="Night" <% if (quest.questTimeOfDay === "Night") { %>selected<% } %>>🌙 Night</option>
+                                                </select>
+                                            </div>
+                                        <% } else { %>
+                                            <div class="field-wrapper mb-3">
+                                                <p><strong>🕒 Sighting Time:</strong>
+                                                    <span class="species-view bg-gray-100">
+                                                        <%= new Date(quest.updatedAt).toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' }) %> - 
+                                                        <%= new Date(quest.updatedAt).toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit', hour12: true }) %>
+                                                    </span>
+                                                </p>
+                                            </div>
+                                        <% } %>
 
                                         <div class="field-wrapper mb-3">
                                             <p><strong>🎮 Difficulty: <span
                                                         class="edit-indicator text-red-500 hidden">*</span></strong></p>
                                             <select name="questDifficulty" class="species-view bg-gray-100" disabled>
-                                                <option value="easy" <%=quest.questDifficulty==="easy" ? "selected" : ""
-                                                    %>>🟢 Easy</option>
-                                                <option value="medium" <%=quest.questDifficulty==="medium" ? "selected"
-                                                    : "" %>>🟡 Medium
+                                                <option value="Easy" <% if (quest.questDifficulty === "Easy") { %>selected<% } %>>🟢 Easy</option>
+                                                <option value="Medium" <% if (quest.questDifficulty === "Medium") { %>selected<% } %>>🟡 Medium
                                                 </option>
-                                                <option value="hard" <%=quest.questDifficulty==="hard" ? "selected" : ""
-                                                    %>>🔴 Hard</option>
+                                                <option value="Hard" <% if (quest.questDifficulty === "Hard") { %>selected<% } %>>🔴 Hard</option>
                                             </select>
                                         </div>
+
+                                        <% if (quest.questAcceptedBy && quest.questAcceptedBy.length > 0) { %>
+                                            <p><strong>📝 Field Note:</strong></p>
+                                            <div class="field-wrapper mb-4">
+                                                <textarea
+                                                    class="species-view bg-gray-100 w-full min-h-[150px] sm:min-h-[200px]"
+                                                    disabled><%= quest.questFieldNote %></textarea>
+                                            </div>
+                                        <% } %>
 
                                         <p><strong>📖 Mission: <span
                                                     class="edit-indicator text-red-500 hidden">*</span></strong></p>
@@ -115,18 +136,20 @@
 
                                     <!-- Edit and Delete-->
                                     <div class="flex justify-end items-center space-x-4 mt-6">
-                                        <button id="editBtn" type="button"
-                                            class="bg-green-500 hover:bg-green-600 text-white text-lg px-3 py-2 rounded">
-                                            <i class="bi bi-pencil"></i> Edit
-                                        </button>
+                                        <% if (!quest.questAcceptedBy || quest.questAcceptedBy.length === 0) { %>
+                                            <button id="editBtn" type="button"
+                                                class="bg-green-500 hover:bg-green-600 text-white text-lg px-3 py-2 rounded">
+                                                <i class="bi bi-pencil"></i> Edit
+                                            </button>
 
-                                        <!-- Save/Cancel -->
-                                        <div id="editButtons" class="hidden space-x-2">
-                                            <button type="submit"
-                                                class="bg-green-600 hover:bg-green-700 text-white px-4 py-2 rounded">Save</button>
-                                            <button type="button" id="cancelBtn"
-                                                class="bg-gray-400 hover:bg-gray-500 text-white px-4 py-2 rounded">Cancel</button>
-                                        </div>
+                                            <!-- Save/Cancel -->
+                                            <div id="editButtons" class="hidden space-x-2">
+                                                <button type="submit"
+                                                    class="bg-green-600 hover:bg-green-700 text-white px-4 py-2 rounded">Save</button>
+                                                <button type="button" id="cancelBtn"
+                                                    class="bg-gray-400 hover:bg-gray-500 text-white px-4 py-2 rounded">Cancel</button>
+                                            </div>
+                                        <% } %>
 
                                         <!-- Delete -->
                                         <button id="deleteTrigger" type="button"
@@ -180,29 +203,44 @@
                                                         value="<%= species.speciesName %>">
                                                 </p>
                                             </div>
+
+                                            <% if (quest.questAcceptedBy && quest.questAcceptedBy.length > 0 && quest.questImage) { %>
+                                                <div class="mb-3">
+                                                    <p class="font-semibold block mb-1">🖼️ Sighting Image:</p>
+                                                    <img src="<%= quest.questImage %>" alt="Sighting Image"
+                                                        class="species-image-explorer rounded shadow inline-block w-full h-auto object-cover" />
+                                                </div>
+                                            <% } %>
+
                                             <div>
-                                                <label class="font-semibold block mb-1">📍 Location</label>
+                                                <label class="font-semibold block mb-1">📍 <%= quest.questAcceptedBy && quest.questAcceptedBy.length > 0 ? "Sighting Location" : "Approximate Location" %></label>
                                                 <div id="map" class="w-full h-64 rounded border border-gray-300 mb-2">
                                                 </div>
                                             </div>
-                                            <div class="field-wrapper mb-3">
-                                                <p><strong>🕒 Time of Day: <span
-                                                            class="edit-indicator text-red-500 hidden">*</span></strong>
-                                                </p>
-                                                <select name="questTimeOfDay" class="species-view bg-gray-100" disabled>
-                                                    <option value="morning" <%=quest.questTimeOfDay==="morning"
-                                                        ? "selected" : "" %>>🌅 Morning
-                                                    </option>
-                                                    <option value="afternoon" <%=quest.questTimeOfDay==="afternoon"
-                                                        ? "selected" : "" %>>🌤️
-                                                        Afternoon</option>
-                                                    <option value="evening" <%=quest.questTimeOfDay==="evening"
-                                                        ? "selected" : "" %>>🌇 Evening
-                                                    </option>
-                                                    <option value="night" <%=quest.questTimeOfDay==="night" ? "selected"
-                                                        : "" %>>🌙 Night</option>
-                                                </select>
-                                            </div>
+                                            <% if (!quest.questAcceptedBy || quest.questAcceptedBy.length === 0) { %>
+                                                <div class="field-wrapper mb-3">
+                                                    <p><strong>🕒 Time of Day: <span
+                                                                class="edit-indicator text-red-500 hidden">*</span></strong></p>
+                                                    <select name="questTimeOfDay" class="species-view bg-gray-100" disabled>
+                                                        <option value="Morning" <% if (quest.questTimeOfDay === "Morning") { %>selected<% } %>>🌅 Morning
+                                                        </option>
+                                                        <option value="Afternoon" <% if (quest.questTimeOfDay === "Afternoon") { %>selected<% } %>>🌤️
+                                                            Afternoon</option>
+                                                        <option value="Evening" <% if (quest.questTimeOfDay === "Evening") { %>selected<% } %>>🌇 Evening
+                                                        </option>
+                                                        <option value="Night" <% if (quest.questTimeOfDay === "Night") { %>selected<% } %>>🌙 Night</option>
+                                                    </select>
+                                                </div>
+                                            <% } else { %>
+                                                <div class="field-wrapper mb-3">
+                                                    <p><strong>🕒 Sighting Time:</strong>
+                                                        <span class="species-view bg-gray-100">
+                                                            <%= new Date(quest.updatedAt).toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' }) %> - 
+                                                            <%= new Date(quest.updatedAt).toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit', hour12: true }) %>
+                                                        </span>
+                                                    </p>
+                                                </div>
+                                            <% } %>
 
                                             <div class="field-wrapper mb-3">
                                                 <p><strong>🎮 Difficulty: <span
@@ -210,15 +248,21 @@
                                                 </p>
                                                 <select name="questDifficulty" class="species-view bg-gray-100"
                                                     disabled>
-                                                    <option value="easy" <%=quest.questDifficulty==="easy" ? "selected"
-                                                        : "" %>>🟢 Easy</option>
-                                                    <option value="medium" <%=quest.questDifficulty==="medium"
-                                                        ? "selected" : "" %>>🟡 Medium
+                                                    <option value="Easy" <% if (quest.questDifficulty === "Easy") { %>selected<% } %>>🟢 Easy</option>
+                                                    <option value="Medium" <% if (quest.questDifficulty === "Medium") { %>selected<% } %>>🟡 Medium
                                                     </option>
-                                                    <option value="hard" <%=quest.questDifficulty==="hard" ? "selected"
-                                                        : "" %>>🔴 Hard</option>
+                                                    <option value="Hard" <% if (quest.questDifficulty === "Hard") { %>selected<% } %>>🔴 Hard</option>
                                                 </select>
                                             </div>
+
+                                            <% if (quest.questAcceptedBy && quest.questAcceptedBy.length > 0) { %>
+                                                <p><strong>📝 Field Note:</strong></p>
+                                                <div class="field-wrapper mb-4">
+                                                    <textarea
+                                                        class="species-view bg-gray-100 w-full min-h-[150px] sm:min-h-[200px]"
+                                                        disabled><%= quest.questFieldNote %></textarea>
+                                                </div>
+                                            <% } %>
 
                                             <p><strong>📖 Mission: <span
                                                         class="edit-indicator text-red-500 hidden">*</span></strong></p>
@@ -232,11 +276,19 @@
 
                                         <!-- Update Sighting-->
                                         <div class="flex justify-end items-center space-x-4 mt-6">
-                                            <a href="/quests/sighting/<%= quest._id %>"
-                                                class="bg-green-500 hover:bg-green-600 text-white text-lg px-3 py-2 rounded inline-flex items-center space-x-2">
-                                                <i class="bi bi-pencil"></i>
-                                                <span>Accept</span>
-                                            </a>
+                                            <% if (quest.questAcceptedBy && quest.questAcceptedBy.length > 0) { %>
+                                                <button type="button"
+                                                    class="bg-gray-400 text-white text-lg px-3 py-2 rounded inline-flex items-center space-x-2 cursor-not-allowed" disabled>
+                                                    <i class="bi bi-check-lg"></i>
+                                                    <span>Completed</span>
+                                                </button>
+                                            <% } else { %>
+                                                <a href="/quests/sighting/<%= quest._id %>"
+                                                    class="bg-green-500 hover:bg-green-600 text-white text-lg px-3 py-2 rounded inline-flex items-center space-x-2">
+                                                    <i class="bi bi-pencil"></i>
+                                                    <span>Accept</span>
+                                                </a>
+                                            <% } %>
                                         </div>
                         </div>
                         <% } %>
@@ -247,8 +299,14 @@
                                 </div>
                                 <% } %>
         </div>
+        <% 
+        let questCoordinatesString = '[]';
+        if (quest && quest.questLocation && quest.questLocation.coordinates) {
+            questCoordinatesString = JSON.stringify(quest.questLocation.coordinates);
+        }
+        %>
         <script>
-            const questCoordinates = <% - JSON.stringify(quest.questLocation.coordinates) %>; // [lng, lat]
+            const questCoordinates = JSON.parse('<%- questCoordinatesString %>'); // [lng, lat]
         </script>
         <!-- Footer: Takes its natural height -->
         <% if (userType==='researcher' ) { %>

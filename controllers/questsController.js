@@ -63,6 +63,7 @@ const selectQuestList = async (req, res, next) => {
       });
     } else {
       questList = await Quest.find().sort({ createdAt: -1 });
+      console.log(questList);
     }
 
     res.locals.questList = questList;

@@ -34,14 +34,14 @@
         <h1 class="text-xl font-bold text-center">Complete Sighting</h1>
         <div>
             <label for="questImage" class="font-semibold block mb-1">Sighting Image</label>
-            <input type="file" name="questImage" id="questImage" accept="image/*"
+            <input type="file" name="questImage" id="questImage" accept="image/*" required
                 class="w-full border border-gray-300 p-2 rounded bg-white file:mr-2 file:py-1 file:px-3 file:rounded file:border-0 file:bg-green-600 file:text-white hover:file:bg-green-700" />
         </div>
         <div>
             <label class="font-semibold block mb-1">Sighting Location <span style="color: red;">*</span></label>
             <div id="map" class="w-full h-64 rounded border border-gray-300 mb-2"></div>
-                <input type="hidden" name="latitude" id="latitude" />
-                <input type="hidden" name="longitude" id="longitude" />
+                <input type="hidden" name="latitude" id="latitude" required />
+                <input type="hidden" name="longitude" id="longitude" required />
             </div>
         <div>
             <label for="questFieldNote" class="font-semibold block mb-1">Field Note <span style="color: red;">*</span></label>

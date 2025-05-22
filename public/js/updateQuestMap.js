@@ -42,7 +42,6 @@ document.addEventListener('DOMContentLoaded', function () {
     cancelBtn.addEventListener('click', () => {
       isEditable = false;
 
-      // 마커 복원
       if (marker) marker.remove();
 
       marker = new mapboxgl.Marker({ color: 'green' })
