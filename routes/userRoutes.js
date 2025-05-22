@@ -20,7 +20,6 @@ router.get('/explorer', authenticated, (req, res) => {
   res.render('pages/explorerDashboard');
 });
 
-
 router.get('/researcher', authenticated, isAuthorizedResearcher, (req, res) => {
   res.render('pages/researcherDashboard');
 });

@@ -14,6 +14,7 @@ const {
   getSpecies,
   targetSpecies,
   selectTarget,
+  getSpeciesById,
 } = require('../controllers/speciesController');
 const {
   isAuthorizedResearcher,
@@ -33,16 +34,26 @@ const upload = multer({
 });
 
 // list all species
-router.get('/', getSpecies, async (req, res) => {
+router.get('/', authenticated, getSpecies, async (req, res) => {
   try {
     // const speciesList = await speciesCollection.find().toArray();
     // res.render(species, { species: speciesList, title: "All Species" });
-    res.render('pages/speciesCard', { userType: req.session.type });
+    console.log('User type from session:', req.session.type);
+    res.render('pages/speciesList', {
+      speciesList: res.locals.speciesList,
+      userType: req.session.type,
+    });
   } catch (err) {
     console.error('Error fetching species list:', err);
     res.status(500).send('Error fetching species list');
   }
 });
+
+// router.put('/species/:id', upload.single('image'), updateSpecies, (req, res) => {
+//   console.log('Received update:', req.body);
+//     console.log('Image:', req.file);
+//   res.redirect(`/species/${req.params.id}`);
+// });
 
 router.get('/searchTarget', targetSpecies);
 
@@ -63,10 +74,7 @@ router.post(
   }
 );
 
-// NEED UPDATE SPECIES PAGE
-router.get('/updateSpecies', isAuthorizedResearcher, (req, res) => {
-  res.render(update);
-});
+router.get('/:id', getSpeciesById);
 
 router.post(
   '/updateSpecies/:id',
@@ -74,19 +82,13 @@ router.post(
   upload.single('speciesImage'),
   updateSpecies,
   (req, res) => {
-    const updatedName = req.body.speciesName;
-    res.redirect(`/${encodeURIComponent(updatedName)}`);
+    res.redirect(`/species/${req.params.id}`);
   }
 );
 
-router.post(
-  '/deleteSpecies/:id',
-  isAuthorizedResearcher,
-  deleteSpecies,
-  (req, res) => {
-    res.redirect('/species');
-  }
-);
+router.post('/:id', deleteSpecies, (req, res) => {
+  res.redirect('/species');
+});
 
 // Get a specific species by name
 router.get('/:speciesName', async (req, res) => {

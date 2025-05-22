@@ -9,6 +9,10 @@ const app = express();
 // Middleware
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
+const methodOverride = require('method-override');
+
+app.use(methodOverride('_method'));
+
 require('./utils.js');
 
 const PORT = process.env.PORT || 8000;
@@ -64,6 +68,11 @@ mongoose
     process.exit(1);
   });
 
+app.use((req, res, next) => {
+  console.log(`${req.method} ${req.originalUrl}`);
+  next();
+});
+
 // Route protection middleware
 const { authenticated } = require('./controllers/userController');
 
@@ -91,3 +100,8 @@ app.use('/species', authenticated, speciesRouter);
 
 // const testRouter = require('./routes/testRoutes');
 // app.use('/test', testRouter);
+
+// 404 handler
+app.use((req, res, next) => {
+  res.status(404).render('pages/404', { title: 'Page Not Found' });
+});

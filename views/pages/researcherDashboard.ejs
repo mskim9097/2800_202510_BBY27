@@ -5,6 +5,7 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Photo Capture</title>
+    
     <script src="https://cdn.tailwindcss.com"></script>
     <!-- mapbox css and js links -->
     <link href="https://api.mapbox.com/mapbox-gl-js/v2.15.0/mapbox-gl.css" rel="stylesheet" />
@@ -42,7 +43,15 @@
             <div id="content" class="flex flex-col gap-4 overflow-y-scroll  ">
 
                 <%- include('../partials/header') %>
-
+                <div class="flex items-center gap-5 mt-4">
+                    <img class="w-10 h-10" src="/images/photo.svg" alt="Profile Icon">
+                    <div>
+                      <span class="text-xl">Hello,</span> <span class="font-bold text-xl"><%= name %></span>
+                    </div>
+                    <div id="weather-caption" class="text-black px-2 py-2 rounded shadow text-sm bg-white">
+                      Loading weather...
+                    </div>
+                  </div>
                 <div id="explore_time" class="py-2 px-1 w-fit shadow text-sm rounded font-semibold m-auto text-center">
                     Is it a good day to explore .....
                 </div>

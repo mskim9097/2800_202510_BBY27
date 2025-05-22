@@ -6,13 +6,11 @@ const multer = require('multer');
 
 const upload = multer({ dest: 'uploads/' });
 
-const researcherDashboard = '/user/researcher';
-const addQuest = 'pages/addQuest';
-
 const {
   createQuest,
   searchTarget,
   selectQuestList,
+  selectQuest,
 } = require('../controllers/questsController');
 const {
   isAuthorizedResearcher,
@@ -31,6 +29,8 @@ router.get('/', selectQuestList, (req, res, next) => {
 router.get('/completeQuest', (req, res, next) => {
   res.redirect(researcherDashboard);
 });
+
+router.get('/:id', selectQuest);
 
 // NEEDS QUEST PAGE
 router.get('/viewQuest', (req, res, next) => {

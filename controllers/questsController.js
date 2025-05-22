@@ -2,7 +2,9 @@ require('dotenv').config();
 const Quest = require('../models/questModel');
 
 const appClient = require('../databaseConnection').database;
+
 const speciesCollection = appClient.db('biodiversityGo').collection('species');
+const { ObjectId } = require('mongodb');
 
 // searchTarget function to search spicies that match input from mongoDB
 const searchTarget = async (req, res) => {
@@ -14,6 +16,44 @@ const searchTarget = async (req, res) => {
     .limit(5)
     .toArray();
   res.json(results);
+};
+
+const selectQuestList = async (req, res, next) => {
+  try {
+    let questList;
+
+    if (req.session.type === 'researcher') {
+      const { userId } = req.session;
+      questList = await Quest.find({ questCreatedBy: userId }).sort({
+        createdAt: -1,
+      });
+    } else {
+      questList = await Quest.find().sort({ createdAt: -1 });
+    }
+
+    res.locals.questList = questList;
+    next();
+  } catch (err) {
+    console.error('Error fetching quest list:', err);
+    res.status(500).send('Error fetching quest list');
+  }
+};
+
+// select specific quest
+const selectQuest = async (req, res) => {
+  try {
+    const questId = req.params.id;
+    const quest = await Quest.findById(questId);
+
+    if (!quest) {
+      return res.status(404).send('Species not found');
+    }
+
+    res.render('pages/quest', { quest });
+  } catch (error) {
+    console.error('Error fetching species:', error);
+    res.status(500).send('Error retrieving species details');
+  }
 };
 
 // createQuest function that saves quest document in mongoDB.
@@ -47,25 +87,4 @@ const createQuest = async (req, res, next) => {
   next();
 };
 
-const selectQuestList = async (req, res, next) => {
-  try {
-    let questList;
-
-    if (req.session.type === 'researcher') {
-      const { userId } = req.session;
-      questList = await Quest.find({ questCreatedBy: userId }).sort({
-        createdAt: -1,
-      });
-    } else {
-      questList = await Quest.find().sort({ createdAt: -1 });
-    }
-
-    res.locals.questList = questList;
-    next();
-  } catch (err) {
-    console.error('Error fetching quest list:', err);
-    res.status(500).send('Error fetching quest list');
-  }
-};
-
-module.exports = { createQuest, searchTarget, selectQuestList };
+module.exports = { createQuest, searchTarget, selectQuestList, selectQuest };

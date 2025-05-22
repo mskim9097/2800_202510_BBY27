@@ -1,5 +1,6 @@
 const Species = require('../models/specieModel');
 require('dotenv').config();
+const mongoose = require('mongoose');
 const { ObjectId } = require('mongodb');
 const cloudinary = require('cloudinary').v2;
 
@@ -38,13 +39,28 @@ const uploadImageToCloudinary = (buffer) => {
 
 const getSpecies = async (req, res, next) => {
   try {
-    const speciesList = await Species.find();
-    // Attach the species list to `res.locals` to pass to the route/render layer
+    const speciesList = await Species.find().sort({ speciesName: 1 });
     res.locals.speciesList = speciesList;
     next();
   } catch (err) {
     console.error('Error fetching species list:', err);
     res.status(500).send('Error fetching species list');
+  }
+};
+
+const getSpeciesById = async (req, res) => {
+  try {
+    const speciesId = req.params.id;
+    const species = await Species.findById(speciesId);
+
+    if (!species) {
+      return res.status(404).send('Species not found');
+    }
+
+    res.render('pages/speciesPage', { species });
+  } catch (error) {
+    console.error('Error fetching species:', error);
+    res.status(500).send('Error retrieving species details');
   }
 };
 
@@ -189,4 +205,5 @@ module.exports = {
   deleteSpecies,
   getSpecies,
   selectTarget,
+  getSpeciesById,
 };
