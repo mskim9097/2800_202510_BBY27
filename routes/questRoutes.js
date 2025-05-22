@@ -12,6 +12,7 @@ const {
   selectQuestList,
   selectQuest,
   updateQuest,
+  deleteQuest,
 } = require('../controllers/questsController');
 const {
   isAuthorizedResearcher,
@@ -57,6 +58,10 @@ router.post(
     res.redirect(`/quests/${req.params.id}`);
   }
 );
+
+router.post('/deleteQuest/:id', deleteQuest, (req, res) => {
+  res.redirect('/quests');
+})
 
 //! !!! NEEDS MIDDLEWARE FOR UPDATING QUESTS !!!!!
 router.get('/updateQuest', isAuthorizedResearcher, (req, res, next) => {

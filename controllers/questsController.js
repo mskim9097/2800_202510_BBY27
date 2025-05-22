@@ -127,4 +127,15 @@ const updateQuest = async (req, res, next) => {
   next();
 };
 
-module.exports = { createQuest, searchTarget, selectQuestList, selectQuest, updateQuest };
+// DeleteFunction that deletes species data in mongoDB.
+const deleteQuest = async (req, res, next) => {
+  const questId = req.params.id;
+  const objectId = new ObjectId(questId);
+  const quest = await questCollection.findOne({ _id: objectId });
+  if (quest) {
+    await questCollection.deleteOne({ _id: objectId });
+  }
+  next();
+};
+
+module.exports = { createQuest, searchTarget, selectQuestList, selectQuest, updateQuest, deleteQuest };
