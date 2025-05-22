@@ -4,7 +4,7 @@
 <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Photo Capture</title>
+    <title>Explorer Dashboard</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <!-- Camera icon -->
     <script src="https://unpkg.com/lucide@latest"></script>
@@ -27,58 +27,68 @@
 </head>
 
 <body class="h-screen overflow-y-auto">
-    <% const quests=[ { id: 1, image: "/images/plant4.jpg" , title: "Explore the Wetlands" , location: "Burnaby Lake" ,
-        mission: "Find and photograph 3 amphibians" , target: "Frogs, salamanders" , time: "Before sunset" ,
-        difficulty: "Medium" }, { id: 2, image: "/images/plant2.jpg" , title: "Urban Pollinators" ,
-        location: "Downtown Vancouver" , mission: "Identify 5 pollinator species" , target: "Bees, butterflies" ,
-        time: "Anytime" , difficulty: "Easy" }, { id: 3, image: "/images/plant1.jpg" , title: "Explore Stanley Park" ,
-        location: "Downtown Vancouver" , mission: "Identify 5 pollinator species" , target: "Bees, butterflies" ,
-        time: "Anytime" , difficulty: "Easy" } ]; %>
+    <div style="background-color:rgb(242, 242, 242)"
+        class="flex flex-col p-4 justify-between h-full rounded-lg shadow-sm gap-5">
+        <div id="content" class="flex flex-col gap-4 overflow-y-auto">
+            
+            <%- include("../partials/header") %>
 
-        <div style="background-color:rgb(242, 242, 242)"
-            class="flex flex-col p-4 justify-between h-full rounded-lg shadow-sm gap-5">
-            <div id="content" class="flex flex-col gap-4 overflow-y-auto ">
-                
-                <%- include("../partials/header") %>
-
-                <div id="explore_time" class="py-2 px-1 w-fit shadow text-sm rounded font-semibold m-auto">
-                    Is it a good day to explore .....
+            <div class="flex items-center gap-5 mt-4">
+                <img class="w-10 h-10" src="/images/photo.svg" alt="Profile Icon">
+                <div>
+                    <span class="text-xl">Hello,</span> <span class="font-bold text-xl">
+                        <%= name %>
+                    </span>
                 </div>
-                <!--Map-->
-                <div id="map" class="min-h-[200px] w-full rounded shadow">
-
+                <div id="weather-caption" class="text-black px-2 py-2 rounded shadow text-sm bg-white">
+                    Loading weather...
                 </div>
-                <!-- quest cards -->
-                <div class="p-3">
-                    <span class="font-bold text-xl">Quests</span>
+            </div>
 
-                    <!-- Swiper Container -->
-                    <div class="swiper mySwiper mt-2 w-full">
-                        <div class="swiper-wrapper flex items-center">
-                            <% quests.forEach((quest)=> { %>
-                                <div class="swiper-slide">
-                                    <%- include('../partials/questCard', { quest: quest, isResearcher: false }) %>
-                                </div>
-                                <% }) %>
-                                    <div class="swiper-slide flex items-center justify-center">
-                                        <a href="/researcher/quests"
-                                            class="p-5 flex items-center justify-center text-green-600 border border-green-600 rounded-lg text-sm font-semibold hover:bg-green-50 gap-2">
-                                            <span>See More </span>
-                                            <img src="/images/right.svg" width="20" alt="">
-                                        </a>
-                                    </div>
+            <div id="explore_time" class="py-2 px-1 w-fit shadow text-sm rounded font-semibold m-auto">
+                Is it a good day to explore .....
+            </div>
+
+            <!--Map-->
+            <div id="map" class="min-h-[200px] w-full rounded shadow">
+            </div>
+
+            <!-- quest cards -->
+            <div class="p-3">
+                <span class="font-bold text-xl">Quests</span>
+
+                <!-- Swiper Container -->
+                <div class="swiper mySwiper mt-2 w-full">
+                    <div class="swiper-wrapper flex items-center">
+                        <% quests.forEach((quest) => { %>
+                            <div class="swiper-slide">
+                                <%- include('../partials/questCard', { quest: quest, isResearcher: false }) %>
+                            </div>
+                        <% }) %>
+                        <div class="swiper-slide flex items-center justify-center">
+                            <a href="/quests"
+                                class="p-5 flex items-center justify-center text-green-600 border border-green-600 rounded-lg text-sm font-semibold hover:bg-green-50 gap-2">
+                                <span>See More </span>
+                                <img src="/images/right.svg" width="20" alt="">
+                            </a>
                         </div>
                     </div>
                 </div>
             </div>
-            <%- include("../partials/explorer-footer") %>
         </div>
-        <!-- SwiperJS JS -->
-        <script src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js"></script>
+        <%- include("../partials/explorer-footer") %>
+    </div>
 
-        <script src="/js/camera.js"></script>
-        <script src="/js/weather.js"></script>
-        <script src="/js/map.js"></script>
-        <script src="/js/swiper.js"></script>
-        <script src="/js/menu.js"></script>
+    <script>
+        const quests = <%- JSON.stringify(quests) %>;
+    </script>
+    <!-- SwiperJS JS -->
+    <script src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js"></script>
+
+    <script src="/js/camera.js"></script>
+    <script src="/js/weather.js"></script>
+    <script src="/js/explorerMap.js"></script>
+    <script src="/js/swiper.js"></script>
+    <script src="/js/menu.js"></script>
+</body>
 </html>
