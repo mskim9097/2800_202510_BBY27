@@ -103,5 +103,10 @@ app.use('/species', authenticated, speciesRouter);
 
 // 404 handler
 app.use((req, res, next) => {
-  res.status(404).render('pages/404', { title: 'Page Not Found' });
+  res.status(404).render('pages/404', {
+    title: 'Page Not Found',
+    isAuthenticated: !!req.session.user,
+    userType: req.session.type,
+    name: req.session.name
+  });
 });
