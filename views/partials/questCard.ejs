@@ -5,9 +5,9 @@
     <h2 class="text-xs font-semibold text-gray-800 mb-1">
       <%= quest.questTitle %>
     </h2>
-    <p class="text-[11px] text-gray-600">📍 <%= quest.questLocation || 'Location not specified' %>
+    <p class="text-[11px] text-gray-600">⏰ <%= quest.questTimeOfDay || 'Time not specified' %>
     </p>
-    <p class="text-[11px] text-gray-700">🎯 <%= quest.questMission %>
+    <p class="text-[11px] text-gray-700">🦋 <%= quest.speciesName || 'Species not specified' %>
     </p>
     <% if (!isResearcher) { const difficulty = quest.difficulty?.toLowerCase() || 'medium'; %>
       <div class="text-gray-500 text-xs flex items-center gap-1">

@@ -227,22 +227,29 @@ const getResearcherDashboard = async (req, res) => {
   try {
     const userId = req.session.userId;
 
-    const quests = await Quest.find({ questCreatedBy: userId }).lean();
+    const quests = await Quest.find({ questCreatedBy: userId })
+      .populate('speciesId')
+      .lean();
 
     // Format the data for the frontend map script
     const mapQuests = quests.map(q => ({
+      _id: q._id,
       questTitle: q.questTitle,
       questMission: q.questMission,
-      questLocation: q.questLocation?.coordinates
-        ? `(${q.questLocation.coordinates[1]}, ${q.questLocation.coordinates[0]})`
-        : 'Unknown',
+      difficulty: q.questDifficulty,
+      questTimeOfDay: q.questTimeOfDay,
+      speciesName: q.speciesId?.speciesName || 'Unknown Species',
+      image: q.speciesId?.speciesImage || '/images/plant4.jpg',
       coordinates: {
         lat: q.questLocation?.coordinates[1],
         lng: q.questLocation?.coordinates[0]
       }
     }));
 
-    res.render('pages/researcherDashboard', { quests: mapQuests }); // ✅ Make sure your EJS uses "quests"
+    res.render('pages/researcherDashboard', { 
+      quests: mapQuests,
+      name: req.session.name 
+    });
   } catch (err) {
     console.error("Error fetching quests:", err);
     res.status(500).send("Internal Server Error");
@@ -368,18 +375,20 @@ const addImage = async (req, res, next) => {
 
 const getExplorerDashboard = async (req, res) => {
   try {
-    // Get all quests
-    const quests = await Quest.find().lean();
+    // Get all quests with species data
+    const quests = await Quest.find()
+      .populate('speciesId')
+      .lean();
 
     // Format the data for the frontend map script
     const mapQuests = quests.map(q => ({
       _id: q._id,
       questTitle: q.questTitle,
       questMission: q.questMission,
-      difficulty: q.difficulty,
-      questLocation: q.questLocation?.coordinates
-        ? `(${q.questLocation.coordinates[1]}, ${q.questLocation.coordinates[0]})`
-        : 'Unknown',
+      difficulty: q.questDifficulty,
+      questTimeOfDay: q.questTimeOfDay,
+      speciesName: q.speciesId?.speciesName || 'Unknown Species',
+      image: q.speciesId?.speciesImage || '/images/plant4.jpg',
       coordinates: {
         lat: q.questLocation?.coordinates[1],
         lng: q.questLocation?.coordinates[0]
