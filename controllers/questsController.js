@@ -115,7 +115,6 @@ const renderCreateQuestPage = async (req, res) => {
 
 
 const createQuest = async (req, res, next) => {
-<<<<<<< HEAD
     const speciesList = await Species.find({});
     var questTitle = req.body.title;
     var questMission = req.body.mission;
@@ -272,7 +271,6 @@ const getResearcherDashboard = async (req, res) => {
 // };
 
 module.exports = { createQuest, searchTarget, renderCreateQuestPage, getQuests, getResearcherDashboard }
-=======
   const questTitle = req.body.title;
   const questMission = req.body.mission;
   const { latitude } = req.body;
@@ -402,4 +400,3 @@ const addImage = async (req, res, next) => {
 };
 
 module.exports = { createQuest, searchTarget, selectQuestList, selectQuest, updateQuest, deleteQuest, updateSighting };
->>>>>>> 395379d78488e37492e2488aa66443e1708cdd7a

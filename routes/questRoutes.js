@@ -11,7 +11,6 @@ const upload = multer({
   limits: { fileSize: 10 * 1024 * 1024 },
 });
 
-<<<<<<< HEAD
 const { createQuest, searchTarget,renderCreateQuestPage,getQuests } = require('../controllers/questsController');
 const { isAuthorizedResearcher,authenticated } = require('../controllers/userController');
 
@@ -24,7 +23,6 @@ const { isAuthorizedResearcher,authenticated } = require('../controllers/userCon
 
 router.get('/',authenticated,getQuests);
 
-=======
 const {
   createQuest,
   searchTarget,
@@ -49,12 +47,10 @@ router.get('/', selectQuestList, (req, res, next) => {
     questList: res.locals.questList,
   });
 });
->>>>>>> 395379d78488e37492e2488aa66443e1708cdd7a
 router.get('/completeQuest', (req, res, next) => {
   res.redirect(researcherDashboard);
 });
 
-<<<<<<< HEAD
 // NEEDS QUEST PAGE
 router.get('/viewQuest', (req, res, next) => {
     res.redirect(researcherDashboard);
@@ -62,27 +58,12 @@ router.get('/viewQuest', (req, res, next) => {
 
 //Needs to be updated with actua
 router.get('/addQuest',authenticated, isAuthorizedResearcher,renderCreateQuestPage);
-=======
-router.get('/addQuest', authenticated, isAuthorizedResearcher, (req, res, next) => {
-    res.render('pages/addQuest');
-});
->>>>>>> 395379d78488e37492e2488aa66443e1708cdd7a
 
 router.get('/searchTarget', searchTarget);
 router.get('/:id', selectQuest);
 
-<<<<<<< HEAD
 router.post('/createQuest', isAuthorizedResearcher,createQuest, upload.single("speciesImage"),(req, res, next) => {
     res.redirect('/quests');
-=======
-// NEEDS QUEST PAGE
-router.get('/viewQuest', (req, res, next) => {
-  res.redirect(researcherDashboard);
-});
-// NEEDS QUEST LIST PAGE
-router.get('/questList', (req, res, next) => {
-  res.render('pages/questList');
->>>>>>> 395379d78488e37492e2488aa66443e1708cdd7a
 });
 
 router.post('/createQuest', isAuthorizedResearcher, upload.single('speciesImage'), createQuest);
