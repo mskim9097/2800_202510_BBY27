@@ -1,0 +1,53 @@
+<!--Taken from mdn web docs website, then added some changed-->
+<div id="pagination" class="flex gap-4 mt-6 justify-center items-center text-sm">
+
+    <!-- Previous Button -->
+    <form action="<%= baseUrl %>" method="get">
+        <input type="hidden" name="page" value="<%= currentPage - 1 %>">
+        <% if (filters) { %>
+            <% for (const key in filters) { %>
+                <% if (key !=='page' ) { %>
+                    <input type="hidden" name="<%= key %>" value="<%= filters[key] %>">
+                    <% } %>
+                        <% } %>
+                            <% } %>
+                                <% if (currentPage> 1) { %>
+                                    <button type="submit" class="px-4 py-2 bg-gray-200 rounded hover:bg-gray-300">
+                                        Previous
+                                    </button>
+                                    <% } else { %>
+                                        <button type="button" disabled
+                                            class="px-4 py-2 bg-gray-200 rounded hover:bg-gray-300 cursor-not-allowed">
+                                            Previous
+                                        </button>
+                                        <% } %>
+    </form>
+
+    <!-- Page Info -->
+    <span class="text-gray-700">
+        Page <%= currentPage %> of <%= totalPages %>
+    </span>
+
+    <!-- Next Button -->
+    <form action="<%= baseUrl %>" method="get">
+        <input type="hidden" name="page" value="<%= currentPage + 1 %>">
+        <% if (filters) { %>
+            <% for (const key in filters) { %>
+                <% if (key !=='page' ) { %>
+                    <input type="hidden" name="<%= key %>" value="<%= filters[key] %>">
+                    <% } %>
+                        <% } %>
+                            <% } %>
+                                <% if (currentPage < totalPages) { %>
+                                    <button type="submit" class="px-4 py-2 bg-gray-200 rounded hover:bg-gray-300">
+                                        Next 
+                                    </button>
+                                    <% } else { %>
+                                        <button type="button" disabled
+                                            class="px-4 py-2 bg-gray-200 rounded hover:bg-gray-300 cursor-not-allowed">
+                                            Next 
+                                        </button>
+                                        <% } %>
+    </form>
+
+</div>
