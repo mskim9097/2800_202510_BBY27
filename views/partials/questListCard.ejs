@@ -2,7 +2,7 @@
     <div id="speciesContainer" class="flex flex-col gap-4 pb-4">
         <% if (questList && questList.length> 0) { %>
             <% questList.forEach(quest=> { %>
-                <div
+                <a href="/quests/<%= quest._id %>"
                     class="w-full max-w-md rounded-xl shadow-md p-6 flex flex-col items-start mx-auto border border-green-600 relative bg-white">
                     <div
                         class="absolute -top-3 -left-3 bg-green-700 text-white rounded-full w-8 h-8 flex items-center justify-center text-xl shadow-md select-none">
@@ -45,7 +45,7 @@
                                         <%= quest.questCreatedBy?.firstName || 'Unknown' %>
                                     </p>
                                 </div>
-                </div>
+                </a>
                 <% }) %>
                     <% } else { %>
                         <p class="text-gray-500 text-center">No quests available.</p>
