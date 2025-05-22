@@ -4,6 +4,7 @@
   "description": "Team Name: BBY-27\r Team Members: \r - Rayen Ben Moussa\r - Minsu Kim\r - Tony Chen\r - Blair Tate \r - Jazib jeehan\r ## Overview",
   "main": "index.js",
   "scripts": {
+    "start": "nodemon index.js",
     "test": "echo \"Error: no test specified\" && exit 1",
     "lint": "eslint .",
     "lint:fix": "eslint . --fix",

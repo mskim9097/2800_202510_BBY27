@@ -1,7 +1,6 @@
 const axios = require('axios');
 
-const OPENROUTER_API_KEY =
-  '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';
+const OPENROUTER_API_KEY ="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";
 
 const showRiddleForm = (req, res) => {
   res.render('pages/riddle');

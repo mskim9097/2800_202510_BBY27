@@ -4,37 +4,107 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
+    <title>Riddle Results</title>
     <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Camera icon -->
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <style>
+        #content {
+            -ms-overflow-style: none;
+            scrollbar-width: none;
+            overflow-y: scroll;
+        }
 
+        #content::-webkit-scrollbar,body::-webkit-scrollbar {
+            display: none;
+        }
+    </style>
 </head>
 
-<body>
-    <h2>Your Score: <%= score %> / <%= total %>
-    </h2>
+<body class="h-screen overflow-y-auto">
+    <div style="background-color:rgb(242, 242, 242)"
+        class="flex flex-col p-4 justify-between h-full rounded-lg shadow-sm gap-5">
+        <div id="content" class="flex flex-col gap-4 overflow-y-auto">
+            <%- include("../partials/header") %>
 
-    <ul>
-        <% riddles.forEach(r=> { %>
-            <li>
-                <strong>Q:</strong>
-                <%= r.question %><br>
-                    <strong>Your answer:</strong>
-                    <%= r.userAnswer %>
-                        <%= r.correct ? "✅" : "❌" %><br>
-                            <% if (!r.correct) { %>
-                                <strong>Correct answer:</strong>
-                                <%= r.correctAnswer %>
-                                    <% } %>
-            </li>
-            <% }) %>
-    </ul>
+            <div class="flex items-center gap-5 mt-4">
+                <img class="w-10 h-10" src="/images/photo.svg" alt="Profile Icon">
+                <div>
+                    <span class="text-xl">Hello,</span> <span class="font-bold text-xl">
+                        <%= name %>
+                    </span>
+                </div>
+            </div>
 
+            <!-- Results Container -->
+            <div class="max-w-3xl mx-auto bg-white p-6 rounded-xl shadow-md">
+                <div class="text-center mb-8">
+                    <h2 class="text-3xl font-bold mb-2">🎯 Your Score: <%= score %> / <%= total %></h2>
+                    <% const percentage = (score/total) * 100; %>
+                    <% let message = ""; %>
+                    <% if (percentage === 100) { %>
+                        <% message = "Perfect Score! You're a Biodiversity Master! 🏆"; %>
+                    <% } else if (percentage >= 80) { %>
+                        <% message = "Great job! You're a Natural! 🌟"; %>
+                    <% } else if (percentage >= 60) { %>
+                        <% message = "Well done! Keep learning! 📚"; %>
+                    <% } else { %>
+                        <% message = "Keep practicing! You'll get better! 💪"; %>
+                    <% } %>
+                    <p class="text-lg text-gray-600"><%= message %></p>
+                </div>
 
-    <h3>Bonus Nature Joke 🐸:</h3>
-    <p>
-        <%= joke %>
-    </p>
+                <!-- Riddle Review -->
+                <div class="space-y-6 mb-8">
+                    <% riddles.forEach((r, index) => { %>
+                        <div class="border-b pb-6 last:border-b-0">
+                            <div class="flex items-start gap-3">
+                                <span class="bg-gray-100 rounded-full w-8 h-8 flex items-center justify-center font-semibold text-gray-700">
+                                    <%= index + 1 %>
+                                </span>
+                                <div class="flex-1">
+                                    <p class="font-semibold text-lg mb-2"><%= r.question %></p>
+                                    <div class="pl-4 space-y-2">
+                                        <p class="flex items-center gap-2">
+                                            <span class="font-medium">Your answer:</span>
+                                            <span class="<%= r.correct ? 'text-green-600' : 'text-red-600' %>">
+                                                <%= r.userAnswer %> <%= r.correct ? "✅" : "❌" %>
+                                            </span>
+                                        </p>
+                                        <% if (!r.correct) { %>
+                                            <p class="flex items-center gap-2 text-green-600">
+                                                <span class="font-medium">Correct answer:</span>
+                                                <%= r.correctAnswer %>
+                                            </p>
+                                        <% } %>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    <% }) %>
+                </div>
 
+                <!-- Joke Section -->
+                <div class="bg-green-50 p-4 rounded-lg mb-8">
+                    <h3 class="font-semibold text-lg mb-2">🐸 Bonus Nature Joke:</h3>
+                    <p class="text-gray-700 italic">"<%= joke %>"</p>
+                </div>
+
+                <!-- Action Buttons -->
+                <div class="flex justify-center gap-4">
+                    <a href="/ai/riddleForm" 
+                        class="bg-green-600 text-white px-6 py-3 rounded-lg hover:bg-green-700 transition font-semibold flex items-center gap-2">
+                        🎲 Try New Riddles
+                    </a>
+                </div>
+            </div>
+        </div>
+        
+        <%- include("../partials/explorer-footer") %>
+    </div>
+
+    <script src="/js/menu.js"></script>
+    <script src="/js/camera.js"></script>
 </body>
 
 </html>
