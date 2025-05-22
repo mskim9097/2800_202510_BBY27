@@ -1,22 +1,30 @@
 const express = require('express');
+
 const router = express.Router();
 
-const { authenticated, destroySession, authenticateUser, signUp, checkAuthorization, isAuthorizedResearcher } = require('../controllers/userController');
+const {
+  authenticated,
+  destroySession,
+  authenticateUser,
+  signUp,
+  checkAuthorization,
+  isAuthorizedResearcher,
+} = require('../controllers/userController');
 
 router.get('/', (req, res) => {
-  res.render('pages/landing'); 
+  res.render('pages/landing');
 });
 
 router.get('/signup', (req, res) => {
-  res.render('pages/signup'); 
+  res.render('pages/signup');
 });
 
-router.post('/createUser',signUp, async (req, res) => {
-  res.redirect("/login");
+router.post('/createUser', signUp, async (req, res) => {
+  res.redirect('/login');
 });
 
 router.get('/login', (req, res) => {
-  res.render('pages/login'); 
+  res.render('pages/login');
 });
 
 router.post('/login', authenticateUser, (req, res) => {
@@ -28,7 +36,13 @@ router.get('/logout', destroySession, (req, res) => {
 });
 
 router.get('/invalid', (req, res) => {
-  res.render('pages/login', { error: 'Invalid email or password. Please try again.' });
+  res.render('pages/login', {
+    error: 'Invalid email or password. Please try again.',
+  });
+});
+
+router.get('/about', (req, res) => {
+  res.render('pages/about');
 });
 
 module.exports = router;

@@ -6,29 +6,29 @@ const userSchema = new mongoose.Schema({
     type: String,
     required: true,
     trim: true,
-    maxlength: 20
+    maxlength: 20,
   },
   lastName: {
     type: String,
     required: true,
-    trim:true,
-    maxlength: 20
+    trim: true,
+    maxlength: 20,
   },
   email: {
     type: String,
     required: true,
     unique: true,
-    maxlength: 30
+    maxlength: 30,
   },
   password: {
     type: String,
-    required: true
+    required: true,
   },
   type: {
     type: String,
-    enum: ['researcher', 'explorer'], 
-    required: true
-  }
+    enum: ['researcher', 'explorer'],
+    required: true,
+  },
 });
 
 module.exports = mongoose.model('User', userSchema);

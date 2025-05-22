@@ -1,0 +1,106 @@
+body {
+    font-family: Arial, sans-serif;
+    margin: 20px;
+    background-color: #f4f4f4;
+    color: #333;
+}
+
+h1 {
+    color: #2c3e50;
+    text-align: center;
+}
+img.species-image {
+    max-width: 90%;
+    height: auto;
+    border-radius: 5px;
+    display: block;
+    margin-left: auto;
+    margin-right: auto;
+}
+.species-info p {
+    line-height: 1.6;
+}
+.species-info strong {
+    color: #555;
+}
+.back-link {
+    display: inline-block;
+    margin-top: 20px;
+    padding: 10px 15px;
+    background-color: #3498db;
+    color: white;
+    text-decoration: none;
+    border-radius: 5px;
+}
+.back-link:hover {
+    background-color: #2980b9;
+}
+.species-title {
+    border: none;
+    background-color: transparent;
+    font-size: 2em;
+    font-weight: bold;
+    text-align: center;
+    color: #2c3e50;
+    width: 100%;
+    padding: 0;
+    margin: 0;
+    font-family: inherit;
+}
+
+.species-title:disabled {
+    color: #2c3e50;
+    cursor: default;
+}
+
+.species-view {
+    border: none;
+    background-color: transparent;
+    font-size: 1rem;
+    font-weight: normal;
+    color: inherit;
+    width: 100%;
+    resize: none;
+    padding: 0;
+    margin: 0;
+    font-family: inherit;
+}
+
+.species-view:disabled {
+    color: #333;
+    cursor: default;
+}
+
+.field-wrapper {
+    display: flex;
+    align-items: center;
+    margin-bottom: 10px;
+}
+
+.field-wrapper p {
+    margin-right: 5px;
+    white-space: nowrap;
+}
+
+.field-wrapper input[type="text"],
+.field-wrapper textarea {
+    flex-grow: 1;
+    margin-right: 5px;
+}
+
+.field-wrapper .edit-indicator {
+    margin-left: auto;
+}
+
+.editable-field-background {
+    background-color: #ffffe0 !important;
+    border: 1px solid lightgray;
+}
+
+.species-title.editable-field-background {
+    background-color: #ffffe0 !important;
+}
+
+.species-view.editable-field-background {
+    background-color: #ffffe0 !important;
+}

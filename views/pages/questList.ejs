@@ -30,12 +30,51 @@
 
 <body class="bg-gray-100 p-4 flex flex-col gap-4 h-screen overflow-hidden text-sm">
     <%- include('../partials/header') %>
+<<<<<<< HEAD
         <% if (successMessage) { %>
             <div id="success-message"
                 class="flex items-center gap-2 p-4 mb-4 text-sm text-green-800 bg-green-100 rounded-lg border border-green-200 font-semibold">
                 ✅ <span>
                     <%= successMessage %>
                 </span>
+=======
+
+        <!-- Search Field -->
+        <div
+            class="flex  max-w-xl bg-white border border-gray-300 rounded-full shadow-sm px-4 py-2 items-center gap-2">
+            <span class="text-gray-500 text-lg">🔍</span>
+            <input id="searchInput" type="text" placeholder="Search Quests..."
+                class="flex-grow focus:outline-none text-sm text-gray-800 placeholder-gray-400 bg-transparent">
+        </div>
+        <div id="filterContainer">
+            <select id="difficultyFilter"
+            class="border border-gray-300 rounded-full text-sm px-3 py-2 bg-white shadow-sm focus:outline-none mt-2">
+                <option value="">Difficulty</option>
+                <option value="easy">🟢 Easy</option>
+                <option value="medium">🟡 Medium</option>
+                <option value="hard">🔴 Hard</option>
+            </select>
+            <select id="timeFilter"
+            class="border border-gray-300 rounded-full text-sm px-3 py-2 bg-white shadow-sm focus:outline-none mt-2">
+                <option value="">Time of Day</option>
+                <option value="morning">🌅 Morning</option>
+                <option value="afternoon">🌤️ Afternoon </option>
+                <option value="evening">🌇 Evening</option>
+                <option value="night">🌙 Night</option>
+            </select>
+            <select id="statusFilter"
+            class="border border-gray-300 rounded-full text-sm px-3 py-2 bg-white shadow-sm focus:outline-none mt-2">
+                <option value="">Status</option>
+                <option value="completed">✅ Completed</option>
+                <option value="notAccepted">❌ Not Accepted</option>
+            </select>
+        </div>
+
+        <!-- Quest Cards Section (Horizontal Scroll) -->
+        <div class="mt-4 max-w-6xl mx-auto w-full relative">
+            <div id="speciesContainer" class="flex gap-4 overflow-x-auto pb-4 scroll-smooth"
+                style="scrollbar-width: none;">
+>>>>>>> 395379d78488e37492e2488aa66443e1708cdd7a
             </div>
             <% } %>
 
@@ -70,7 +109,13 @@
                             <% } %>
                                 <!--quest cards-->
 
+<<<<<<< HEAD
                             <%- include('../partials/questListCard') %>
+=======
+        <script>
+            const questData = JSON.parse(`<%- JSON.stringify(questList || null) %>`);
+        </script>
+>>>>>>> 395379d78488e37492e2488aa66443e1708cdd7a
 
                 </div>
                 <!-- Footer by userType -->

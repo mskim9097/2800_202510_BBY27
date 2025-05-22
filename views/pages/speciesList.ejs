@@ -83,7 +83,11 @@
                     </div>
 
             </div>
-            <%- include("../partials/researcher-footer") %>
+            <% if (userType==='researcher' ) { %>
+                <%- include("../partials/researcher-footer") %>
+            <% } else if (userType==='explorer' ) { %>
+                <%- include("../partials/explorer-footer") %>
+            <% } %>
     </div>
     <script src="js/paginationSpecies.js"> </script>
 
