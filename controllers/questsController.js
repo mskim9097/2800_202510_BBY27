@@ -1,5 +1,8 @@
 require('dotenv').config();
-const Quest = require('../models/questModel');
+const express = require('express');
+const Joi = require("joi");
+const Quest = require("../models/questModel");
+const Species = require('../models/specieModel');
 
 const appClient = require('../databaseConnection').database;
 
@@ -46,13 +49,19 @@ const selectQuest = async (req, res) => {
     const quest = await Quest.findById(questId);
 
     if (!quest) {
-      return res.status(404).send('Species not found');
+      return res.status(404).send("Quest not found");
     }
 
-    res.render('pages/quest', { quest });
+    const species = await Species.findById(quest.speciesId);
+
+    if (!species) {
+      return res.status(404).send("Species not found");
+    }
+
+    res.render("pages/quest", { quest, species });
   } catch (error) {
-    console.error('Error fetching species:', error);
-    res.status(500).send('Error retrieving species details');
+    console.error("Error fetching quest or species:", error);
+    res.status(500).send("Error retrieving quest details");
   }
 };
 
