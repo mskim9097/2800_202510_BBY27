@@ -41,6 +41,9 @@ async function createCard(quest) {
   return card;
 }
 
+// AI generated to integrate scrolling and search/filter
+// (But search/filter is my own. just for integratation).
+
 // render function for next scrolling
 async function renderNextBatch() {
   const end = Math.min(currentIndex + batchSize, questData.length);
@@ -106,6 +109,7 @@ function filterQuest() {
   renderFilteredResults(filtered);
 }
 
+// AI generated.
 // function to give some delay when searching and filtering
 function debounceFilterQuest() {
   clearTimeout(debounceTimer);
