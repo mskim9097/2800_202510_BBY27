@@ -93,7 +93,7 @@ const createQuest = async (req, res, next) => {
     questImage: '',
   });
   await newQuest.save();
-  next();
+  res.redirect(`/quests/${newQuest._id}`);
 };
 
 module.exports = { createQuest, searchTarget, selectQuestList, selectQuest };

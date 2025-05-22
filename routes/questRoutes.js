@@ -30,6 +30,11 @@ router.get('/completeQuest', (req, res, next) => {
   res.redirect(researcherDashboard);
 });
 
+router.get('/addQuest', authenticated, isAuthorizedResearcher, (req, res, next) => {
+    res.render('pages/addQuest');
+});
+
+router.get('/searchTarget', searchTarget);
 router.get('/:id', selectQuest);
 
 // NEEDS QUEST PAGE
@@ -41,27 +46,7 @@ router.get('/questList', (req, res, next) => {
   res.render('pages/questList');
 });
 
-// Needs to be updated with actua
-router.get(
-  '/addQuest',
-  authenticated,
-  isAuthorizedResearcher,
-  (req, res, next) => {
-    res.render(addQuest);
-  }
-);
-
-router.get('/searchTarget', searchTarget);
-
-router.post(
-  '/createQuest',
-  isAuthorizedResearcher,
-  upload.single('speciesImage'),
-  createQuest,
-  (req, res, next) => {
-    res.redirect(researcherDashboard);
-  }
-);
+router.post('/createQuest', isAuthorizedResearcher, upload.single('speciesImage'), createQuest);
 
 //! !!! NEEDS MIDDLEWARE FOR UPDATING QUESTS !!!!!
 router.get('/updateQuest', isAuthorizedResearcher, (req, res, next) => {
