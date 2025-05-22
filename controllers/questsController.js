@@ -19,6 +19,23 @@ const searchTarget = async (req, res) => {
     res.json(results);
 };
 
+// select specific quest
+const selectQuest = async (req, res) => {
+    try {
+        const questId = req.params.id;
+        const quest = await Quest.findById(questId);
+
+        if (!quest) {
+            return res.status(404).send("Species not found");
+        }
+
+        res.render("pages/quest", { quest });
+    } catch (error) {
+        console.error("Error fetching species:", error);
+        res.status(500).send("Error retrieving species details");
+    }
+};
+
 // createQuest function that saves quest document in mongoDB.
 const createQuest = async (req, res, next) => {
     var questTitle = req.body.title;
@@ -71,4 +88,4 @@ const selectQuestList = async (req, res, next) => {
     }
 };
 
-module.exports = { createQuest, searchTarget, selectQuestList }
+module.exports = { createQuest, searchTarget, selectQuestList, selectQuest }
