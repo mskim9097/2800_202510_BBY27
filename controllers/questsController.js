@@ -7,6 +7,7 @@ const Species = require('../models/specieModel');
 const appClient = require('../databaseConnection').database;
 
 const speciesCollection = appClient.db('biodiversityGo').collection('species');
+const questCollection = appClient.db('biodiversityGo').collection('quests');
 const { ObjectId } = require('mongodb');
 
 // searchTarget function to search spicies that match input from mongoDB
@@ -96,4 +97,34 @@ const createQuest = async (req, res, next) => {
   res.redirect(`/quests/${newQuest._id}`);
 };
 
-module.exports = { createQuest, searchTarget, selectQuestList, selectQuest };
+const updateQuest = async (req, res, next) => {
+  console.log(req.body);
+  const questId = req.params.id;
+  const {
+    questTitle,
+    longitude,
+    latitude,
+    questTimeOfDay,
+    questDifficulty,
+    questMission,
+  } = req.body;
+
+  const updateFields = {
+    questTitle,
+    questMission,
+    questTimeOfDay,
+    questDifficulty,
+    questLocation: {
+      type: 'Point',
+      coordinates: [parseFloat(longitude), parseFloat(latitude)]
+    }
+  };
+
+  await questCollection.updateOne(
+    { _id: new ObjectId(questId) },
+    { $set: updateFields }
+  );
+  next();
+};
+
+module.exports = { createQuest, searchTarget, selectQuestList, selectQuest, updateQuest };

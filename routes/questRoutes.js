@@ -11,6 +11,7 @@ const {
   searchTarget,
   selectQuestList,
   selectQuest,
+  updateQuest,
 } = require('../controllers/questsController');
 const {
   isAuthorizedResearcher,
@@ -47,6 +48,15 @@ router.get('/questList', (req, res, next) => {
 });
 
 router.post('/createQuest', isAuthorizedResearcher, upload.single('speciesImage'), createQuest);
+
+router.post(
+  '/updateQuest/:id',
+  isAuthorizedResearcher,
+  updateQuest,
+  (req, res) => {
+    res.redirect(`/quests/${req.params.id}`);
+  }
+);
 
 //! !!! NEEDS MIDDLEWARE FOR UPDATING QUESTS !!!!!
 router.get('/updateQuest', isAuthorizedResearcher, (req, res, next) => {
