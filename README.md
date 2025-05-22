@@ -298,7 +298,10 @@ Put what code snippets were used, and from where. this is to ensure we meet acad
 - **Images and Icons**
   I Naturalist was to get images and scientific name/common name to populate a bunch of species in our database for showcasing.
   - https://www.inaturalist.org/
-  - 
+  - plant2.jpg -> https://unsplash.com/photos/purple-succulent-plants-gSQbip5HHuc 
+  - plant1.jpg -> https://soltech.com/en-ca/blogs/blog/turn-your-succulents-into-delicious-meals 
+  - All icons and symbols were taken from Google icons -> https://fonts.google.com/icons 
+
 ---
 
 ## Limitations and Future Work
@@ -313,6 +316,8 @@ what the app can not do, or would like to have it do.
 - Would ideally have it so that researchers actually have to submit an application to be approved by our team, so as to avoid just anyone from adding to our database.
 - Would like to have it so that researchers can eventually extract data from their quests in the form of a csv file. Currently they are not able to view the results of their quests.
 - Ability of the explorer to be able to save data that they have collected, close the app, and then come back and complete it at a later date.
+- Currently the app only supports a quest being completed by one Explorer. It should eventually be able to take multiple sightings and be marked completed once the researcher decides it is done.
+- Completing quests only allows uploading one image, but eventually it should accept more than one image.
 
 ---
 
