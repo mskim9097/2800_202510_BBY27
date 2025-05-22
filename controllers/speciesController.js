@@ -31,7 +31,7 @@ const uploadImageToCloudinary = (buffer) => {
 
 const getSpecies = async (req, res, next) => {
     try {
-        const speciesList = await Species.find();
+        const speciesList = await Species.find().sort({ speciesName: 1 });
         res.locals.speciesList = speciesList;
         next();
     } catch (err) {
