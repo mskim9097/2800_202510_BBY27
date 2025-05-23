@@ -1,12 +1,14 @@
 document.addEventListener('DOMContentLoaded', function () {
   if (!mapboxgl || !document.getElementById('map')) return;
 
-  mapboxgl.accessToken = 'pk.eyJ1IjoidG9ueXhjaGVuIiwiYSI6ImNtOGdjMGYydTBsdjcyaW9pa2xqNWw3ODUifQ.zNywMAWcRkug0iD3Aej6hw';
+  mapboxgl.accessToken =
+    'pk.eyJ1IjoidG9ueXhjaGVuIiwiYSI6ImNtOGdjMGYydTBsdjcyaW9pa2xqNWw3ODUifQ.zNywMAWcRkug0iD3Aej6hw';
 
   const defaultCoords = [-123.1207, 49.2827];
-  const mapCenter = (typeof questCoordinates !== 'undefined' && Array.isArray(questCoordinates))
-    ? questCoordinates
-    : defaultCoords;
+  const mapCenter =
+    typeof questCoordinates !== 'undefined' && Array.isArray(questCoordinates)
+      ? questCoordinates
+      : defaultCoords;
 
   const originalCoordinates = [...mapCenter];
 
@@ -14,7 +16,7 @@ document.addEventListener('DOMContentLoaded', function () {
     container: 'map',
     style: 'mapbox://styles/mapbox/streets-v12',
     center: mapCenter,
-    zoom: 13
+    zoom: 13,
   });
 
   let marker = new mapboxgl.Marker({ color: 'green' })

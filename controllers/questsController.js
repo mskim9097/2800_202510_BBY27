@@ -1,8 +1,8 @@
 require('dotenv').config();
 const express = require('express');
-const Joi = require("joi");
-const Quest = require("../models/questModel");
-const Species = require("../models/specieModel");
+const Joi = require('joi');
+const Quest = require('../models/questModel');
+const Species = require('../models/specieModel');
 const cloudinary = require('cloudinary').v2;
 
 const appClient = require('../databaseConnection').database;
@@ -68,13 +68,13 @@ const selectQuestList = async (req, res) => {
     res.render('pages/questList', {
       questList,
       userType: req.session.type,
-      error: null
+      error: null,
     });
   } catch (err) {
     res.render('pages/questList', {
       questList: [],
       userType: req.session.type,
-      error: 'Unable to retrieve the quest list. Please try again later.'
+      error: 'Unable to retrieve the quest list. Please try again later.',
     });
   }
 };
@@ -84,7 +84,7 @@ const selectQuest = async (req, res) => {
   try {
     const questId = req.params.id;
     const quest = await Quest.findById(questId);
-    const userId = req.session.userId;
+    const { userId } = req.session;
 
     if (!quest) {
       return res.render('pages/quest', {
@@ -93,7 +93,7 @@ const selectQuest = async (req, res) => {
         userId,
         userType: req.session?.type,
         name: req.session?.name,
-        error: 'The quest you are looking for could not be found.'
+        error: 'The quest you are looking for could not be found.',
       });
     }
 
@@ -105,7 +105,7 @@ const selectQuest = async (req, res) => {
         userId,
         userType: req.session?.type,
         name: req.session?.name,
-        error: 'The species associated with this quest could not be found.'
+        error: 'The species associated with this quest could not be found.',
       });
     }
 
@@ -115,7 +115,7 @@ const selectQuest = async (req, res) => {
       userId,
       userType: req.session?.type,
       name: req.session?.name,
-      error: null
+      error: null,
     });
   } catch (error) {
     res.render('pages/quest', {
@@ -124,7 +124,7 @@ const selectQuest = async (req, res) => {
       userId: req.session.userId,
       userType: req.session?.type,
       name: req.session?.name,
-      error: 'Unable to retrieve the quest details. Please try again later.'
+      error: 'Unable to retrieve the quest details. Please try again later.',
     });
   }
 };
@@ -136,14 +136,14 @@ const renderCreateQuestPage = async (req, res) => {
       speciesList,
       userType: req.session?.type,
       name: req.session?.name,
-      error: null
+      error: null,
     });
   } catch (err) {
     res.render('pages/addQuest', {
       speciesList: [],
       userType: req.session?.type,
       name: req.session?.name,
-      error: 'Unable to load the species list. Please try again later.'
+      error: 'Unable to load the species list. Please try again later.',
     });
   }
 };
@@ -158,16 +158,22 @@ const createQuest = async (req, res) => {
       longitude,
       target,
       timeOfDay: questTimeOfDay,
-      difficulty: questDifficulty
+      difficulty: questDifficulty,
     } = req.body;
 
     // Validation checks
-    if (!questTitle || !questMission || !target || !questTimeOfDay || !questDifficulty) {
+    if (
+      !questTitle ||
+      !questMission ||
+      !target ||
+      !questTimeOfDay ||
+      !questDifficulty
+    ) {
       return res.render('pages/addQuest', {
         speciesList,
         userType: req.session?.type,
         name: req.session?.name,
-        error: 'Please fill in all required fields.'
+        error: 'Please fill in all required fields.',
       });
     }
 
@@ -179,7 +185,7 @@ const createQuest = async (req, res) => {
         speciesList,
         userType: req.session?.type,
         name: req.session?.name,
-        error: 'Please select a valid location on the map.'
+        error: 'Please select a valid location on the map.',
       });
     }
 
@@ -189,17 +195,17 @@ const createQuest = async (req, res) => {
         speciesList,
         userType: req.session?.type,
         name: req.session?.name,
-        error: 'Please select a valid species from the list.'
+        error: 'Please select a valid species from the list.',
       });
     }
 
-    const userId = req.session.userId;
+    const { userId } = req.session;
     const newQuest = new Quest({
       questTitle,
       questMission,
       questLocation: {
         type: 'Point',
-        coordinates: [lng, lat]
+        coordinates: [lng, lat],
       },
       speciesId: species._id,
       questTimeOfDay,
@@ -207,7 +213,7 @@ const createQuest = async (req, res) => {
       questCreatedBy: userId,
       questAcceptedBy: [],
       questFieldNote: '',
-      questImage: ''
+      questImage: '',
     });
 
     await newQuest.save();
@@ -218,7 +224,7 @@ const createQuest = async (req, res) => {
       speciesList,
       userType: req.session?.type,
       name: req.session?.name,
-      error: 'Failed to create the quest. Please try again later.'
+      error: 'Failed to create the quest. Please try again later.',
     });
   }
 };
@@ -243,7 +249,8 @@ const getQuests = async (req, res) => {
     }
     if (creator && req.session) {
       if (creator === 'me') filters.questCreatedBy = req.session.userId;
-      else if (creator === 'others') filters.questCreatedBy = { $ne: req.session.userId };
+      else if (creator === 'others')
+        filters.questCreatedBy = { $ne: req.session.userId };
     }
 
     const skip = (parseInt(page) - 1) * parseInt(limit);
@@ -258,7 +265,7 @@ const getQuests = async (req, res) => {
         .lean(),
       Quest.countDocuments(filters),
     ]);
-    const successMessage = req.session.successMessage;
+    const { successMessage } = req.session;
     delete req.session.successMessage;
     res.render('pages/questList', {
       questList: quests,
@@ -267,12 +274,12 @@ const getQuests = async (req, res) => {
       userType: req.session?.type || 'guest',
       userId: req.session.userId || '',
       currentFilters: {
-        difficulty: difficulty || "",
-        time: time || "",
-        creator: creator || "",
-        search: search || ""
+        difficulty: difficulty || '',
+        time: time || '',
+        creator: creator || '',
+        search: search || '',
       },
-      successMessage
+      successMessage,
     });
   } catch (err) {
     console.error(err);
@@ -282,14 +289,14 @@ const getQuests = async (req, res) => {
 
 const getResearcherDashboard = async (req, res) => {
   try {
-    const userId = req.session.userId;
+    const { userId } = req.session;
 
     const quests = await Quest.find({ questCreatedBy: userId })
       .populate('speciesId')
       .lean();
 
     // Format the data for the frontend map script
-    const mapQuests = quests.map(q => ({
+    const mapQuests = quests.map((q) => ({
       _id: q._id,
       questTitle: q.questTitle,
       questMission: q.questMission,
@@ -299,17 +306,17 @@ const getResearcherDashboard = async (req, res) => {
       image: q.speciesId?.speciesImage || '/images/plant4.jpg',
       coordinates: {
         lat: q.questLocation?.coordinates[1],
-        lng: q.questLocation?.coordinates[0]
-      }
+        lng: q.questLocation?.coordinates[0],
+      },
     }));
 
-    res.render('pages/researcherDashboard', { 
+    res.render('pages/researcherDashboard', {
       quests: mapQuests,
-      name: req.session.name 
+      name: req.session.name,
     });
   } catch (err) {
-    console.error("Error fetching quests:", err);
-    res.status(500).send("Internal Server Error");
+    console.error('Error fetching quests:', err);
+    res.status(500).send('Internal Server Error');
   }
 };
 
@@ -332,8 +339,8 @@ const updateQuest = async (req, res, next) => {
     questDifficulty,
     questLocation: {
       type: 'Point',
-      coordinates: [parseFloat(longitude), parseFloat(latitude)]
-    }
+      coordinates: [parseFloat(longitude), parseFloat(latitude)],
+    },
   };
 
   await questCollection.updateOne(
@@ -357,12 +364,7 @@ const deleteQuest = async (req, res, next) => {
 const updateSighting = async (req, res, next) => {
   const questId = req.params.id;
   const { userId } = req.session;
-  const {
-    questFieldNote,
-    questImage,
-    latitude,
-    longitude
-  } = req.body;
+  const { questFieldNote, questImage, latitude, longitude } = req.body;
 
   const questImageUrl = await addImage(req, res, next);
 
@@ -370,19 +372,16 @@ const updateSighting = async (req, res, next) => {
     questFieldNote,
     questLocation: {
       type: 'Point',
-      coordinates: [parseFloat(longitude), parseFloat(latitude)]
+      coordinates: [parseFloat(longitude), parseFloat(latitude)],
     },
-    questAcceptedBy: userId
+    questAcceptedBy: userId,
   };
   if (questImageUrl) {
     updateFields.questImage = questImageUrl;
   }
   updateFields.updatedAt = new Date();
 
-  await Quest.updateOne(
-    { _id: questId },
-    { $set: updateFields }
-  );
+  await Quest.updateOne({ _id: questId }, { $set: updateFields });
   next();
 };
 
@@ -433,12 +432,10 @@ const addImage = async (req, res, next) => {
 const getExplorerDashboard = async (req, res) => {
   try {
     // Get all quests with species data
-    const quests = await Quest.find()
-      .populate('speciesId')
-      .lean();
+    const quests = await Quest.find().populate('speciesId').lean();
 
     // Format the data for the frontend map script
-    const mapQuests = quests.map(q => ({
+    const mapQuests = quests.map((q) => ({
       _id: q._id,
       questTitle: q.questTitle,
       questMission: q.questMission,
@@ -448,20 +445,30 @@ const getExplorerDashboard = async (req, res) => {
       image: q.speciesId?.speciesImage || '/images/plant4.jpg',
       coordinates: {
         lat: q.questLocation?.coordinates[1],
-        lng: q.questLocation?.coordinates[0]
-      }
+        lng: q.questLocation?.coordinates[0],
+      },
     }));
 
-    res.render('pages/explorerDashboard', { 
+    res.render('pages/explorerDashboard', {
       quests: mapQuests,
-      name: req.session.name 
+      name: req.session.name,
     });
   } catch (err) {
-    console.error("Error fetching quests:", err);
-    res.status(500).send("Internal Server Error");
+    console.error('Error fetching quests:', err);
+    res.status(500).send('Internal Server Error');
   }
 };
 
-module.exports = { createQuest, searchTarget, renderCreateQuestPage, getQuests, getResearcherDashboard, selectQuestList, selectQuest, updateQuest, deleteQuest, updateSighting, getExplorerDashboard }
-
-
+module.exports = {
+  createQuest,
+  searchTarget,
+  renderCreateQuestPage,
+  getQuests,
+  getResearcherDashboard,
+  selectQuestList,
+  selectQuest,
+  updateQuest,
+  deleteQuest,
+  updateSighting,
+  getExplorerDashboard,
+};
