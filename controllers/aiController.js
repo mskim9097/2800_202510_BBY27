@@ -1,5 +1,5 @@
 const axios = require('axios');
-const OPENROUTER_API_KEY = process.env.OPENROUTER_API_KEY;
+const OPENROUTER_API_KEY = "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";
 
 const showRiddleForm = (req, res) => {
   res.render('pages/riddle', {
