@@ -69,8 +69,7 @@ router.post(
   upload.single('speciesImage'),
   createSpecies,
   (req, res) => {
-    const { speciesName } = req;
-    res.redirect(`/species/${encodeURIComponent(speciesName)}`);
+    res.redirect(`/species/${req.newSpecies._id}`);
   }
 );
 
@@ -91,28 +90,28 @@ router.post('/:id', deleteSpecies, (req, res) => {
 });
 
 // Get a specific species by name
-router.get('/:speciesName', async (req, res) => {
-  try {
-    const { speciesName } = req.params;
-    // Decode the speciesName in case it has URL encoded characters (e.g., spaces as %20)
-    const decodedSpeciesName = decodeURIComponent(speciesName);
-    const species = await speciesCollection.findOne({
-      speciesName: decodedSpeciesName,
-    });
+// router.get('/:speciesName', async (req, res) => {
+//   try {
+//     const { speciesName } = req.params;
+//     // Decode the speciesName in case it has URL encoded characters (e.g., spaces as %20)
+//     const decodedSpeciesName = decodeURIComponent(speciesName);
+//     const species = await speciesCollection.findOne({
+//       speciesName: decodedSpeciesName,
+//     });
 
-    if (!species) {
-      return res.status(404).render('pages/404', { title: 'Not Found' }); // Assumes you have a 404.ejs page
-    }
-    res.render('pages/speciesPage', {
-      species,
-      title: species.speciesName,
-      userType: req.session.type,
-      name: req.session.name,
-    });
-  } catch (err) {
-    console.error('Error fetching species:', err);
-    res.status(500).send('Error fetching species details');
-  }
-});
+//     if (!species) {
+//       return res.status(404).render('pages/404', { title: 'Not Found' }); // Assumes you have a 404.ejs page
+//     }
+//     res.render('pages/speciesPage', {
+//       species,
+//       title: species.speciesName,
+//       userType: req.session.type,
+//       name: req.session.name,
+//     });
+//   } catch (err) {
+//     console.error('Error fetching species:', err);
+//     res.status(500).send('Error fetching species details');
+//   }
+// });
 
 module.exports = router;
