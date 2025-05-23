@@ -4,7 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>login</title>
+    <title>Login - BiodiversityGo</title>
     <script src="https://cdn.tailwindcss.com"></script>
 </head>
 
@@ -14,12 +14,25 @@
     <div class="bg-white/10 backdrop-blur-sm p-8 rounded-xl shadow-xl max-w-md w-full text-white">
         <h2 class="text-3xl font-bold mb-6 text-center">Log In to Your Account</h2>
 
+        <% if (typeof error !== 'undefined' && error) { %>
+            <div class="bg-red-100/20 backdrop-blur-sm border border-red-400 text-red-100 px-4 py-3 rounded relative mb-4" role="alert">
+                <span class="block sm:inline"><%= error %></span>
+            </div>
+        <% } %>
+
+        <% if (typeof success !== 'undefined' && success) { %>
+            <div class="bg-green-100/20 backdrop-blur-sm border border-green-400 text-green-100 px-4 py-3 rounded relative mb-4" role="alert">
+                <span class="block sm:inline"><%= success %></span>
+            </div>
+        <% } %>
+
         <form action="/login" method="POST" class="space-y-4">
             <div>
                 <label for="email" class="text-sm font-medium">Email</label>
                 <input type="email" name="email" id="email" required
                     class="w-full mt-1 p-2 rounded bg-white/20 focus:outline-none focus:ring-2 focus:ring-green-400 placeholder-white"
-                    placeholder="you@example.com">
+                    placeholder="you@example.com"
+                    value="<%= locals.email ? email : '' %>">
             </div>
 
             <div>
@@ -30,8 +43,9 @@
             </div>
 
             <button type="submit"
-                class="w-full bg-green-600 hover:bg-green-700 text-white font-semibold py-2 rounded transition duration-300 ease-in-out">Log
-                In</button>
+                class="w-full bg-green-600 hover:bg-green-700 text-white font-semibold py-2 rounded transition duration-300 ease-in-out">
+                Log In
+            </button>
         </form>
 
         <p class="mt-4 text-sm text-center">
@@ -40,4 +54,25 @@
         </p>
     </div>
 
+    <script>
+        // Get success message from URL query parameter
+        const urlParams = new URLSearchParams(window.location.search);
+        const successMsg = urlParams.get('success');
+        
+        if (successMsg) {
+            // Create success message element
+            const successDiv = document.createElement('div');
+            successDiv.className = 'bg-green-100/20 backdrop-blur-sm border border-green-400 text-green-100 px-4 py-3 rounded relative mb-4';
+            successDiv.innerHTML = `<span class="block sm:inline">${successMsg}</span>`;
+            
+            // Insert after heading
+            const heading = document.querySelector('h2');
+            heading.parentNode.insertBefore(successDiv, heading.nextSibling);
+            
+            // Remove success parameter from URL without refreshing
+            window.history.replaceState({}, document.title, window.location.pathname);
+        }
+    </script>
 </body>
+
+</html>

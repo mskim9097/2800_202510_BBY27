@@ -1,30 +1,45 @@
 const express = require('express');
+
 const router = express.Router();
 
-const { authenticated, destroySession, authenticateUser, signUp, checkAuthorization, isAuthorizedResearcher } = require('../controllers/userController');
+const {
+  authenticated,
+  destroySession,
+  authenticateUser,
+  signUp,
+  checkAuthorization,
+  isAuthorizedResearcher,
+} = require('../controllers/userController');
 
 router.get('/', (req, res) => {
-  res.render('pages/landing'); 
+  res.render('pages/landing');
 });
 
 router.get('/signup', (req, res) => {
-  res.render('pages/signup'); 
+  res.render('pages/signup', { error: null, formData: {} });
 });
 
-router.post('/createUser',signUp, async (req, res) => {
-  res.redirect("/login");
-});
+router.post('/createUser', signUp);
 
 router.get('/login', (req, res) => {
-  res.render('pages/login'); 
+  const { success } = req.query;
+  res.render('pages/login', { error: null, success });
 });
 
-router.post('/login', authenticateUser, (req, res) => {
-  res.redirect('/user');
+router.post('/login', authenticateUser);
+
+router.get('/logout', destroySession);
+
+router.get('/user', checkAuthorization);
+
+router.get('/invalid', (req, res) => {
+  res.render('pages/login', {
+    error: 'Invalid email or password. Please try again.',
+  });
 });
 
-router.get('/logout', destroySession, (req, res) => {
-  res.redirect('/');
+router.get('/about', (req, res) => {
+  res.render('pages/about');
 });
 
 module.exports = router;

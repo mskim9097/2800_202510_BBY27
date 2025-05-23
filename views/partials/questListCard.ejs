@@ -1,0 +1,56 @@
+<div class="mt-6 max-w-6xl mx-auto w-full px-4">
+    <div id="speciesContainer" class="flex flex-col gap-4 pb-4">
+        <% if (questList && questList.length> 0) { %>
+            <% questList.forEach(quest=> { %>
+                <a href="/quests/<%= quest._id %>"
+                    class="w-full max-w-md rounded-xl shadow-md p-6 flex flex-col items-start mx-auto border border-green-600 relative bg-white">
+                    <div
+                        class="absolute -top-3 -left-3 bg-green-700 text-white rounded-full w-8 h-8 flex items-center justify-center text-xl shadow-md select-none">
+                        📌
+                    </div>
+                    <% if (quest.speciesId.speciesImage && quest.speciesId.speciesImage.length> 0) { %>
+                        <img src="<%= quest.speciesId.speciesImage[0] %>" alt="<%= quest.speciesId.speciesName %>"
+                            class="w-full h-48 object-cover rounded-lg mb-4" />
+                        <% } else { %>
+                            <div
+                                class="w-full h-48 bg-gray-200 flex items-center justify-center rounded-lg mb-4 text-gray-500">
+                                No Image
+                            </div>
+                            <% } %>
+
+                                <div class="mb-3 w-full">
+                                    <h2 class="text-xl font-semibold text-left text-green-900">
+                                        🎯 <%= quest.questTitle %>
+                                    </h2>
+                                </div>
+
+                                <div class="mb-3 w-full">
+                                    <p class="text-gray-600 leading-relaxed line-clamp-2">
+                                        <strong>📝 Mission:</strong>
+                                        <%= quest.questMission %>
+                                    </p>
+                                </div>
+
+                                <div class="text-sm text-gray-600 leading-relaxed w-full space-y-1">
+                                    <p>🐾 <strong>Species:</strong>
+                                        <%= quest.speciesId.speciesName %>
+                                    </p>
+                                    <p>☀️ <strong>Time of Day:</strong>
+                                        <%= quest.questTimeOfDay %>
+                                    </p>
+                                    <p>🎯 <strong>Difficulty:</strong>
+                                        <%= quest.questDifficulty %>
+                                    </p>
+                                    <p>🧑‍🔬 <strong>Created By:</strong>
+                                        <%= quest.questCreatedBy?.firstName || 'Unknown' %>
+                                    </p>
+                                </div>
+                </a>
+                <% }) %>
+                    <% } else { %>
+                        <p class="text-gray-500 text-center">No quests available.</p>
+                        <% } %>
+    </div>
+    <%- include('../partials/paginationQuest', { currentPage, totalPages, baseUrl: '/quests' , filters: { search: typeof
+        search !=='undefined' ? search : '' , difficulty: typeof difficulty !=='undefined' ? difficulty : '' } }) %>
+</div>

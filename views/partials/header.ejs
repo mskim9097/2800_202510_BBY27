@@ -3,30 +3,45 @@
 
   <div class="relative inline-block">
     <!-- Menu Button -->
-    <button id="dropdownButton" class="p-2 hover:bg-gray-200 rounded">
+    <button id="dropdownButton" class="p-2 hover:bg-gray-200 rounded-lg transition duration-200">
       <img class="w-10 h-10" src="/images/menu.svg" alt="Menu Icon">
     </button>
 
     <!-- Dropdown -->
     <div id="dropdownMenu"
-      class="hidden absolute top-full left-0 mt-2 w-48 bg-white border border-gray-300 rounded shadow-lg z-50">
-      <a href="/user/settings" class="block px-4 py-2 hover:bg-gray-100">Settings</a>
-      <a href="/ai/riddleForm" class="block px-4 py-2 hover:bg-gray-100">AI Riddles</a>
-      <a href="/logout" class="block px-4 py-2 hover:bg-gray-100">Log out</a>
+      class="hidden absolute top-full left-0 mt-2 w-56 bg-white border border-gray-200 rounded-xl shadow-xl z-50 overflow-hidden">
+      <!-- Settings -->
+      <a href="/about" 
+        class="flex items-center gap-3 px-4 py-3 hover:bg-gray-50 transition duration-200 text-gray-700">
+        <span class="text-xl">⚙️</span>
+        <span>About</span>
+      </a>
+      
+      <!-- AI Riddles -->
+      <a href="/ai/riddleForm" 
+        class="flex items-center gap-3 px-4 py-3 hover:bg-gray-50 transition duration-200 text-gray-700">
+        <span class="text-xl">🧩</span>
+        <span>AI Riddles</span>
+      </a>
+      
+      <!-- Divider -->
+      <div class="h-[1px] bg-gray-200"></div>
+      
+      <!-- Logout -->
+      <a href="/logout" 
+        class="flex items-center gap-3 px-4 py-3 hover:bg-red-50 transition duration-200 text-red-600">
+        <span class="text-xl">🚪</span>
+        <span>Log out</span>
+      </a>
     </div>
   </div>
   <!-- <a href="/logout">
     <img class="w-10 h-10" src="/images/menu.svg" alt="Menu Icon">
   </a> -->
-  <img class="w-10 h-10" src="/images/bell.svg" alt="Notification Bell">
+  <div class="relative">
+    <button class="p-2 hover:bg-gray-200 rounded-lg transition duration-200">
+      <img class="w-10 h-10" src="/images/bell.svg" alt="Notification Bell">
+    </button>
+  </div>
 </div>
 
-<div class="flex items-center gap-5 mt-4">
-  <img class="w-10 h-10" src="/images/photo.svg" alt="Profile Icon">
-  <div>
-    <span class="text-xl">Hello,</span> <span class="font-bold text-xl">Jazib!</span>
-  </div>
-  <div id="weather-caption" class="text-black px-2 py-2 rounded shadow text-sm bg-white">
-    Loading weather...
-  </div>
-</div>

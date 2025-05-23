@@ -1,41 +1,43 @@
-/*This code came from Chat GPT*/
+/**
+ * This code came from Chat GPT 4 - Turbo
+ * @author https://chat.openai.com/
+ */
 .card {
-    width: 400px;
-    border: 1px solid #ccc;
-    border-radius: 12px;
-    overflow: hidden;
-    box-shadow: 0 2px 8px rgba(0,0,0,0.1);
-    font-family: Arial, sans-serif;
-    background-color: #fff;
-  }
-  
-  .card-header {
-    background-color: #4CAF50;
-    color: white;
-    padding: 10px 16px;
-    font-size: 1.2em;
-    font-weight: bold;
-    border-bottom: 1px solid #ddd;
-  }
-  
-  .card-body {
-    display: flex;
-    justify-content: space-between;
-    align-items: flex-start;
-    padding: 16px;
-    gap: 16px;
-  }
-  
-  .card-description {
-    flex: 1;
-    font-size: 0.95em;
-    color: #333;
-  }
-  
-  .card-thumbnail {
-    width: 100px;
-    height: 100px;
-    object-fit: cover;
-    border-radius: 8px;
-  }
-  
+  width: 400px;
+  border: 1px solid #ccc;
+  border-radius: 12px;
+  overflow: hidden;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  font-family: Arial, sans-serif;
+  background-color: #fff;
+}
+
+.card-header {
+  background-color: #4caf50;
+  color: white;
+  padding: 10px 16px;
+  font-size: 1.2em;
+  font-weight: bold;
+  border-bottom: 1px solid #ddd;
+}
+
+.card-body {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  padding: 16px;
+  gap: 16px;
+}
+
+.card-description {
+  flex: 1;
+  font-size: 0.95em;
+  color: #333;
+}
+
+.card-thumbnail {
+  width: 100px;
+  height: 100px;
+  object-fit: cover;
+  border-radius: 8px;
+}

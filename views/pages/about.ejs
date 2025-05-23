@@ -1,0 +1,352 @@
+<!-- This file was completed completely using Cursor IDE, which used Chat GPT Gemini 2.5-pro -->
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>About</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Camera icon -->
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <!-- mapbox css and js links -->
+    <link href="https://api.mapbox.com/mapbox-gl-js/v2.15.0/mapbox-gl.css" rel="stylesheet" />
+    <script src="https://api.mapbox.com/mapbox-gl-js/v2.15.0/mapbox-gl.js"></script>
+    <!-- SwiperJS CSS -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.css" />
+    <style>
+        body {
+            font-family: sans-serif;
+            margin: 20px;
+            line-height: 1.6;
+        }
+
+        h1 {
+            text-align: center;
+        }
+
+        h2 {
+            border-bottom: 1px solid #ccc;
+            padding-bottom: 5px;
+            margin-top: 30px;
+        }
+
+        .dependency {
+            margin-bottom: 20px;
+            padding: 10px;
+            border: 1px solid #eee;
+            border-radius: 5px;
+        }
+
+        .dependency strong {
+            display: inline-block;
+            width: 100px;
+        }
+
+        .dependency ul {
+            list-style-type: none;
+            padding-left: 0;
+        }
+
+        .dependency li {
+            margin-bottom: 5px;
+        }
+        #content {
+            -ms-overflow-style: none;
+            scrollbar-width: none;
+            overflow-y: scroll;
+        }
+
+        #content::-webkit-scrollbar {
+            display: none;
+        }
+        .line-clamp-2 {
+            overflow: hidden;
+            display: -webkit-box;
+            -webkit-line-clamp: 2;
+            -webkit-box-orient: vertical;
+            text-overflow: ellipsis;
+        }
+    </style>
+</head>
+
+<body class="h-screen overflow-y-auto">
+    <div style="background-color:rgb(242, 242, 242)"
+        class="flex flex-col p-4 justify-between h-full rounded-lg shadow-sm gap-5">
+        <header class="fixed top-0 left-0 right-0 z-10 shadow-md w-full" style="background-color:rgb(242, 242, 242)">
+            <%- include("../partials/header") %>
+        </header>
+
+        <main class="pt-20 pb-20 mt-4 overflow-y-auto flex-grow">
+            <h1>Project Open Source Dependencies</h1>
+
+            <h2>Production Dependencies</h2>
+
+            <div class="dependency">
+                <h3>axios</h3>
+                <ul>
+                    <li><strong>URL:</strong> <a href="https://axios-http.com/">https://axios-http.com/</a> or <a
+                            href="https://github.com/axios/axios">https://github.com/axios/axios</a></li>
+                    <li><strong>Author:</strong> Matt Zabriskie and contributors</li>
+                    <li><strong>Copyright:</strong> Copyright (c) 2014-present Matt Zabriskie and contributors</li>
+                    <li><strong>License Type:</strong> MIT</li>
+                </ul>
+            </div>
+
+            <div class="dependency">
+                <h3>bcrypt</h3>
+                <ul>
+                    <li><strong>URL:</strong> <a
+                            href="https://github.com/kelektiv/node.bcrypt.js">https://github.com/kelektiv/node.bcrypt.js</a>
+                    </li>
+                    <li><strong>Author:</strong> The kelektiv, Nick Campbell, and various contributors</li>
+                    <li><strong>Copyright:</strong> Copyright (c) node.bcrypt.js contributors (Primarily Nick Campbell &
+                        various contributors for node.bcrypt.js; original bcrypt-nodejs copyrights by Antonio Salazar
+                        Cardozo (2012) and Marco Rogers (2013))</li>
+                    <li><strong>License Type:</strong> MIT</li>
+                </ul>
+            </div>
+
+            <div class="dependency">
+                <h3>cloudinary</h3>
+                <ul>
+                    <li><strong>URL:</strong> <a href="https://cloudinary.com/">https://cloudinary.com/</a> or <a
+                            href="https://github.com/cloudinary/cloudinary_npm">https://github.com/cloudinary/cloudinary_npm</a>
+                    </li>
+                    <li><strong>Author:</strong> Cloudinary Ltd.</li>
+                    <li><strong>Copyright:</strong> Copyright (c) Cloudinary Ltd. (SDK specific: Copyright (c)
+                        2012-Present Cloudinary Ltd.)</li>
+                    <li><strong>License Type:</strong> MIT</li>
+                </ul>
+            </div>
+
+            <div class="dependency">
+                <h3>connect-mongo</h3>
+                <ul>
+                    <li><strong>URL:</strong> <a
+                            href="https://github.com/jdesboeufs/connect-mongo">https://github.com/jdesboeufs/connect-mongo</a>
+                    </li>
+                    <li><strong>Author:</strong> Jérôme Desboeufs, Suen Chun Ming, and contributors (Original: Casey
+                        Banner)</li>
+                    <li><strong>Copyright:</strong> Copyright (c) connect-mongo contributors (e.g., Copyright (c)
+                        2012-2023 Jérôme Desboeufs; older versions Copyright (c) 2011-2015 Casey Banner)</li>
+                    <li><strong>License Type:</strong> MIT</li>
+                </ul>
+            </div>
+
+            <div class="dependency">
+                <h3>dotenv</h3>
+                <ul>
+                    <li><strong>URL:</strong> <a
+                            href="https://github.com/motdotla/dotenv">https://github.com/motdotla/dotenv</a></li>
+                    <li><strong>Author:</strong> Scott Motte and contributors</li>
+                    <li><strong>Copyright:</strong> Copyright (c) Scott Motte and other contributors (e.g., Copyright
+                        (c) 2015, Scott Motte)</li>
+                    <li><strong>License Type:</strong> BSD-2-Clause</li>
+                </ul>
+            </div>
+
+            <div class="dependency">
+                <h3>ejs</h3>
+                <ul>
+                    <li><strong>URL:</strong> <a href="https://ejs.co/">https://ejs.co/</a> or <a
+                            href="https://github.com/mde/ejs">https://github.com/mde/ejs</a></li>
+                    <li><strong>Author:</strong> Matthew Eernisse (mde@fleegix.org) and other contributors (Original v1
+                        by TJ Holowaychuk)</li>
+                    <li><strong>Copyright:</strong> Copyright Matthew Eernisse and other contributors (e.g., Copyright
+                        (c) 2009-2023 Matthew Eernisse)</li>
+                    <li><strong>License Type:</strong> Apache-2.0</li>
+                </ul>
+            </div>
+
+            <div class="dependency">
+                <h3>express</h3>
+                <ul>
+                    <li><strong>URL:</strong> <a href="https://expressjs.com/">https://expressjs.com/</a> or <a
+                            href="https://github.com/expressjs/express">https://github.com/expressjs/express</a></li>
+                    <li><strong>Author:</strong> TJ Holowaychuk (Original Author), OpenJS Foundation, and Express.js
+                        contributors</li>
+                    <li><strong>Copyright:</strong> Copyright (c) TJ Holowaychuk, OpenJS Foundation and other
+                        contributors (e.g., Copyright (c) 2009-2014 TJ Holowaychuk; Copyright (c) 2013-2014 Roman
+                        Shtylman; Copyright (c) 2014-2015 Douglas Christopher Wilson)</li>
+                    <li><strong>License Type:</strong> MIT</li>
+                </ul>
+            </div>
+
+            <div class="dependency">
+                <h3>express-session</h3>
+                <ul>
+                    <li><strong>URL:</strong> <a
+                            href="https://github.com/expressjs/session">https://github.com/expressjs/session</a></li>
+                    <li><strong>Author:</strong> Douglas Wilson, OpenJS Foundation, and Express.js contributors</li>
+                    <li><strong>Copyright:</strong> Copyright (c) Douglas Wilson, OpenJS Foundation and other
+                        contributors (e.g., Copyright (c) 2010 Sencha Inc.; Copyright (c) 2011 LearnBoost; Copyright (c)
+                        2011-2014 TJ Holowaychuk; Copyright (c) 2014-2017 Douglas Christopher Wilson)</li>
+                    <li><strong>License Type:</strong> MIT</li>
+                </ul>
+            </div>
+
+            <div class="dependency">
+                <h3>method-override</h3>
+                <ul>
+                    <li><strong>URL:</strong> <a
+                            href="https://github.com/expressjs/method-override">https://github.com/expressjs/method-override</a>
+                    </li>
+                    <li><strong>Author:</strong> Jonathan Ong, Douglas Wilson, and Express.js contributors</li>
+                    <li><strong>Copyright:</strong> Copyright (c) 2014 Jonathan Ong, Express.js contributors</li>
+                    <li><strong>License Type:</strong> MIT</li>
+                </ul>
+            </div>
+
+            <div class="dependency">
+                <h3>mongodb (Node.js driver)</h3>
+                <ul>
+                    <li><strong>URL:</strong> <a
+                            href="https://github.com/mongodb/node-mongodb-native">https://github.com/mongodb/node-mongodb-native</a>
+                    </li>
+                    <li><strong>Author:</strong> MongoDB Inc. and contributors (Original: Christian Amor Kvalheim)</li>
+                    <li><strong>Copyright:</strong> © 2012-present MongoDB Contributors, © 2009-2012 Christian Amor
+                        Kvalheim</li>
+                    <li><strong>License Type:</strong> Apache-2.0</li>
+                </ul>
+            </div>
+
+            <div class="dependency">
+                <h3>mongoose</h3>
+                <ul>
+                    <li><strong>URL:</strong> <a href="https://mongoosejs.com/">https://mongoosejs.com/</a> or <a
+                            href="https://github.com/Automattic/mongoose">https://github.com/Automattic/mongoose</a>
+                    </li>
+                    <li><strong>Author:</strong> LearnBoost (original), Automattic, Valeri Karpov, and contributors</li>
+                    <li><strong>Copyright:</strong> Copyright (c) 2010 LearnBoost &lt;dev@learnboost.com&gt;</li>
+                    <li><strong>License Type:</strong> MIT</li>
+                </ul>
+            </div>
+
+            <div class="dependency">
+                <h3>multer</h3>
+                <ul>
+                    <li><strong>URL:</strong> <a
+                            href="https://github.com/expressjs/multer">https://github.com/expressjs/multer</a></li>
+                    <li><strong>Author:</strong> Hage Yaapa (original), Express.js contributors</li>
+                    <li><strong>Copyright:</strong> Copyright (c) 2014 Hage Yaapa, Express.js contributors</li>
+                    <li><strong>License Type:</strong> MIT</li>
+                </ul>
+            </div>
+
+            <div class="dependency">
+                <h3>passport</h3>
+                <ul>
+                    <li><strong>URL:</strong> <a href="https://www.passportjs.org/">https://www.passportjs.org/</a> or
+                        <a href="https://github.com/jaredhanson/passport">https://github.com/jaredhanson/passport</a>
+                    </li>
+                    <li><strong>Author:</strong> Jared Hanson</li>
+                    <li><strong>Copyright:</strong> Copyright (c) 2011-2021 Jared Hanson
+                        &lt;https://www.jaredhanson.me/&gt;</li>
+                    <li><strong>License Type:</strong> MIT</li>
+                </ul>
+            </div>
+
+            <div class="dependency">
+                <h3>passport-local</h3>
+                <ul>
+                    <li><strong>URL:</strong> <a
+                            href="https://github.com/jaredhanson/passport-local">https://github.com/jaredhanson/passport-local</a>
+                    </li>
+                    <li><strong>Author:</strong> Jared Hanson</li>
+                    <li><strong>Copyright:</strong> Copyright (c) 2011-2015 Jared Hanson &lt;http://jaredhanson.net/&gt;
+                    </li>
+                    <li><strong>License Type:</strong> MIT</li>
+                </ul>
+            </div>
+
+            <h2>Development Dependencies (Tools for Development)</h2>
+
+            <div class="dependency">
+                <h3>eslint</h3>
+                <ul>
+                    <li><strong>URL:</strong> <a href="https://eslint.org/">https://eslint.org/</a> or <a
+                            href="https://github.com/eslint/eslint">https://github.com/eslint/eslint</a></li>
+                    <li><strong>Author:</strong> Nicholas C. Zakas (creator), OpenJS Foundation and other contributors
+                    </li>
+                    <li><strong>Copyright:</strong> Copyright OpenJS Foundation and other contributors,
+                        &lt;www.openjsf.org&gt;</li>
+                    <li><strong>License Type:</strong> MIT</li>
+                </ul>
+            </div>
+
+            <div class="dependency">
+                <h3>eslint-config-airbnb-base</h3>
+                <ul>
+                    <li><strong>URL:</strong> <a
+                            href="https://github.com/airbnb/javascript/tree/master/packages/eslint-config-airbnb-base">https://github.com/airbnb/javascript/tree/master/packages/eslint-config-airbnb-base</a>
+                    </li>
+                    <li><strong>Author:</strong> Airbnb</li>
+                    <li><strong>Copyright:</strong> Copyright (c) Airbnb (e.g., main repo Copyright (c) 2012 Airbnb)
+                    </li>
+                    <li><strong>License Type:</strong> MIT</li>
+                </ul>
+            </div>
+
+            <div class="dependency">
+                <h3>eslint-config-prettier</h3>
+                <ul>
+                    <li><strong>URL:</strong> <a
+                            href="https://github.com/prettier/eslint-config-prettier">https://github.com/prettier/eslint-config-prettier</a>
+                    </li>
+                    <li><strong>Author:</strong> Prettier team and contributors (Simon Lydell, JounQin, etc.)</li>
+                    <li><strong>Copyright:</strong> Copyright (c) Prettier (and contributors)</li>
+                    <li><strong>License Type:</strong> MIT</li>
+                </ul>
+            </div>
+
+            <div class="dependency">
+                <h3>eslint-plugin-import</h3>
+                <ul>
+                    <li><strong>URL:</strong> <a
+                            href="https://github.com/import-js/eslint-plugin-import">https://github.com/import-js/eslint-plugin-import</a>
+                    </li>
+                    <li><strong>Author:</strong> Ben Mosher, Jordan Harband, Jean-François Mengel, and contributors</li>
+                    <li><strong>Copyright:</strong> Copyright (c) Ben Mosher and other contributors</li>
+                    <li><strong>License Type:</strong> MIT</li>
+                </ul>
+            </div>
+
+            <div class="dependency">
+                <h3>eslint-plugin-prettier</h3>
+                <ul>
+                    <li><strong>URL:</strong> <a
+                            href="https://github.com/prettier/eslint-plugin-prettier">https://github.com/prettier/eslint-plugin-prettier</a>
+                    </li>
+                    <li><strong>Author:</strong> Prettier team and contributors (Andres Suarez, Simon Lydell, Brian P.
+                        Scott, etc.)</li>
+                    <li><strong>Copyright:</strong> Copyright (c) Prettier and contributors</li>
+                    <li><strong>License Type:</strong> MIT</li>
+                </ul>
+            </div>
+
+            <div class="dependency">
+                <h3>prettier</h3>
+                <ul>
+                    <li><strong>URL:</strong> <a href="https://prettier.io/">https://prettier.io/</a> or <a
+                            href="https://github.com/prettier/prettier">https://github.com/prettier/prettier</a></li>
+                    <li><strong>Author:</strong> James Long (Creator), Prettier team and contributors</li>
+                    <li><strong>Copyright:</strong> Copyright (c) 2017-present James Long and contributors</li>
+                    <li><strong>License Type:</strong> MIT</li>
+                </ul>
+            </div>
+        </main>
+        <footer class="fixed bottom-0 left-0 right-0 z-10 shadow-md p-4 w-full" style="background-color:rgb(242, 242, 242)">
+            <% if (userType==='researcher' ) { %>
+                <%- include("../partials/researcher-footer") %>
+            <% } %>
+            <% if (userType==='explorer' ) { %>
+                <%- include("../partials/explorer-footer") %>
+            <% } %>
+        </footer>
+        <script src="/js/camera.js"></script>
+        <script src="/js/menu.js"></script>
+    </div>
+</body>
+
+</html>

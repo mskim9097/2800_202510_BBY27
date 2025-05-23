@@ -1,116 +1,204 @@
-const axios = require("axios");
+const axios = require('axios');
 
-const OPENROUTER_API_KEY = "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"; // Replace with your real key
+const OPENROUTER_API_KEY =
+  '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';
 
 const showRiddleForm = (req, res) => {
-    res.render("pages/riddle");
+  res.render('pages/riddle', {
+    error: null,
+    userType: req.session?.type,
+    name: req.session?.name,
+  });
 };
+
+function createPrompt(difficulty, number, category) {
+  return `
+    Generate ${number} riddles related to "${category}" with difficulty level "${difficulty}".
+    Format them as a JSON array with this structure:
+    [
+      {
+        "question": "...",
+        "answer": "...",
+        "options": ["...","...","...","..."]
+      }
+    ]
+  `;
+}
 
 const generateRiddles = async (req, res) => {
+  try {
     const { difficulty, number, category } = req.body;
 
-    const prompt = `
-      Generate ${number} riddles related to "${category}" with difficulty level "${difficulty}".
-      Format them as a JSON array with this structure:
-      [
-        {
-          "question": "...",
-          "answer": "...",
-          "options": ["...","...","...","..."]
-        }
-      ]
-    `;
+    if (!difficulty || !number || !category) {
+      return res.render('pages/riddle', {
+        error: 'Please fill in all required fields',
+        userType: req.session?.type,
+        name: req.session?.name,
+      });
+    }
+
+    if (!OPENROUTER_API_KEY) {
+      return res.render('pages/riddle', {
+        error: 'AI service is not properly configured. Please try again later.',
+        userType: req.session?.type,
+        name: req.session?.name,
+      });
+    }
+
+    const prompt = createPrompt(difficulty, number, category);
 
     try {
-        const response = await axios.post(
-            "https://openrouter.ai/api/v1/chat/completions",
-            {
-                model: "openai/gpt-3.5-turbo", // or a free model like "deepseek/deepseek-chat:free"
-                messages: [{ role: "user", content: prompt }],
-                max_tokens: 1000, // set to a safe number
-            },
-            {
-                headers: {
-                    Authorization: `Bearer ${OPENROUTER_API_KEY}`,
-                    "Content-Type": "application/json",
-                    "HTTP-Referer": "http://localhost:3000",
-                    "X-Title": "RiddleQuizzApp",
-                },
-            }
-        );
-
-        if (!response.data?.choices?.length) {
-            console.error("Unexpected response format:", response.data);
-            return res.status(500).send("Unexpected response from AI");
+      const response = await axios.post(
+        'https://openrouter.ai/api/v1/chat/completions',
+        {
+          model: 'openai/gpt-3.5-turbo',
+          messages: [{ role: 'user', content: prompt }],
+          max_tokens: 1000,
+        },
+        {
+          headers: {
+            Authorization: `Bearer ${OPENROUTER_API_KEY}`,
+            'Content-Type': 'application/json',
+            'HTTP-Referer': process.env.APP_URL || 'http://localhost:3000',
+            'X-Title': 'BiodiversityGo',
+          },
         }
+      );
 
-        let content = response.data.choices[0].message.content;
+      if (!response.data?.choices?.length) {
+        return res.render('pages/riddle', {
+          error: 'Unable to generate riddles. Please try again.',
+          userType: req.session?.type,
+          name: req.session?.name,
+        });
+      }
 
-        // Sometimes GPT returns JSON inside markdown ``` blocks — remove them
-        content = content.trim();
-        if (content.startsWith("```")) {
-            content = content.replace(/^```(json)?/, "").replace(/```$/, "").trim();
-        }
+      let { content } = response.data.choices[0].message;
+      content = content.trim();
+      if (content.startsWith('```')) {
+        content = content
+          .replace(/^```(json)?/, '')
+          .replace(/```$/, '')
+          .trim();
+      }
 
+      try {
         const riddles = JSON.parse(content);
-        res.render("pages/riddleQuizz", { riddles });
-    } catch (err) {
-        console.error("Error generating riddles:", err.response?.data || err.message || err);
-        res.status(500).send("Failed to generate riddles");
+        res.render('pages/riddleQuizz', {
+          riddles,
+          userType: req.session?.type,
+          name: req.session?.name,
+        });
+      } catch (parseError) {
+        console.error('JSON parse error:', parseError);
+        return res.render('pages/riddle', {
+          error: 'Failed to process the riddles. Please try again.',
+          userType: req.session?.type,
+          name: req.session?.name,
+        });
+      }
+    } catch (apiError) {
+      console.error('API error:', apiError.response?.data || apiError.message);
+      let errorMessage = 'Failed to generate riddles. ';
+
+      if (apiError.response?.status === 401) {
+        errorMessage =
+          'AI service authentication failed. Please try again later.';
+      } else if (apiError.response?.status === 429) {
+        errorMessage = 'Too many requests. Please wait a moment and try again.';
+      } else if (apiError.response?.status === 500) {
+        errorMessage =
+          'AI service is temporarily unavailable. Please try again later.';
+      }
+
+      return res.render('pages/riddle', {
+        error: errorMessage,
+        userType: req.session?.type,
+        name: req.session?.name,
+      });
     }
+  } catch (error) {
+    console.error('General error:', error);
+    res.render('pages/riddle', {
+      error: 'An unexpected error occurred. Please try again later.',
+      userType: req.session?.type,
+      name: req.session?.name,
+    });
+  }
 };
 
-
 const gradeRiddles = async (req, res) => {
+  try {
     const riddles = JSON.parse(req.body.riddles);
     const answers = req.body;
-    console.log("answers from form:", answers.answers);
+
+    if (!riddles || !answers.answers) {
+      return res.render('pages/error', {
+        error: 'Missing riddles or answers. Please try again.',
+        userType: req.session?.type,
+        name: req.session?.name,
+      });
+    }
 
     let score = 0;
     riddles.forEach((riddle, index) => {
-        const userAnswer = answers.answers && answers.answers[index] ? answers.answers[index] : "";
-        riddle.userAnswer = userAnswer;
-        riddle.correctAnswer = riddle.answer;
-        riddle.correct = userAnswer.trim().toLowerCase() === riddle.answer.trim().toLowerCase();
-
-        if (riddle.correct) score++;
+      const userAnswer = answers.answers[index] || '';
+      riddle.userAnswer = userAnswer;
+      riddle.correctAnswer = riddle.answer;
+      riddle.correct =
+        userAnswer.trim().toLowerCase() === riddle.answer.trim().toLowerCase();
+      if (riddle.correct) score++;
     });
 
+    let joke =
+      "Why did the biologist break up with the mathematician? Because there wasn't enough chemistry! 🧪";
 
     try {
+      if (OPENROUTER_API_KEY) {
         const response = await axios.post(
-            "https://openrouter.ai/api/v1/chat/completions",
-            {
-                model: "openai/gpt-4o",
-                messages: [{ role: "user", content: "Tell me a fun biology-related joke." }],
-                max_tokens: 1000,
+          'https://openrouter.ai/api/v1/chat/completions',
+          {
+            model: 'openai/gpt-3.5-turbo',
+            messages: [
+              { role: 'user', content: 'Tell me a fun biology-related joke.' },
+            ],
+            max_tokens: 1000,
+          },
+          {
+            headers: {
+              Authorization: `Bearer ${OPENROUTER_API_KEY}`,
+              'Content-Type': 'application/json',
+              'HTTP-Referer': process.env.APP_URL || 'http://localhost:3000',
+              'X-Title': 'BiodiversityGo',
             },
-            {
-                headers: {
-                    Authorization: `Bearer ${OPENROUTER_API_KEY}`,
-                    "Content-Type": "application/json",
-                    "HTTP-Referer": "http://localhost:3000",
-                    "X-Title": "RiddleQuizzApp",
-                    
-                },
-            }
+          }
         );
 
-        console.log("Joke API response:", response.data); // <- Add this
-
-        const joke = response.data.choices?.[0]?.message?.content || "Oops! Couldn't fetch a joke this time.";
-        res.render("pages/quizzResult", { score, total: riddles.length, joke, riddles });
-
-    } catch (err) {
-        console.error("Error getting joke:", err.response?.data || err.message);
-        res.render("pages/quizzResult", { score, total: riddles.length, joke: "", riddles });
+        if (response.data?.choices?.[0]?.message?.content) {
+          joke = response.data.choices[0].message.content;
+        }
+      }
+    } catch (jokeError) {
+      console.error('Failed to fetch joke:', jokeError);
+      // Use default joke if API call fails
     }
 
+    res.render('pages/quizzResult', {
+      score,
+      total: riddles.length,
+      joke,
+      riddles,
+      userType: req.session?.type,
+      name: req.session?.name,
+    });
+  } catch (error) {
+    console.error('Grade riddles error:', error);
+    res.render('pages/error', {
+      error: 'Failed to grade your answers. Please try again.',
+      userType: req.session?.type,
+      name: req.session?.name,
+    });
+  }
 };
 
-
 module.exports = { showRiddleForm, generateRiddles, gradeRiddles };
-
-
-
-

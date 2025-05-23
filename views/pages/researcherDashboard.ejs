@@ -4,97 +4,92 @@
 <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Photo Capture</title>
+    <title>Researcher Dashboard</title>
     <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Camera icon -->
+    <script src="https://unpkg.com/lucide@latest"></script>
     <!-- mapbox css and js links -->
     <link href="https://api.mapbox.com/mapbox-gl-js/v2.15.0/mapbox-gl.css" rel="stylesheet" />
     <script src="https://api.mapbox.com/mapbox-gl-js/v2.15.0/mapbox-gl.js"></script>
     <!-- SwiperJS CSS -->
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.css" />
     <style>
-       #content{
+        #content {
             -ms-overflow-style: none;
             scrollbar-width: none;
             overflow-y: scroll;
         }
 
-        #content::-webkit-scrollbar {
+        #content::-webkit-scrollbar,body::-webkit-scrollbar {
             display: none;
         }
     </style>
 </head>
 
-<body class="h-screen overflow-hidden">
-    <% const quests=[ { id: 1, image: "/images/plant4.jpg" , title: "Explore the Wetlands" , location: "Burnaby Lake" ,
-        mission: "Find and photograph 3 amphibians" , target: "Frogs, salamanders" , time: "Before sunset" ,
-        difficulty: "Medium" }, { id: 2, image: "/images/plant2.jpg" , title: "Urban Pollinators" ,
-        location: "Downtown Vancouver" , mission: "Identify 5 pollinator species" , target: "Bees, butterflies" ,
-        time: "Anytime" , difficulty: "Easy" }, { id: 3, image: "/images/plant1.jpg" , title: "Explore Stanley Park" ,
-        location: "Downtown Vancouver" , mission: "Identify 5 pollinator species" , target: "Bees, butterflies" ,
-        time: "Anytime" , difficulty: "Easy" },{ id: 2, image: "/images/plant2.jpg" , title: "Urban Pollinators" ,
-        location: "Downtown Vancouver" , mission: "Identify 5 pollinator species" , target: "Bees, butterflies" ,
-        time: "Anytime" , difficulty: "Easy" },{ id: 3, image: "/images/plant1.jpg" , title: "Explore Stanley Park" ,
-        location: "Downtown Vancouver" , mission: "Identify 5 pollinator species" , target: "Bees, butterflies" ,
-        time: "Anytime" , difficulty: "Easy" } ]; %>
+<body class="h-screen overflow-y-auto">
+    <div style="background-color:rgb(242, 242, 242)"
+        class="flex flex-col p-4 justify-between h-full rounded-lg shadow-sm gap-5">
+        <div id="content" class="flex flex-col gap-4 overflow-y-auto">
+            
+            <%- include("../partials/header") %>
 
-        <div style="background-color:rgb(242, 242, 242)"
-            class="flex flex-col p-4 justify-between h-full rounded-lg shadow-sm gap-4">
-            <div id="content" class="flex flex-col gap-4 overflow-y-scroll  ">
-
-                <%- include('../partials/header') %>
-
-                <div id="explore_time" class="py-2 px-1 w-fit shadow text-sm rounded font-semibold m-auto text-center">
-                    Is it a good day to explore .....
-                </div>
-                <!--Add Quest-->
-                <div class=" flex justify-end  ">
-                    <div class="relative group">
-                        <div
-                            class="absolute bottom-full bg-black text-white text-xs rounded px-2 py-1 group-hover:opacity-100 mb-2 right-0  opacity-0   mb-2 right-0">
-                            Add Quests
-                        </div>
-                        <a href="/quests/addQuest" class="bg-green-700 p-2 rounded-full cursor-pointer block">
-                            <img src="/images/add.svg" class="h-8 w-8" alt="Add Quest">
-                        </a>
-                    </div>
-
-                </div>
-                <!--Map-->
-                <div id="map" class="min-h-[180px] w-full rounded shadow">
-
-                </div>
-                <!-- quest cards -->
+            <div class="flex items-center gap-5 mt-4">
+                <img class="w-10 h-10" src="/images/photo.svg" alt="Profile Icon">
                 <div>
-                    <span class="font-bold text-xl">Quests</span>
+                    <span class="text-xl">Hello,</span> <span class="font-bold text-xl">
+                        <%= name %>
+                    </span>
+                </div>
+                <div id="weather-caption" class="text-black px-2 py-2 rounded shadow text-sm bg-white">
+                    Loading weather...
+                </div>
+            </div>
 
-                    <!-- Swiper Container -->
-                    <div class="swiper mySwiper mt-2 w-full">
-                        <div class="swiper-wrapper ">
-                            <% quests.forEach((quest)=> { %>
-                                <div class="swiper-slide max-w-[280px]">
-                                    <%- include('../partials/questCard', { quest: quest, isResearcher :true }) %>
-                                </div>
-                                <% }) %>
-                                    <div class="swiper-slide ">
-                                        <a href="/quests"
-                                            class="p-5 flex items-center justify-center text-green-600 border border-green-600 rounded-lg text-sm font-semibold hover:bg-green-50 gap-2">
-                                            <span>See More </span>
-                                            <img src="/images/right.svg" width="20" alt="">
-                                        </a>
-                                    </div>
+            <div id="explore_time" class="py-2 px-1 w-fit shadow text-sm rounded font-semibold m-auto">
+                Is it a good day to explore .....
+            </div>
+
+
+            <!--Map-->
+            <div id="map" class="min-h-[200px] w-full rounded shadow">
+            </div>
+
+            <!-- quest cards -->
+            <div class="p-3">
+                <span class="font-bold text-xl">Your Quests</span>
+
+                <!-- Swiper Container -->
+                <div class="swiper mySwiper mt-2">
+                    <div class="swiper-wrapper">
+                        <% quests.slice(0, 6).forEach((quest) => { %>
+                            <div class="swiper-slide max-w-[280px]">
+                                <%- include('../partials/questCard', { quest: quest, isResearcher: true }) %>
+                            </div>
+                        <% }) %>
+                        <div class="swiper-slide flex items-center justify-center">
+                            <a href="/quests?creator=me"
+                                class="p-5 flex items-center justify-center text-green-600 border border-green-600 rounded-lg text-sm font-semibold hover:bg-green-50 gap-2">
+                                <span>See All Your Quests</span>
+                                <img src="/images/right.svg" width="20" alt="">
+                            </a>
                         </div>
                     </div>
                 </div>
-
             </div>
-            <%- include('../partials/researcher-footer') %>
-
         </div>
-        <script src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js"></script>
-        <script src="/js/weather.js"></script>
-        <script src="/js/map.js"></script>
-        <script src="/js/swiper.js"></script>
-        <script src="/js/menu.js"></script>
-</body>
+        <%- include("../partials/researcher-footer") %>
+    </div>
 
+    <script>
+        const quests = <%- JSON.stringify(quests) %>;
+    </script>
+    <!-- SwiperJS JS -->
+    <script src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js"></script>
+
+    <script src="/js/camera.js"></script>
+    <script src="/js/weather.js"></script>
+    <script src="/js/researcherMap.js"></script>
+    <script src="/js/swiper.js"></script>
+    <script src="/js/menu.js"></script>
+</body>
 </html>

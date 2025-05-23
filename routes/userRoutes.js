@@ -1,20 +1,32 @@
 const express = require('express');
+
 const router = express.Router();
 
-const { authenticated, destroySession, authenticateUser, signUp, checkAuthorization, isAuthorizedResearcher,isAuthorizedExplorer } = require('../controllers/userController');
+const {
+  authenticated,
+  destroySession,
+  authenticateUser,
+  signUp,
+  checkAuthorization,
+  isAuthorizedResearcher,
+  isAuthorizedExplorer,
+} = require('../controllers/userController');
+const {
+  getResearcherDashboard,
+  getExplorerDashboard,
+} = require('../controllers/questsController');
 
 router.get('/', (req, res) => {
-    checkAuthorization(req, res);
+  checkAuthorization(req, res);
 });
 
-router.get('/explorer', authenticated, (req, res) => {
+router.get('/explorer', authenticated, getExplorerDashboard);
 
-    res.render('pages/explorerDashboard');
-});
-
-router.get('/researcher', authenticated, isAuthorizedResearcher, (req, res) => {
-
-    res.render('pages/researcherDashboard');
-});
+router.get(
+  '/researcher',
+  authenticated,
+  isAuthorizedResearcher,
+  getResearcherDashboard
+);
 
 module.exports = router;

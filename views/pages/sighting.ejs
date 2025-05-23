@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Sightings</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://api.mapbox.com/mapbox-gl-js/v2.15.0/mapbox-gl.css" rel="stylesheet" />
+    <script src="https://api.mapbox.com/mapbox-gl-js/v2.15.0/mapbox-gl.js"></script>
+    <style>
+        html,
+        body {
+            -ms-overflow-style: none;
+            scrollbar-width: none;
+            overflow-y: scroll;
+        }
+
+        html::-webkit-scrollbar,
+        body::-webkit-scrollbar {
+            display: none;
+        }
+    </style>
+
+</head>
+
+<body class="bg-gray-100 p-4 flex flex-col gap-6 text-sm">
+    <div>
+        <a href="javascript:history.back()" class="text-green-600 font-medium">← Back to Quest</a>
+    </div>
+
+    <form action="/quests/updateSighting/<%= quest._id %>" method="POST" enctype="multipart/form-data"
+    class="flex flex-col gap-4 bg-white p-4 rounded shadow-md">
+        <h1 class="text-xl font-bold text-center">Complete Sighting</h1>
+        <div>
+            <label for="questImage" class="font-semibold block mb-1">Sighting Image</label>
+            <input type="file" name="questImage" id="questImage" accept="image/*" required
+                class="w-full border border-gray-300 p-2 rounded bg-white file:mr-2 file:py-1 file:px-3 file:rounded file:border-0 file:bg-green-600 file:text-white hover:file:bg-green-700" />
+        </div>
+        <div>
+            <label class="font-semibold block mb-1">Sighting Location <span style="color: red;">*</span></label>
+            <div id="map" class="w-full h-64 rounded border border-gray-300 mb-2"></div>
+                <input type="hidden" name="latitude" id="latitude" required />
+                <input type="hidden" name="longitude" id="longitude" required />
+            </div>
+        <div>
+            <label for="questFieldNote" class="font-semibold block mb-1">Field Note <span style="color: red;">*</span></label>
+            <textarea name="questFieldNote" id="questFieldNote" rows="4" required
+                class="w-full border border-gray-300 p-2 rounded"></textarea>
+        </div>
+
+
+        <button type="submit" class="bg-green-600 text-white p-2 rounded font-semibold hover:bg-green-700">
+            Complete
+        </button>
+    </form>
+
+    <script src="/js/sightingMap.js"> </script>
+    <script src="/js/quest.js"></script>
+</body>
+
+</html>
