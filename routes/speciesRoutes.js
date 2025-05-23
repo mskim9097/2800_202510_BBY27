@@ -36,7 +36,7 @@ const upload = multer({
 // list all species
 router.get('/', authenticated, async (req, res) => {
   try {
-    const speciesList = await pecies.find().sort({ speciesName: 1 });
+    const speciesList = await species.find().sort({ speciesName: 1 });
     res.render('pages/speciesList', {
       speciesList,
       userType: req.session.type,
