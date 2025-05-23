@@ -34,18 +34,20 @@ const upload = multer({
 });
 
 // list all species
-router.get('/', authenticated, getSpecies, async (req, res) => {
+router.get('/', authenticated, async (req, res) => {
   try {
-    // const speciesList = await speciesCollection.find().toArray();
-    // res.render(species, { species: speciesList, title: "All Species" });
-    console.log('User type from session:', req.session.type);
+    const speciesList = await pecies.find().sort({ speciesName: 1 });
     res.render('pages/speciesList', {
-      speciesList: res.locals.speciesList,
+      speciesList,
       userType: req.session.type,
+      error: null
     });
   } catch (err) {
-    console.error('Error fetching species list:', err);
-    res.status(500).send('Error fetching species list');
+    res.render('pages/speciesList', {
+      speciesList: [],
+      userType: req.session.type,
+      error: 'Unable to retrieve the species list. Please try again later.'
+    });
   }
 });
 
