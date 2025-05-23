@@ -28,7 +28,7 @@
     <div>
         <a href="/quests" class="text-green-600 font-medium">← Back to Quests</a>
     </div>
-    <% if (typeof error !=="undefined" ) { %>
+    <% if (error ) { %>
         <div class="bg-red-100 border border-red-400 text-red-700 px-4 py-2 rounded">
             <%= error %>
         </div>
@@ -95,6 +95,17 @@
             </form>
 
             <script src="/js/questMap.js"> </script>
+            <script>
+                document.addEventListener("DOMContentLoaded", () => {
+                    const errorBox = document.querySelector(".bg-red-100");
+                    if (errorBox) {
+                        setTimeout(() => {
+                            errorBox.remove();
+                        }, 4000); 
+                    }
+                });
+            </script>
+
 </body>
 
 </html>
