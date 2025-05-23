@@ -5,6 +5,8 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Camera icon -->
+    <script src="https://unpkg.com/lucide@latest"></script>
     <title>Document</title>
     <style>
         #content {
@@ -63,25 +65,26 @@
                             <% } %>
                     </div>
                     <%- include('../partials/questFilter') %>
-                    <% if (userType==="explorer" ) { %>
-                        <h1 class="text-center p-2 rounded-xl" style="background-color: rgb(92, 203, 92,50%);">🧭
-                            Biodiversity
-                            Quests</h1>
-                        <% } %>
-                    <!--quest cards-->
+                        <% if (userType==="explorer" ) { %>
+                            <h1 class="text-center p-2 rounded-xl" style="background-color: rgb(92, 203, 92,50%);">🧭
+                                Biodiversity
+                                Quests</h1>
+                            <% } %>
+                                <!--quest cards-->
 
-                    <%- include('../partials/questListCard') %>
+                                <%- include('../partials/questListCard') %>
 
                 </div>
                 <!-- Footer by userType -->
                 <% if (userType==='researcher' ) { %>
                     <%- include("../partials/researcher-footer") %>
                         <% } %>
-                <% if (userType==='explorer' ) { %>
-                    <%- include("../partials/explorer-footer") %>
-                        <% } %>
+                            <% if (userType==='explorer' ) { %>
+                                <%- include("../partials/explorer-footer") %>
+                                    <% } %>
                                         <script src="/js/menu.js"></script>
                                         <script src="/js/questList.js"></script>
+                                        <script src="/js/camera.js"></script>
                                         <script>
                                             setTimeout(() => {
                                                 const flash = document.getElementById('success-message');

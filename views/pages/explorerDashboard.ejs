@@ -58,17 +58,17 @@
                 <span class="font-bold text-xl">Quests</span>
 
                 <!-- Swiper Container -->
-                <div class="swiper mySwiper mt-2 w-full">
-                    <div class="swiper-wrapper flex items-center">
-                        <% quests.forEach((quest) => { %>
-                            <div class="swiper-slide">
+                <div class="swiper mySwiper mt-2">
+                    <div class="swiper-wrapper">
+                        <% quests.slice(0, 6).forEach((quest) => { %>
+                            <div class="swiper-slide max-w-[280px]">
                                 <%- include('../partials/questCard', { quest: quest, isResearcher: false }) %>
                             </div>
                         <% }) %>
                         <div class="swiper-slide flex items-center justify-center">
                             <a href="/quests"
                                 class="p-5 flex items-center justify-center text-green-600 border border-green-600 rounded-lg text-sm font-semibold hover:bg-green-50 gap-2">
-                                <span>See More </span>
+                                <span>See More Quests</span>
                                 <img src="/images/right.svg" width="20" alt="">
                             </a>
                         </div>
