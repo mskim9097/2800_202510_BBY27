@@ -29,12 +29,11 @@
     </style>
 </head>
 
-<body class="h-screen overflow-hidden">
+<body class="h-screen flex flex-col h-full">
     <div style="background-color:rgb(242, 242, 242)"
-        class="flex flex-col p-4 justify-between h-full rounded-lg shadow-sm gap-4">
-        <%- include("../partials/header") %>
-
-            <div id="content" class="flex flex-col gap-5 items-center overflow-y-scroll">
+        class="flex flex-col overflow-hidden p-4 h-full  rounded-lg shadow-sm gap-5">
+        <div id="content" class="flex flex-col h-full gap-4 overflow-y-auto">
+            <%- include("../partials/header") %>
                 <div class="flex justify-between w-full px-4 items-center">
                     <% if (userType==="researcher" ) { %>
                         <h1 class="text-center p-2 rounded-xl text-2xl" style="background-color: rgb(92, 203, 92,50%);">
@@ -84,16 +83,16 @@
                                     class="px-4 py-2 bg-gray-200 rounded hover:bg-gray-300">Next</button>
                             </div>
 
-            </div>
-            <% if (userType==='researcher' ) { %>
-                <%- include("../partials/researcher-footer") %>
-                    <% } else if (userType==='explorer' ) { %>
-                        <%- include("../partials/explorer-footer") %>
-                            <% } %>
-    </div>
-    <script src="js/paginationSpecies.js"> </script>
-    <script src="/js/menu.js"></script>
-    <script src="js/camera.js"></script>
+        </div>
+        <% if (userType==='researcher' ) { %>
+            <%- include("../partials/researcher-footer") %>
+                <% } else if (userType==='explorer' ) { %>
+                    <%- include("../partials/explorer-footer") %>
+                        <% } %>
+
+                            <script src="js/paginationSpecies.js"> </script>
+                            <script src="/js/menu.js"></script>
+                            <script src="js/camera.js"></script>
 
 </body>
 
