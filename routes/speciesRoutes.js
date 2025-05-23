@@ -34,26 +34,7 @@ const upload = multer({
 });
 
 // list all species
-router.get('/', authenticated, getSpecies, async (req, res) => {
-  try {
-    // The speciesList is now available from res.locals.speciesList set by getSpecies
-    res.render('pages/speciesList', {
-      speciesList: res.locals.speciesList,
-      userType: req.session.type,
-      error: null, // Error handling is now primarily in getSpecies
-    });
-  } catch (err) {
-    // This catch block might still be useful for rendering errors
-    // that occur after getSpecies but before or during rendering.
-    res.render('pages/speciesList', {
-      speciesList: [],
-      userType: req.session.type,
-      error:
-        err.message ||
-        'An unexpected error occurred while displaying the species list.',
-    });
-  }
-});
+router.get('/', authenticated, getSpecies);
 
 // router.put('/species/:id', upload.single('image'), updateSpecies, (req, res) => {
 //   console.log('Received update:', req.body);

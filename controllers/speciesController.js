@@ -37,17 +37,20 @@ const uploadImageToCloudinary = (buffer) => {
   });
 };
 
-const getSpecies = async (req, res, next) => {
+const getSpecies = async (req, res) => {
   try {
     const speciesList = await Species.find().sort({ speciesName: 1 });
-    res.locals.speciesList = speciesList;
-    next();
+    res.render('pages/speciesList', {
+      speciesList,
+      userType: req.session.type,
+      error: null
+    });
   } catch (err) {
-    const error = new Error(
-      'Unable to retrieve the species list. Please try again later.'
-    );
-    error.status = 500;
-    next(error);
+    res.render('pages/speciesList', {
+      speciesList: [],
+      userType: req.session.type,
+      error: 'Unable to retrieve the species list. Please try again later.'
+    });
   }
 };
 

@@ -34,51 +34,63 @@
         class="flex flex-col p-4 justify-between h-full rounded-lg shadow-sm gap-4">
         <%- include("../partials/header") %>
 
-        <% if (userType === 'researcher') { %>
-            <div class="mb-6">
-                <a href="/species/addSpecies" class="bg-green-600 text-white px-4 py-2 rounded hover:bg-green-700">
-                    Add New Species
-                </a>
-            </div>
-        <% } %>
-
-        <% if (error) { %>
-            <div class="flex items-center justify-center min-h-[400px]">
-                <div class="text-center p-8 rounded-lg bg-white shadow-md">
-                    <div class="text-red-500 mb-4">
-                        <svg class="mx-auto h-12 w-12" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"/>
-                        </svg>
-                    </div>
-                    <p class="text-gray-600"><%= error %></p>
-                    <button onclick="window.location.reload()" class="mt-4 text-green-600 hover:text-green-700">
-                        Try Again
-                    </button>
+            <div id="content" class="flex flex-col gap-5 items-center overflow-y-scroll">
+                <div class="flex justify-between w-full px-4 items-center">
+                    <% if (userType==="researcher" ) { %>
+                        <h1 class="text-center p-2 rounded-xl text-2xl" style="background-color: rgb(92, 203, 92,50%);">
+                            🌱
+                            Biodiversity
+                            Species</h1>
+                        <div class="flex justify-end">
+                            <div class="relative group">
+                                <div
+                                    class="absolute bottom-full bg-black text-white text-xs rounded px-2 py-1 group-hover:opacity-100 mb-2 right-0 opacity-0">
+                                    Add Species
+                                </div>
+                                <a href="/species/addSpecies" class="p-2 rounded-full cursor-pointer block"
+                                    style="background-color: rgb(92, 203, 92, 80%);">
+                                    <img src="/images/add.svg" class="h-8 w-8" alt="Add Quest">
+                                </a>
+                            </div>
+                        </div>
+                        <% } %>
                 </div>
-            </div>
-        <% } else if (speciesList && speciesList.length > 0) { %>
-            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-                <%- include('../partials/specieCard', { speciesList: speciesList }) %>
-            </div>
-        <% } else { %>
-            <div class="text-center py-12">
-                <p class="text-gray-600">No species found.</p>
-            </div>
-        <% } %>
+                <% if (userType==="explorer" ) { %>
+                    <h1 class="text-center p-2 rounded-xl" style="background-color: rgb(92, 203, 92,50%);">🌱
+                        Biodiversity
+                        Species</h1>
+                    <% } %>
+                        <div
+                            class="flex  max-w-xl bg-white border border-gray-300 rounded-full shadow-sm px-4 py-2 items-center gap-2">
+                            <span class="text-gray-500 text-lg">🔍</span>
+                            <input id="searchInput" type="text" placeholder="Search species..."
+                                class="flex-grow focus:outline-none text-sm text-gray-800 placeholder-gray-400 bg-transparent">
+                            <button id="filterToggle" class="text-gray-500 hover:text-gray-700 text-lg" title="Filter">
+                                🧪
+                            </button>
+                        </div>
 
-        <div class="flex justify-center gap-4 mt-4 mb-6" id="paginationControls">
-            <button id="prevPage" class="px-4 py-2 bg-gray-200 rounded hover:bg-gray-300">Previous</button>
-            <span id="pageIndicator" class="self-center text-gray-600"></span>
-            <button id="nextPage" class="px-4 py-2 bg-gray-200 rounded hover:bg-gray-300">Next</button>
-        </div>
+                        <!--filter dropdown -->
+                        <%-include("../partials/dropdownFilter")%>
 
-        <% if (userType==='researcher' ) { %>
-            <%- include("../partials/researcher-footer") %>
-        <% } else if (userType==='explorer' ) { %>
-            <%- include("../partials/explorer-footer") %>
-        <% } %>
+                            <div id="speciesContainer" class="flex flex-col">
+                                <%- include("../partials/specieCard")%>
+                            </div>
+                            <div class="flex justify-center gap-4 mt-4 mb-6" id="paginationControls">
+                                <button id="prevPage"
+                                    class="px-4 py-2 bg-gray-200 rounded hover:bg-gray-300">Previous</button>
+                                <span id="pageIndicator" class="self-center text-gray-600"></span>
+                                <button id="nextPage"
+                                    class="px-4 py-2 bg-gray-200 rounded hover:bg-gray-300">Next</button>
+                            </div>
+
+            </div>
+            <% if (userType==='researcher' ) { %>
+                <%- include("../partials/researcher-footer") %>
+                    <% } else if (userType==='explorer' ) { %>
+                        <%- include("../partials/explorer-footer") %>
+                            <% } %>
     </div>
-    <script src="/js/menu.js"></script>
     <script src="js/paginationSpecies.js"> </script>
     <script src="js/camera.js"></script>
 
