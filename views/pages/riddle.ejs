@@ -4,7 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Biodiversity Riddles</title>
+    <title>AI Riddles - BiodiversityGo</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <!-- Camera icon -->
     <script src="https://unpkg.com/lucide@latest"></script>
@@ -21,58 +21,66 @@
     </style>
 </head>
 
-<body class="h-screen overflow-y-auto">
-    <div style="background-color:rgb(242, 242, 242)"
-        class="flex flex-col p-4 justify-between h-full rounded-lg shadow-sm gap-5">
-        <div id="content" class="flex flex-col gap-4 overflow-y-auto">
-            <%- include("../partials/header") %>
+<body style="background-color:rgb(242, 242, 242)" class="flex flex-col text-gray-800 h-screen p-4">
+    <%- include("../partials/header") %>
 
-            <div class="flex items-center gap-5 mt-4">
-                <img class="w-10 h-10" src="/images/photo.svg" alt="Profile Icon">
-                <div>
-                    <span class="text-xl">Hello,</span> <span class="font-bold text-xl">
-                        <%= name %>
-                    </span>
-                </div>
-            </div>
-
-            <!-- Riddle Form -->
-            <div class="max-w-xl mx-auto bg-white p-6 rounded-xl shadow-md">
-                <h1 class="text-2xl font-bold text-center mb-6">🧠 Biodiversity Riddle Challenge</h1>
-                <form action="/ai/riddles" method="POST" class="space-y-6">
-                    <div>
-                        <label class="block text-sm font-medium text-gray-700">Difficulty Level</label>
-                        <select name="difficulty" class="mt-2 block w-full border border-gray-300 rounded-md p-2 bg-white">
-                            <option>easy</option>
-                            <option>medium</option>
-                            <option>hard</option>
-                        </select>
-                    </div>
-
-                    <div>
-                        <label class="block text-sm font-medium text-gray-700">Number of Riddles</label>
-                        <input type="number" name="number" value="5" min="1" max="10"
-                            class="mt-2 block w-full border border-gray-300 rounded-md p-2" />
-                    </div>
-
-                    <div>
-                        <label class="block text-sm font-medium text-gray-700">Category</label>
-                        <select name="category" class="mt-2 block w-full border border-gray-300 rounded-md p-2 bg-white">
-                            <option value="any">Any</option>
-                            <option value="birds">Birds</option>
-                            <option value="plants">Plants</option>
-                            <option value="insects">Insects</option>
-                        </select>
-                    </div>
-
-                    <div class="text-center pt-4">
-                        <button type="submit"
-                            class="bg-green-600 text-white px-6 py-3 rounded-lg hover:bg-green-700 transition duration-200 font-semibold">
-                            🪄 Generate Riddles
+    <div class="flex-1 flex flex-col">
+        <div class="flex-1 flex items-center justify-center">
+            <% if (error) { %>
+                <div class="max-w-xl mx-auto">
+                    <div class="text-center p-8 rounded-lg bg-white shadow-md">
+                        <div class="text-red-500 mb-4">
+                            <svg class="mx-auto h-12 w-12" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"/>
+                            </svg>
+                        </div>
+                        <p class="text-gray-600 mb-4"><%= error %></p>
+                        <button onclick="window.location.reload()" class="text-green-600 hover:text-green-700">
+                            Try Again
                         </button>
                     </div>
-                </form>
-            </div>
+                </div>
+            <% } else { %>
+                <!-- Riddle Form -->
+                <div class="max-w-xl mx-auto bg-white p-6 rounded-xl shadow-md">
+                    <h1 class="text-2xl font-bold text-center mb-6">🧠 Biodiversity Riddle Challenge</h1>
+                    <form action="/ai/riddles" method="POST" class="space-y-6">
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700">Difficulty Level</label>
+                            <select name="difficulty" class="mt-2 block w-full border border-gray-300 rounded-md p-2 bg-white">
+                                <option value="easy">Easy</option>
+                                <option value="medium">Medium</option>
+                                <option value="hard">Hard</option>
+                            </select>
+                        </div>
+
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700">Number of Riddles</label>
+                            <input type="number" name="number" value="5" min="1" max="10"
+                                class="mt-2 block w-full border border-gray-300 rounded-md p-2" />
+                        </div>
+
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700">Category</label>
+                            <select name="category" class="mt-2 block w-full border border-gray-300 rounded-md p-2 bg-white">
+                                <option value="biodiversity">Biodiversity</option>
+                                <option value="birds">Birds</option>
+                                <option value="plants">Plants</option>
+                                <option value="insects">Insects</option>
+                                <option value="mammals">Mammals</option>
+                                <option value="marine life">Marine Life</option>
+                            </select>
+                        </div>
+
+                        <div class="text-center pt-4">
+                            <button type="submit"
+                                class="bg-green-600 text-white px-6 py-3 rounded-lg hover:bg-green-700 transition duration-200 font-semibold">
+                                🪄 Generate Riddles
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            <% } %>
         </div>
         
         <%- include("../partials/explorer-footer") %>
