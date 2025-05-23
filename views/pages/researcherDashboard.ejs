@@ -20,62 +20,62 @@
             overflow-y: scroll;
         }
 
-        #content::-webkit-scrollbar,body::-webkit-scrollbar {
+        #content::-webkit-scrollbar,
+        body::-webkit-scrollbar {
             display: none;
         }
     </style>
 </head>
 
-<body class="h-screen overflow-y-auto">
+<body class="h-screen flex flex-col h-full">
     <div style="background-color:rgb(242, 242, 242)"
-        class="flex flex-col p-4 justify-between h-full rounded-lg shadow-sm gap-5">
-        <div id="content" class="flex flex-col gap-4 overflow-y-auto">
-            
+        class="flex flex-col overflow-hidden p-4 h-full  rounded-lg shadow-sm gap-5">
+        <div id="content" class="flex flex-col h-full  gap-4 overflow-y-auto">
             <%- include("../partials/header") %>
+                <div class="flex flex-col flex-grow max-h-[55%]">
+                    <div class="flex items-center gap-5 mt-4">
+                        <img class="w-10 h-10" src="/images/photo.svg" alt="Profile Icon">
+                        <div>
+                            <span class="text-xl">Hello,</span> <span class="font-bold text-xl">
+                                <%= name %>
+                            </span>
+                        </div>
+                        <div id="weather-caption" class="text-black px-2 py-2 rounded shadow text-sm bg-white">
+                            Loading weather...
+                        </div>
+                    </div>
 
-            <div class="flex items-center gap-5 mt-4">
-                <img class="w-10 h-10" src="/images/photo.svg" alt="Profile Icon">
-                <div>
-                    <span class="text-xl">Hello,</span> <span class="font-bold text-xl">
-                        <%= name %>
-                    </span>
+                    <div id="explore_time" class="py-2 px-1 w-fit shadow text-sm rounded font-semibold m-auto">
+                        Is it a good day to explore .....
+                    </div>
+                    <!--Map-->
+                    <div id="map" class="min-h-[200px] w-full rounded shadow">
+                    </div>
                 </div>
-                <div id="weather-caption" class="text-black px-2 py-2 rounded shadow text-sm bg-white">
-                    Loading weather...
-                </div>
-            </div>
-
-            <div id="explore_time" class="py-2 px-1 w-fit shadow text-sm rounded font-semibold m-auto">
-                Is it a good day to explore .....
-            </div>
 
 
-            <!--Map-->
-            <div id="map" class="min-h-[200px] w-full rounded shadow">
-            </div>
+                <!-- quest cards -->
+                <div class="p-3">
+                    <span class="font-bold text-xl">Your Quests</span>
 
-            <!-- quest cards -->
-            <div class="p-3">
-                <span class="font-bold text-xl">Your Quests</span>
-
-                <!-- Swiper Container -->
-                <div class="swiper mySwiper mt-2">
-                    <div class="swiper-wrapper">
-                        <% quests.slice(0, 6).forEach((quest) => { %>
-                            <div class="swiper-slide max-w-[280px]">
-                                <%- include('../partials/questCard', { quest: quest, isResearcher: true }) %>
-                            </div>
-                        <% }) %>
-                        <div class="swiper-slide flex items-center justify-center">
-                            <a href="/quests?creator=me"
-                                class="p-5 flex items-center justify-center text-green-600 border border-green-600 rounded-lg text-sm font-semibold hover:bg-green-50 gap-2">
-                                <span>See All Your Quests</span>
-                                <img src="/images/right.svg" width="20" alt="">
-                            </a>
+                    <!-- Swiper Container -->
+                    <div class="swiper mySwiper mt-2">
+                        <div class="swiper-wrapper">
+                            <% quests.slice(0, 6).forEach((quest)=> { %>
+                                <div class="swiper-slide max-w-[280px]">
+                                    <%- include('../partials/questCard', { quest: quest, isResearcher: true }) %>
+                                </div>
+                                <% }) %>
+                                    <div class="swiper-slide flex items-center justify-center">
+                                        <a href="/quests?creator=me"
+                                            class="p-5 flex items-center justify-center text-green-600 border border-green-600 rounded-lg text-sm font-semibold hover:bg-green-50 gap-2">
+                                            <span>See All Your Quests</span>
+                                            <img src="/images/right.svg" width="20" alt="">
+                                        </a>
+                                    </div>
                         </div>
                     </div>
                 </div>
-            </div>
         </div>
         <%- include("../partials/researcher-footer") %>
     </div>
@@ -92,4 +92,5 @@
     <script src="/js/swiper.js"></script>
     <script src="/js/menu.js"></script>
 </body>
+
 </html>
