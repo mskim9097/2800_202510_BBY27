@@ -4,7 +4,7 @@
 <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Sign Up</title>
+    <title>Sign Up - BiodiversityGo</title>
     <script src="https://cdn.tailwindcss.com"></script>
 </head>
 
@@ -14,52 +14,65 @@
     <div class="bg-white/10 backdrop-blur-sm p-8 rounded-xl shadow-xl max-w-md w-full text-white">
         <h2 class="text-3xl font-bold mb-6 text-center">Create an Account</h2>
 
+        <% if (typeof error !== 'undefined' && error) { %>
+            <div class="bg-red-100/20 backdrop-blur-sm border border-red-400 text-red-100 px-4 py-3 rounded relative mb-4" role="alert">
+                <span class="block sm:inline"><%= error %></span>
+            </div>
+        <% } %>
+
         <form action="/createUser" method="POST" class="space-y-4">
             <div>
-                <label for="fname" class="text-sm font-medium">First Name <span style="color: red;">*</span></label>
+                <label for="fname" class="text-sm font-medium">First Name <span class="text-red-300">*</span></label>
                 <input type="text" name="firstName" id="fname" required
                     class="w-full mt-1 p-2 rounded bg-white/20 focus:outline-none focus:ring-2 focus:ring-green-400 placeholder-white"
-                    placeholder="Your name">
+                    placeholder="Your first name"
+                    value="<%= locals.formData ? formData.firstName : '' %>">
             </div>
 
             <div>
-                <label for="lname" class="text-sm font-medium">Last Name <span style="color: red;">*</span></label>
+                <label for="lname" class="text-sm font-medium">Last Name <span class="text-red-300">*</span></label>
                 <input type="text" name="lastName" id="lname" required
                     class="w-full mt-1 p-2 rounded bg-white/20 focus:outline-none focus:ring-2 focus:ring-green-400 placeholder-white"
-                    placeholder="Your name">
+                    placeholder="Your last name"
+                    value="<%= locals.formData ? formData.lastName : '' %>">
             </div>
 
             <div>
-                <label for="email" class="text-sm font-medium">Email <span style="color: red;">*</span></label>
+                <label for="email" class="text-sm font-medium">Email <span class="text-red-300">*</span></label>
                 <input type="email" name="email" id="email" required
                     class="w-full mt-1 p-2 rounded bg-white/20 focus:outline-none focus:ring-2 focus:ring-green-400 placeholder-white"
-                    placeholder="you@example.com">
+                    placeholder="you@example.com"
+                    value="<%= locals.formData ? formData.email : '' %>">
             </div>
 
             <div class="flex flex-col gap-3">
-                <label for="userType" class="text-sm font-medium">Account <span style="color: red;">*</span></label>
+                <label class="text-sm font-medium">Account Type <span class="text-red-300">*</span></label>
                 <div class="flex justify-between min-w-[40%]">
                     <div>
-                        <input type="radio" id="explorer" name="type" value="explorer">
-                        <label for="explorer" class="mr-4">Explorer(Normal User)</label>
+                        <input type="radio" id="explorer" name="type" value="explorer"
+                               <%= locals.formData && formData.type === 'explorer' ? 'checked' : '' %>>
+                        <label for="explorer" class="mr-4">Explorer (Normal User)</label>
                     </div>
                     <div>
-                        <input type="radio" id="researcher" name="type" value="researcher">
+                        <input type="radio" id="researcher" name="type" value="researcher"
+                               <%= locals.formData && formData.type === 'researcher' ? 'checked' : '' %>>
                         <label for="researcher">Researcher</label>
                     </div>
                 </div>
             </div>
 
             <div>
-                <label for="password" class="text-sm font-medium">Password <span style="color: red;">*</span></label>
+                <label for="password" class="text-sm font-medium">Password <span class="text-red-300">*</span></label>
                 <input type="password" name="password" id="password" required
                     class="w-full mt-1 p-2 rounded bg-white/20 focus:outline-none focus:ring-2 focus:ring-green-400 placeholder-white"
                     placeholder="••••••••">
+                <p class="text-sm text-gray-300 mt-1">Must be at least 6 characters</p>
             </div>
 
             <button type="submit"
-                class="w-full bg-green-600 hover:bg-green-700 text-white font-semibold py-2 rounded transition duration-300 ease-in-out">Sign
-                Up</button>
+                class="w-full bg-green-600 hover:bg-green-700 text-white font-semibold py-2 rounded transition duration-300 ease-in-out">
+                Sign Up
+            </button>
         </form>
 
         <p class="mt-4 text-sm text-center">

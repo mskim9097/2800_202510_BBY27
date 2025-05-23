@@ -39,28 +39,41 @@ const uploadImageToCloudinary = (buffer) => {
 
 const getSpecies = async (req, res, next) => {
   try {
-    const speciesList = await Species.find().sort({ speciesName: 1 });
+    const speciesList = await speciesCollection.Species.find().sort({ speciesName: 1 });
+    console.log("Species List " + speciesList);
     res.locals.speciesList = speciesList;
     next();
   } catch (err) {
-    console.error('Error fetching species list:', err);
-    res.status(500).send('Error fetching species list');
+    const error = new Error('Unable to retrieve the species list. Please try again later.');
+    error.status = 500;
+    next(error);
   }
 };
 
-const getSpeciesById = async (req, res) => {
+const getSpeciesById = async (req, res, next) => {
   try {
     const speciesId = req.params.id;
     const species = await Species.findById(speciesId);
 
     if (!species) {
-      return res.status(404).send('Species not found');
+      const error = new Error('The species you are looking for could not be found.');
+      error.status = 404;
+      throw error;
     }
 
-    res.render('pages/speciesPage', { species });
+    res.render('pages/speciesPage', { 
+      species,
+      userType: req.session?.type,
+      name: req.session?.name
+    });
   } catch (error) {
-    console.error('Error fetching species:', error);
-    res.status(500).send('Error retrieving species details');
+    if (error.name === 'CastError') {
+      const castError = new Error('Invalid species ID format.');
+      castError.status = 400;
+      next(castError);
+    } else {
+      next(error);
+    }
   }
 };
 
@@ -74,11 +87,24 @@ const createSpecies = async (req, res, next) => {
       speciesType,
     } = req.body;
 
+    if (!speciesName || !speciesScientificName) {
+      const error = new Error('Please provide both the common name and scientific name for the species.');
+      error.name = 'ValidationError';
+      throw error;
+    }
+
     const speciesImage = [];
     if (req.file) {
-      const imageUrl = await uploadImageToCloudinary(req.file.buffer);
-      speciesImage.push(imageUrl);
+      try {
+        const imageUrl = await uploadImageToCloudinary(req.file.buffer);
+        speciesImage.push(imageUrl);
+      } catch (uploadError) {
+        const error = new Error('Failed to upload the species image. Please try again.');
+        error.status = 500;
+        throw error;
+      }
     }
+
     const createdBy = req.session.userId;
     const newSpecies = new Species({
       speciesScientificName,
@@ -92,118 +118,175 @@ const createSpecies = async (req, res, next) => {
 
     await newSpecies.save();
     req.newSpecies = newSpecies;
-    next(); // or res.status(201).json(newSpecies);
+    next();
   } catch (error) {
-    console.error('Error creating species:', error);
-    res.status(500).send(`Error adding species. ${error.message}`);
+    if (error.name === 'ValidationError') {
+      // Mongoose validation error
+      const messages = Object.values(error.errors).map(err => err.message);
+      const validationError = new Error(`Please check the following: ${messages.join(', ')}`);
+      validationError.name = 'ValidationError';
+      next(validationError);
+    } else {
+      const serverError = new Error('Failed to create the species. Please try again later.');
+      serverError.status = 500;
+      next(serverError);
+    }
   }
 };
 
 const updateSpecies = async (req, res, next) => {
-  const speciesId = req.params.id;
-  const {
-    speciesName,
-    speciesScientificName,
-    speciesHabitat,
-    speciesType,
-    speciesInfo,
-  } = req.body;
-
-  const speciesImageUrl = await addImage(req, res, next);
-
-  const updateFields = {
-    speciesName,
-    speciesScientificName,
-    speciesHabitat,
-    speciesType,
-    speciesInfo,
-  };
-
-  if (speciesImageUrl) {
-    updateFields.speciesImage = speciesImageUrl;
-  }
-
-  await speciesCollection.updateOne(
-    { _id: new ObjectId(speciesId) },
-    { $set: updateFields }
-  );
-  next();
-};
-
-const targetSpecies = async (req, res) => {
-  const speciesScientificName = req.query.q;
-
-  console.log('getSpecies');
-
-  if (!speciesScientificName) {
-    return res.status(400).json({ error: 'Missing query' });
-  }
-
-  const species = await speciesCollection.findOne({ speciesScientificName });
-
-  if (species) {
-    res.status(200).json([species]); // return as array for consistency with frontend
-  } else {
-    res.json([]); // return empty array if no match
-  }
-};
-
-// Helper function that handles image upload to Cloudinary.
-const addImage = async (req, res, next) => {
-  let speciesImageUrl = null;
-
-  // Check if a file was uploaded
-  if (req.file) {
-    // Upload image to Cloudinary from buffer
-    // For simplicity, Cloudinary auto-generate public_id
-    const result = await new Promise((resolve, reject) => {
-      const uploadStream = cloudinary.uploader.upload_stream(
-        { resource_type: 'image' },
-        (error, result) => {
-          if (error) {
-            console.error('Cloudinary Upload Error:', error);
-            return reject(error);
-          }
-          resolve(result);
-        }
-      );
-      uploadStream.end(req.file.buffer);
-    });
-    speciesImageUrl = result.secure_url;
-    return speciesImageUrl;
-  }
-};
-
-// DeleteFunction that deletes species data in mongoDB.
-const deleteSpecies = async (req, res, next) => {
-  const speciesId = req.params.id;
-  const objectId = new ObjectId(speciesId);
-  const species = await speciesCollection.findOne({ _id: objectId });
-  if (species) {
-    await speciesCollection.deleteOne({ _id: objectId });
-  }
-  next();
-};
-
-const selectTarget = async (req, res) => {
-  const { id } = req.query;
-  if (!id) return res.status(400).json({ error: 'Missing species ID' });
-
   try {
-    const species = await speciesCollection.findOne({ _id: new ObjectId(id) });
-    if (!species) return res.status(404).json({ error: 'Species not found' });
+    const speciesId = req.params.id;
+    const {
+      speciesName,
+      speciesScientificName,
+      speciesHabitat,
+      speciesType,
+      speciesInfo,
+    } = req.body;
+
+    const species = await Species.findById(speciesId);
+    if (!species) {
+      const error = new Error('The species you are trying to update could not be found.');
+      error.status = 404;
+      throw error;
+    }
+
+    let speciesImageUrl;
+    if (req.file) {
+      try {
+        speciesImageUrl = await addImage(req, res, next);
+      } catch (uploadError) {
+        const error = new Error('Failed to upload the new species image. Please try again.');
+        error.status = 500;
+        throw error;
+      }
+    }
+
+    const updateFields = {
+      speciesName,
+      speciesScientificName,
+      speciesHabitat,
+      speciesType,
+      speciesInfo,
+    };
+
+    if (speciesImageUrl) {
+      updateFields.speciesImage = speciesImageUrl;
+    }
+
+    const updatedSpecies = await Species.findByIdAndUpdate(
+      speciesId,
+      { $set: updateFields },
+      { new: true, runValidators: true }
+    );
+
+    if (!updatedSpecies) {
+      const error = new Error('Failed to update the species. The species may have been deleted.');
+      error.status = 404;
+      throw error;
+    }
+
+    next();
+  } catch (error) {
+    if (error.name === 'ValidationError') {
+      // Mongoose validation error
+      const messages = Object.values(error.errors).map(err => err.message);
+      const validationError = new Error(`Please check the following: ${messages.join(', ')}`);
+      validationError.name = 'ValidationError';
+      next(validationError);
+    } else if (error.name === 'CastError') {
+      const castError = new Error('Invalid species ID format.');
+      castError.status = 400;
+      next(castError);
+    } else {
+      next(error);
+    }
+  }
+};
+
+const deleteSpecies = async (req, res, next) => {
+  try {
+    const speciesId = req.params.id;
+    const deletedSpecies = await Species.findByIdAndDelete(speciesId);
+
+    if (!deletedSpecies) {
+      const error = new Error('The species you are trying to delete could not be found.');
+      error.status = 404;
+      throw error;
+    }
+
+    next();
+  } catch (error) {
+    if (error.name === 'CastError') {
+      const castError = new Error('Invalid species ID format.');
+      castError.status = 400;
+      next(castError);
+    } else {
+      const serverError = new Error('Failed to delete the species. Please try again later.');
+      serverError.status = 500;
+      next(serverError);
+    }
+  }
+};
+
+const targetSpecies = async (req, res, next) => {
+  try {
+    const speciesScientificName = req.query.q;
+
+    if (!speciesScientificName) {
+      const error = new Error('Please provide a scientific name to search for.');
+      error.name = 'ValidationError';
+      throw error;
+    }
+
+    const species = await Species.findOne({ speciesScientificName });
+    res.json(species ? [species] : []);
+  } catch (error) {
+    const serverError = new Error('Failed to search for the species. Please try again later.');
+    serverError.status = 500;
+    next(serverError);
+  }
+};
+
+const selectTarget = async (req, res, next) => {
+  try {
+    const { id } = req.query;
+    
+    if (!id) {
+      const error = new Error('Please provide a species ID to select.');
+      error.name = 'ValidationError';
+      throw error;
+    }
+
+    const species = await Species.findById(id);
+    
+    if (!species) {
+      const error = new Error('The selected species could not be found.');
+      error.status = 404;
+      throw error;
+    }
+
     res.json(species);
-  } catch (err) {
-    res.status(500).json({ error: 'Server error' });
+  } catch (error) {
+    if (error.name === 'CastError') {
+      const castError = new Error('Invalid species ID format.');
+      castError.status = 400;
+      next(castError);
+    } else {
+      const serverError = new Error('Failed to select the species. Please try again later.');
+      serverError.status = 500;
+      next(serverError);
+    }
   }
 };
 
 module.exports = {
   createSpecies,
   updateSpecies,
-  targetSpecies,
   deleteSpecies,
   getSpecies,
+  targetSpecies,
   selectTarget,
   getSpeciesById,
 };
