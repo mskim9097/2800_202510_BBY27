@@ -105,9 +105,8 @@ router.post(
   }
 );
 
-//! !!! NEEDS MIDDLEWARE FOR UPDATING QUESTS !!!!!
 router.get('/updateQuest', isAuthorizedResearcher, (req, res, next) => {
-  // NEEDS PAGE FOR UPDATING QUESTS
+
   res.redirect(researcherDashboard);
 });
 router.post('/updateQuest', isAuthorizedResearcher, (req, res, next) => {

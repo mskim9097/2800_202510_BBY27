@@ -34,22 +34,7 @@ const upload = multer({
 });
 
 // list all species
-router.get('/', authenticated, async (req, res) => {
-  try {
-    const speciesList = await pecies.find().sort({ speciesName: 1 });
-    res.render('pages/speciesList', {
-      speciesList,
-      userType: req.session.type,
-      error: null
-    });
-  } catch (err) {
-    res.render('pages/speciesList', {
-      speciesList: [],
-      userType: req.session.type,
-      error: 'Unable to retrieve the species list. Please try again later.'
-    });
-  }
-});
+router.get('/', authenticated, getSpecies);
 
 // router.put('/species/:id', upload.single('image'), updateSpecies, (req, res) => {
 //   console.log('Received update:', req.body);

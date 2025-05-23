@@ -68,13 +68,13 @@ const selectQuestList = async (req, res) => {
     res.render('pages/questList', {
       questList,
       userType: req.session.type,
-      error: null
+      error: null,
     });
   } catch (err) {
     res.render('pages/questList', {
       questList: [],
       userType: req.session.type,
-      error: 'Unable to retrieve the quest list. Please try again later.'
+      error: 'Unable to retrieve the quest list. Please try again later.',
     });
   }
 };
@@ -93,7 +93,7 @@ const selectQuest = async (req, res) => {
         userId,
         userType: req.session?.type,
         name: req.session?.name,
-        error: 'The quest you are looking for could not be found.'
+        error: 'The quest you are looking for could not be found.',
       });
     }
 
@@ -105,7 +105,7 @@ const selectQuest = async (req, res) => {
         userId,
         userType: req.session?.type,
         name: req.session?.name,
-        error: 'The species associated with this quest could not be found.'
+        error: 'The species associated with this quest could not be found.',
       });
     }
 
@@ -115,7 +115,7 @@ const selectQuest = async (req, res) => {
       userId,
       userType: req.session?.type,
       name: req.session?.name,
-      error: null
+      error: null,
     });
   } catch (error) {
     res.render('pages/quest', {
@@ -124,7 +124,7 @@ const selectQuest = async (req, res) => {
       userId: req.session.userId,
       userType: req.session?.type,
       name: req.session?.name,
-      error: 'Unable to retrieve the quest details. Please try again later.'
+      error: 'Unable to retrieve the quest details. Please try again later.',
     });
   }
 };
@@ -136,14 +136,14 @@ const renderCreateQuestPage = async (req, res) => {
       speciesList,
       userType: req.session?.type,
       name: req.session?.name,
-      error: null
+      error: null,
     });
   } catch (err) {
     res.render('pages/addQuest', {
       speciesList: [],
       userType: req.session?.type,
       name: req.session?.name,
-      error: 'Unable to load the species list. Please try again later.'
+      error: 'Unable to load the species list. Please try again later.',
     });
   }
 };
@@ -158,16 +158,22 @@ const createQuest = async (req, res) => {
       longitude,
       target,
       timeOfDay: questTimeOfDay,
-      difficulty: questDifficulty
+      difficulty: questDifficulty,
     } = req.body;
 
     // Validation checks
-    if (!questTitle || !questMission || !target || !questTimeOfDay || !questDifficulty) {
+    if (
+      !questTitle ||
+      !questMission ||
+      !target ||
+      !questTimeOfDay ||
+      !questDifficulty
+    ) {
       return res.render('pages/addQuest', {
         speciesList,
         userType: req.session?.type,
         name: req.session?.name,
-        error: 'Please fill in all required fields.'
+        error: 'Please fill in all required fields.',
       });
     }
 
@@ -179,7 +185,7 @@ const createQuest = async (req, res) => {
         speciesList,
         userType: req.session?.type,
         name: req.session?.name,
-        error: 'Please select a valid location on the map.'
+        error: 'Please select a valid location on the map.',
       });
     }
 
@@ -189,17 +195,17 @@ const createQuest = async (req, res) => {
         speciesList,
         userType: req.session?.type,
         name: req.session?.name,
-        error: 'Please select a valid species from the list.'
+        error: 'Please select a valid species from the list.',
       });
     }
 
-    const userId = req.session.userId;
+    const { userId } = req.session;
     const newQuest = new Quest({
       questTitle,
       questMission,
       questLocation: {
         type: 'Point',
-        coordinates: [lng, lat]
+        coordinates: [lng, lat],
       },
       speciesId: species._id,
       questTimeOfDay,
@@ -207,7 +213,7 @@ const createQuest = async (req, res) => {
       questCreatedBy: userId,
       questAcceptedBy: [],
       questFieldNote: '',
-      questImage: ''
+      questImage: '',
     });
 
     await newQuest.save();
@@ -218,7 +224,7 @@ const createQuest = async (req, res) => {
       speciesList,
       userType: req.session?.type,
       name: req.session?.name,
-      error: 'Failed to create the quest. Please try again later.'
+      error: 'Failed to create the quest. Please try again later.',
     });
   }
 };
