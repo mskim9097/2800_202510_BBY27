@@ -37,15 +37,20 @@ const uploadImageToCloudinary = (buffer) => {
   });
 };
 
-const getSpecies = async (req, res, next) => {
+const getSpecies = async (req, res) => {
   try {
     const speciesList = await Species.find().sort({ speciesName: 1 });
-    res.locals.speciesList = speciesList;
-    next();
+    res.render('pages/speciesList', {
+      speciesList,
+      userType: req.session.type,
+      error: null
+    });
   } catch (err) {
-    const error = new Error('Unable to retrieve the species list. Please try again later.');
-    error.status = 500;
-    next(error);
+    res.render('pages/speciesList', {
+      speciesList: [],
+      userType: req.session.type,
+      error: 'Unable to retrieve the species list. Please try again later.'
+    });
   }
 };
 
@@ -60,7 +65,7 @@ const getSpeciesById = async (req, res, next) => {
       throw error;
     }
 
-    res.render('pages/speciesPage', { 
+    res.render('pages/speciesPage', {
       species,
       userType: req.session?.type,
       name: req.session?.name
@@ -251,7 +256,7 @@ const targetSpecies = async (req, res, next) => {
 const selectTarget = async (req, res, next) => {
   try {
     const { id } = req.query;
-    
+
     if (!id) {
       const error = new Error('Please provide a species ID to select.');
       error.name = 'ValidationError';
@@ -259,7 +264,7 @@ const selectTarget = async (req, res, next) => {
     }
 
     const species = await Species.findById(id);
-    
+
     if (!species) {
       const error = new Error('The selected species could not be found.');
       error.status = 404;
