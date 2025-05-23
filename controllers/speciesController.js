@@ -43,13 +43,13 @@ const getSpecies = async (req, res) => {
     res.render('pages/speciesList', {
       speciesList,
       userType: req.session.type,
-      error: null
+      error: null,
     });
   } catch (err) {
     res.render('pages/speciesList', {
       speciesList: [],
       userType: req.session.type,
-      error: 'Unable to retrieve the species list. Please try again later.'
+      error: 'Unable to retrieve the species list. Please try again later.',
     });
   }
 };

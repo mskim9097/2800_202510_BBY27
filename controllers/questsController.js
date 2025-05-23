@@ -410,24 +410,6 @@ const addImage = async (req, res, next) => {
     return speciesImageUrl;
   }
 };
-// const selectQuestList = async (req, res, next) => {
-//     try {
-//         let questList;
-
-//         if (req.session.type === "researcher") {
-//             const userId = req.session.userId;
-//             questList = await Quest.find({ questCreatedBy: userId }).sort({ createdAt: -1 });
-//         } else {
-//             questList = await Quest.find().sort({ createdAt: -1 });
-//         }
-
-//         res.locals.questList = questList;
-//         next();
-//     } catch (err) {
-//         console.error("Error fetching quest list:", err);
-//         res.status(500).send("Error fetching quest list");
-//     }
-// };
 
 const getExplorerDashboard = async (req, res) => {
   try {

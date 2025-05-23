@@ -98,9 +98,6 @@ const speciesRouter = require('./routes/speciesRoutes');
 
 app.use('/species', authenticated, speciesRouter);
 
-// const testRouter = require('./routes/testRoutes');
-// app.use('/test', testRouter);
-
 // 404 handler
 app.use((req, res, next) => {
   res.status(404).render('pages/404', {

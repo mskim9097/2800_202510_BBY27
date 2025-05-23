@@ -36,12 +36,6 @@ const upload = multer({
 // list all species
 router.get('/', authenticated, getSpecies);
 
-// router.put('/species/:id', upload.single('image'), updateSpecies, (req, res) => {
-//   console.log('Received update:', req.body);
-//     console.log('Image:', req.file);
-//   res.redirect(`/species/${req.params.id}`);
-// });
-
 router.get('/searchTarget', targetSpecies);
 
 router.get('/selectTarget', selectTarget);
@@ -75,30 +69,5 @@ router.post(
 router.post('/:id', deleteSpecies, (req, res) => {
   res.redirect('/species');
 });
-
-// Get a specific species by name
-// router.get('/:speciesName', async (req, res) => {
-//   try {
-//     const { speciesName } = req.params;
-//     // Decode the speciesName in case it has URL encoded characters (e.g., spaces as %20)
-//     const decodedSpeciesName = decodeURIComponent(speciesName);
-//     const species = await speciesCollection.findOne({
-//       speciesName: decodedSpeciesName,
-//     });
-
-//     if (!species) {
-//       return res.status(404).render('pages/404', { title: 'Not Found' }); // Assumes you have a 404.ejs page
-//     }
-//     res.render('pages/speciesPage', {
-//       species,
-//       title: species.speciesName,
-//       userType: req.session.type,
-//       name: req.session.name,
-//     });
-//   } catch (err) {
-//     console.error('Error fetching species:', err);
-//     res.status(500).send('Error fetching species details');
-//   }
-// });
 
 module.exports = router;

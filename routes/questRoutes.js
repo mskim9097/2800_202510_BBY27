@@ -28,25 +28,8 @@ const {
   authenticated,
 } = require('../controllers/userController');
 
-// NEEDS QUEST LIST PAGE
-// Quest List Page
-// router.get('/', selectQuestList, (req, res, next) => {
-//     // res.redirect(researcherDashboard);
-//     res.render('pages/questList', {userType: req.session.type, name: req.session.name});
-// });
-
 router.get('/', authenticated, getQuests);
 
-// NEEDS QUEST LIST PAGE
-// Quest List Page
-// router.get('/', selectQuestList, (req, res, next) => {
-//   // res.redirect(researcherDashboard);
-//   res.render('pages/questList', {
-//     userType: req.session.type,
-//     name: req.session.name,
-//     questList: res.locals.questList,
-//   });
-// });
 router.get('/completeQuest', (req, res, next) => {
   res.redirect(researcherDashboard);
 });
@@ -77,8 +60,6 @@ router.post(
   }
 );
 
-// router.post('/createQuest', isAuthorizedResearcher, upload.single('speciesImage'), createQuest);
-
 router.post(
   '/updateQuest/:id',
   isAuthorizedResearcher,
@@ -106,7 +87,6 @@ router.post(
 );
 
 router.get('/updateQuest', isAuthorizedResearcher, (req, res, next) => {
-
   res.redirect(researcherDashboard);
 });
 router.post('/updateQuest', isAuthorizedResearcher, (req, res, next) => {
