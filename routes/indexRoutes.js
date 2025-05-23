@@ -22,7 +22,7 @@ router.get('/signup', (req, res) => {
 router.post('/createUser', signUp);
 
 router.get('/login', (req, res) => {
-  const success = req.query.success;
+  const { success } = req.query;
   res.render('pages/login', { error: null, success });
 });
 

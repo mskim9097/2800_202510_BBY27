@@ -10,22 +10,25 @@ const errorHandler = (err, req, res, next) => {
   if (err.status === 404 || err.name === 'NotFoundError') {
     return res.status(404).render('pages/404', {
       userType: req.session?.type,
-      name: req.session?.name
+      name: req.session?.name,
     });
   }
 
   // Handle all other errors with the error page
   const status = err.status || 500;
-  const errorMessage = err.name === 'ValidationError' 
-    ? err.message 
-    : (process.env.NODE_ENV === 'development' ? err.message : 'An unexpected error occurred');
+  const errorMessage =
+    err.name === 'ValidationError'
+      ? err.message
+      : process.env.NODE_ENV === 'development'
+        ? err.message
+        : 'An unexpected error occurred';
 
   res.status(status).render('pages/error', {
     error: errorMessage,
     userType: req.session?.type,
     name: req.session?.name,
-    backUrl: req.headers.referer || '/'
+    backUrl: req.headers.referer || '/',
   });
 };
 
-module.exports = errorHandler; 
+module.exports = errorHandler;

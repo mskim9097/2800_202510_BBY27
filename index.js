@@ -107,6 +107,6 @@ app.use((req, res, next) => {
     title: 'Page Not Found',
     isAuthenticated: !!req.session.user,
     userType: req.session.type,
-    name: req.session.name
+    name: req.session.name,
   });
 });

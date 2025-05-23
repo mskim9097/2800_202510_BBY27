@@ -21,13 +21,13 @@ document.addEventListener('DOMContentLoaded', () => {
     window.location.href = `/quests?${params.toString()}`;
   };
 
-  [difficultyFilter, timeFilter, creatorFilter].forEach(filter => {
+  [difficultyFilter, timeFilter, creatorFilter].forEach((filter) => {
     filter.addEventListener('change', () => updatePage(1));
   });
 
-  pageButtons.forEach(button => {
+  pageButtons.forEach((button) => {
     button.addEventListener('click', () => {
-      const page = button.dataset.page;
+      const { page } = button.dataset;
       updatePage(page);
     });
   });

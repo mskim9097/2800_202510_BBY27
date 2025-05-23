@@ -40,12 +40,12 @@ function initializeMap(coords) {
 
   // Add quest markers
   if (typeof quests !== 'undefined' && Array.isArray(quests)) {
-    quests.forEach(quest => {
+    quests.forEach((quest) => {
       if (quest.coordinates && quest.coordinates.lat && quest.coordinates.lng) {
         // Create marker with custom color based on difficulty
         let markerColor = 'rgba(92, 203, 92, 0.8)'; // Default green
         if (quest.difficulty) {
-          switch(quest.difficulty.toLowerCase()) {
+          switch (quest.difficulty.toLowerCase()) {
             case 'easy':
               markerColor = 'rgba(92, 203, 92, 0.8)'; // Green
               break;
@@ -80,4 +80,4 @@ function initializeMap(coords) {
   window.globalMap = map;
 }
 
-showMap(); 
+showMap();

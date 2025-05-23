@@ -17,8 +17,8 @@ async function authenticateUser(req, res) {
 
     if (error) {
       return res.render('pages/login', {
-        error: 'Invalid input: ' + error.details[0].message,
-        email: req.body.email
+        error: `Invalid input: ${error.details[0].message}`,
+        email: req.body.email,
       });
     }
 
@@ -28,7 +28,7 @@ async function authenticateUser(req, res) {
     if (!user || !(await bcrypt.compare(password, user.password))) {
       return res.render('pages/login', {
         error: 'Invalid email or password',
-        email: email
+        email,
       });
     }
 
@@ -43,7 +43,7 @@ async function authenticateUser(req, res) {
     console.error('Authentication error:', error);
     res.render('pages/login', {
       error: 'An error occurred during login. Please try again.',
-      email: req.body.email
+      email: req.body.email,
     });
   }
 }
@@ -55,7 +55,7 @@ async function authenticateUser(req, res) {
 function authenticated(req, res, next) {
   if (!req.session.user) {
     return res.render('pages/login', {
-      error: 'Please log in to access this page'
+      error: 'Please log in to access this page',
     });
   }
   next();
@@ -69,7 +69,7 @@ function destroySession(req, res, next) {
     if (err) {
       console.error('Session destruction error:', err);
       return res.render('pages/error', {
-        error: 'An error occurred while logging out. Please try again.'
+        error: 'An error occurred while logging out. Please try again.',
       });
     }
     res.clearCookie('connect.sid');
@@ -84,7 +84,7 @@ async function signUp(req, res) {
     if (!firstName || !lastName || !email || !password || !type) {
       return res.render('pages/signup', {
         error: 'All fields are required',
-        formData: { firstName, lastName, email, type }
+        formData: { firstName, lastName, email, type },
       });
     }
 
@@ -92,7 +92,7 @@ async function signUp(req, res) {
     if (existingUser) {
       return res.render('pages/signup', {
         error: 'This email is already registered',
-        formData: { firstName, lastName, type }
+        formData: { firstName, lastName, type },
       });
     }
 
@@ -111,7 +111,7 @@ async function signUp(req, res) {
     console.error('Signup error:', error);
     res.render('pages/signup', {
       error: 'An error occurred during signup. Please try again.',
-      formData: req.body
+      formData: req.body,
     });
   }
 }
@@ -123,7 +123,7 @@ function checkAuthorization(req, res) {
   try {
     if (!req.session.type) {
       return res.render('pages/login', {
-        error: 'Please log in to access this page'
+        error: 'Please log in to access this page',
       });
     }
 
@@ -133,13 +133,13 @@ function checkAuthorization(req, res) {
       res.redirect('/user/explorer');
     } else {
       res.render('pages/login', {
-        error: 'Invalid user type. Please log in again.'
+        error: 'Invalid user type. Please log in again.',
       });
     }
   } catch (error) {
     console.error('Authorization error:', error);
     res.render('pages/login', {
-      error: 'An error occurred. Please try again.'
+      error: 'An error occurred. Please try again.',
     });
   }
 }
@@ -150,7 +150,7 @@ function isAuthorizedResearcher(req, res, next) {
     return res.render('pages/error', {
       error: 'You must be a researcher to access this page',
       userType: req.session.type,
-      name: req.session.name
+      name: req.session.name,
     });
   }
   next();
@@ -161,7 +161,7 @@ function isAuthorizedExplorer(req, res, next) {
     return res.render('pages/error', {
       error: 'You must be an explorer to access this page',
       userType: req.session.type,
-      name: req.session.name
+      name: req.session.name,
     });
   }
   next();
@@ -174,5 +174,5 @@ module.exports = {
   signUp,
   checkAuthorization,
   isAuthorizedResearcher,
-  isAuthorizedExplorer
+  isAuthorizedExplorer,
 };
