@@ -3,7 +3,7 @@
         <% if (questList && questList.length> 0) { %>
             <% questList.forEach(quest=> { %>
                 <a href="/quests/<%= quest._id %>"
-                    class="w-full max-w-md rounded-xl shadow-md p-6 flex flex-col items-start mx-auto border border-green-600 relative bg-white min-w-[500px]">
+                    class="w-full sm:max-w-[500px] rounded-xl shadow-md p-6 flex flex-col items-start mx-auto border border-green-600 relative bg-white">
                     <div
                         class="absolute -top-3 -left-3 bg-green-700 text-white rounded-full w-8 h-8 flex items-center justify-center text-xl shadow-md select-none">
                         📌
