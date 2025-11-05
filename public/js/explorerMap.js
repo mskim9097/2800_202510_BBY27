@@ -61,12 +61,17 @@ function initializeMap(coords) {
         new mapboxgl.Marker({ color: markerColor })
           .setLngLat([quest.coordinates.lng, quest.coordinates.lat])
           .setPopup(
-            new mapboxgl.Popup({ offset: 25 }).setHTML(`
-              <div style="min-width: 200px;">
+            new mapboxgl.Popup(
+              {
+                offset: 15,
+                anchor: 'left'  // 'top', 'bottom', 'left', 'right', 'top-left', etc.
+              })
+              .setHTML(`
+              <div style="mix-width: 100px;display:flex; flex-direction:column;">
                 <h3 style="font-weight: bold; margin-bottom: 8px;">${quest.questTitle}</h3>
-                <p style="margin: 4px 0;"><strong>Target:</strong> ${quest.speciesName}</p>
-                <p style="margin: 4px 0;"><strong>Time:</strong> ${quest.questTimeOfDay}</p>
-                <p style="margin: 4px 0;"><strong>Difficulty:</strong> ${quest.difficulty || 'Not specified'}</p>
+                <p "><strong>Target:</strong> ${quest.speciesName}</p>
+                <p "><strong>Time:</strong> ${quest.questTimeOfDay}</p>
+                <p "><strong>Difficulty:</strong> ${quest.difficulty || 'Not specified'}</p>
                 <a href="/quests/${quest._id}" style="display: inline-block; margin-top: 8px; padding: 4px 8px; background: #16a34a; color: white; text-decoration: none; border-radius: 4px;">View Details</a>
               </div>
             `)
