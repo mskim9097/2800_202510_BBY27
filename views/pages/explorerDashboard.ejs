@@ -14,67 +14,84 @@
     <!-- SwiperJS CSS -->
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.css" />
     <style>
+        @media (max-width: 572px) {
+            .dashboard-header {
+                flex-direction: column !important;
+                align-items: center !important;
+                text-align: center;
+                gap: 0.75rem;
+            }
+
+            .dashboard-header .weather {
+                margin-top: 0.5rem;
+            }
+        }
+
         #content {
             -ms-overflow-style: none;
             scrollbar-width: none;
             overflow-y: scroll;
         }
 
-        #content::-webkit-scrollbar,body::-webkit-scrollbar {
+        #content::-webkit-scrollbar,
+        body::-webkit-scrollbar {
             display: none;
         }
     </style>
+
 </head>
 
 <body class="h-screen overflow-y-auto">
     <div style="background-color:rgb(242, 242, 242)"
         class="flex flex-col p-4 justify-between h-full rounded-lg shadow-sm gap-5">
         <div id="content" class="flex flex-col gap-4 overflow-y-auto">
-            
+
             <%- include("../partials/header") %>
 
-            <div class="flex items-center gap-5 mt-4">
-                <img class="w-10 h-10" src="/images/photo.svg" alt="Profile Icon">
-                <div>
-                    <span class="text-xl">Hello,</span> <span class="font-bold text-xl">
-                        <%= name %>
-                    </span>
+                <div class="dashboard-header flex items-center justify-between gap-5 mt-4 p-4 flex-wrap">
+
+                    <div class="flex items-center gap-3">
+                        <img class="w-10 h-10" src="/images/photo.svg" alt="Profile Icon">
+                        <span class="text-xl">Hello,</span> <span class="font-bold text-xl">
+                            <%=name %>
+                        </span>
+                    </div>
+                    <div id="weather-caption" class="weather text-black px-2 py-2 rounded shadow text-sm bg-white">
+                        Loading weather...
+                    </div>
+
                 </div>
-                <div id="weather-caption" class="text-black px-2 py-2 rounded shadow text-sm bg-white">
-                    Loading weather...
+
+                <div id="explore_time" class="py-2 px-1 w-fit shadow text-sm rounded font-semibold m-auto">
+                    Is it a good day to explore .....
                 </div>
-            </div>
 
-            <div id="explore_time" class="py-2 px-1 w-fit shadow text-sm rounded font-semibold m-auto">
-                Is it a good day to explore .....
-            </div>
+                <!--Map-->
+                <div id="map" class="h-[220px] sm:h-[400px] md:h-[500px] lg:h-[600px] w-full rounded shadow"></div>
 
-            <!--Map-->
-            <div id="map" class="min-h-[200px] w-full rounded shadow">
-            </div>
 
-            <!-- quest cards -->
-            <div class="p-3">
-                <span class="font-bold text-xl">Quests</span>
+                <!-- quest cards -->
+                <div class="p-3">
+                    <span class="font-bold text-xl">Quests</span>
 
-                <!-- Swiper Container -->
-                <div class="swiper mySwiper mt-2">
-                    <div class="swiper-wrapper">
-                        <% quests.slice(0, 6).forEach((quest) => { %>
-                            <div class="swiper-slide max-w-[280px]">
-                                <%- include('../partials/questCard', { quest: quest, isResearcher: false }) %>
-                            </div>
-                        <% }) %>
-                        <div class="swiper-slide flex items-center justify-center">
-                            <a href="/quests"
-                                class="p-5 flex items-center justify-center text-green-600 border border-green-600 rounded-lg text-sm font-semibold hover:bg-green-50 gap-2">
-                                <span>See More Quests</span>
-                                <img src="/images/right.svg" width="20" alt="">
-                            </a>
+                    <!-- Swiper Container -->
+                    <div class="swiper mySwiper mt-2">
+                        <div class="swiper-wrapper">
+                            <% quests.slice(0, 6).forEach((quest)=> { %>
+                                <div class="swiper-slide max-w-[280px]">
+                                    <%- include('../partials/questCard', { quest: quest, isResearcher: false }) %>
+                                </div>
+                                <% }) %>
+                                    <div class="swiper-slide flex items-center justify-center">
+                                        <a href="/quests"
+                                            class="p-5 flex items-center justify-center text-green-600 border border-green-600 rounded-lg text-sm font-semibold hover:bg-green-50 gap-2">
+                                            <span>See More Quests</span>
+                                            <img src="/images/right.svg" width="20" alt="">
+                                        </a>
+                                    </div>
                         </div>
                     </div>
                 </div>
-            </div>
         </div>
         <%- include("../partials/explorer-footer") %>
     </div>
@@ -91,4 +108,5 @@
     <script src="/js/swiper.js"></script>
     <script src="/js/menu.js"></script>
 </body>
+
 </html>
